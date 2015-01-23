@@ -31,10 +31,6 @@ The RedEdge will send a heartbeat message approximately once per second using th
 
 <http://pixhawk.ethz.ch/mavlink/#HEARTBEAT>
 
-## COMMAND\_ACK
-
-Note: to prevent misinterpretation of COMMAND\_ACK messages, the RedEdge no longer responds to all messages with an acknowledge. To test round-trip serial connectivity, use the PING message.
-
 ## PING
 
 Send the PING message with system\_id = 0 and component\_id = 0, and with a new sequence number each time, to ensure round-trip communications with the RedEdge.  The PING message will be responded to with the same sequence number and the system\_id and component\_id of the sender (which are present in the message header).

@@ -1025,9 +1025,6 @@ body .markdown-body
 <a href="#heartbeat">HEARTBEAT</a>
 </li>
 <li>
-<a href="#command_ack">COMMAND_ACK</a>
-</li>
-<li>
 <a href="#ping">PING</a>
 </li>
 <li>
@@ -1072,10 +1069,6 @@ body .markdown-body
 <p>The RedEdge will send a heartbeat message approximately once per second using the component ID MAV_COMP_ID_CAMERA. While this message can be safely ignored, it can be used to verify the RedEdge is properly powered on.</p>
 
 <p><a href="http://pixhawk.ethz.ch/mavlink/#HEARTBEAT">http://pixhawk.ethz.ch/mavlink/#HEARTBEAT</a></p>
-
-<h2 id="command_ack">COMMAND_ACK</h2>
-
-<p>Note: to prevent misinterpretation of COMMAND_ACK messages, the RedEdge no longer responds to all messages with an acknowledge. To test round-trip serial connectivity, use the PING message.</p>
 
 <h2 id="ping">PING</h2>
 
