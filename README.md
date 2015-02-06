@@ -12,5 +12,4 @@ python mavlink_serial.py --device /dev/ttyUSB0 --baud 57600
 
 # Ethernet & WiFi API
 
-Coming soon!
-
+Documentation can be found [here](http://micasense.github.com/rededge-api)
