@@ -1793,13 +1793,44 @@ raw_cache_path fields will not be present. </p>
 
 <p>** POST properties **</p>
 
-<p>| --------      | ----- | ----------- | 
-| vehicle<em>roll  | float | radians 
-| vehicle</em>pitch | float | radians 
-| vehicle<em>yaw   | float | radians<br>
-| camera</em>roll   | float | radians
-| camera<em>pitch  | float | radians 
-| camera</em>yaw    | float | radians</p>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>vehicle_roll</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>vehicle_pitch</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>vehicle_yaw</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>camera_roll</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>camera_pitch</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>camera_yaw</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+</tbody></table>
 
 <p><strong>Example POST message</strong></p>
 
@@ -2066,7 +2097,7 @@ raw_cache_path fields will not be present. </p>
 
 <p><strong>Example Response to <code>GET /files/</code></strong>:</p>
 
-<pre><code class="javascript">{
+<pre><code>{
    &quot;files&quot;: []
    &quot;directories&quot;: [&quot;0000SET&quot;, &quot;0001SET&quot;, &quot;0002SET&quot;]
 }
@@ -2074,7 +2105,7 @@ raw_cache_path fields will not be present. </p>
 
 <p><strong>Example Response to <code>GET /files/000SET</code></strong>:</p>
 
-<pre><code class="javascript">{
+<pre><code>{
    &quot;files&quot;: [
       { &quot;name&quot;: &quot;paramlog.dat&quot;, &quot;size&quot;: 3219234 }
    ],
