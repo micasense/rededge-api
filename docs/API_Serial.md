@@ -53,6 +53,8 @@ Note: if using GPS\_RAW\_INT, the 64bit timestamp should be set to UTC time prio
 
 Vehicle state (roll, pitch, yaw) and vehicle rates can be provided via the ATTITUDE message.  Note that this is the state of the host vehicle. The offset of the camera from the host reference frame, whether fixed or on a gimbals, should be provided via the MOUNT_STATUS message defined below.
 
+The aircraft orientation is specified in the standard aeronautical coordinate frame, where the X axis points to the front of the vehicle, the Y axis points to the right, and the Z axis points down. Rotation order is Yaw, then Pitch, then Roll, about the Z, Y, then X axes accordingly.
+
 <http://pixhawk.ethz.ch/mavlink/#ATTITUDE>
 
 ## MOUNT_STATUS
@@ -65,15 +67,15 @@ This message definition is difficult to find, so we will repeat it here.  It has
 @param pointing_c - yaw rotation (INT16, deg*100)
 ```
 
-The three pointing values represent the orientation of a gimbals. The RedEdge interprets these numbers as a set of rotations in roll, then pitch, then yaw, to rotate from the camera pointing directly forward (along the aircraft X axis) to the current camera orientation relative to the aircraft.  Each rotation is relative to the axis pointing out of the front of the camera (coaxial with the lenses) after performing the previous rotation.  Positive values are right handed rotations, while negative values are left-handed. Positive pitch is defined as a rotation where the camera points up, so a standard camera orientation will have a negative pitch rotation.
+This message can be used to provide the orientation of the camera measured by an external source by sending the `MOUNT_STATUS` message along with the `ATTITUDE` message. Anytime this value has been written in the preceding 5 seconds, it will be considered valied and will be written to image metadata.
 
-For example, values of -90 pitch, -90 yaw, 0 roll might be used.  Starting with the camera pointed forward in the same direction as the aircraft's nose, we rotate 0 degrees in roll, causing no movement. Next we rotate -90 degrees in pitch, so that the camera is oriented straight down. Next, we rotate -90 degrees in the camera's yaw axis. The camera now pointed out of the aircraft's left wing, with the right edge of the camera toward the ground and the top of the camera toward the front of the aircraft. This is a useful orientation only for buzzing the tower.
+Using these two messages, two rotations can be specified: An aircraft orientation and a camera orientation. The aircraft orientation gives the orientation of the aircraft relative to the earth frame, and the camera orientation gives the orentiation of the fixed or gimbaled camera relative to the aircraft. If the camera is fixed mounted, the camera orientation can be set to the appropriate static value and only the aircraft orientation needs to be updated.
 
-For a two-axis gimbals where the camera is generally pointed straight down and the two gimballed axes are aircraft pitch and roll, the two values can be derived directly from the gimbals rotation. Pitch will generally be close to -90, while roll and yaw will be close to zero.
+The camera orientation represents the orientation of the camera relative to the aircraft. The default orientation, when the camera angles are all zero, is defined such that the camera is pointed straight down relative to the aircraft (aircraft nadir) with the top of the camera towards the "front" of the aircraft. The rotation order is again yaw, then pitch, then roll, about the camera Z, Y, and X axes accordingly. The camera axes are defined such that at zero rotation angle, the X axis points down (along the camera focal axis) the Z axis points towards the rear of the vehicle, and the Y axis follows right-hand rule and points out the right side of the vehicle.
 
-The combination of the aircraft attitude sent in the attitude message and the rotations in the mount status message will be used to derive an earth-fixed camera orientation.  It is recommended that when these messages are built, the values for both the aircraft orientation and the gimbals orientation are latched into memory, then they are sent via these messages. This will ensure that the aircraft orientation and gimbals orientations were acquired at the same moment. 
+The default value for these angles is zero. For a fixed camera pointed straight down relative to the aircraft, and with the top of the camera toward the front of the aircraft, this default value can be used (pitch = 0.0, roll = 0.0, yaw = 0.0).
 
-Note: For a fixed camera pointed straight down relative to the aircraft, and with the top of the camera toward the front of the aircraft, use (pitch = -90.0, roll = 0, yaw = 0)
+The combination of the aircraft attitude sent in the attitude message and the rotations in the mount status message will be used to derive an earth-fixed camera orientation.  It is recommended that when these messages are built on the host aircraft, the values for both the aircraft orientation and the gimbals orientation are latched into memory, then they are sent via these messages. This will ensure that the aircraft orientation and gimbals orientations were acquired at the same moment. 
 
 ## GLOBAL\_POSITION\_INT
 
