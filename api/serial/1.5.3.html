@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="generator"
+      content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+      <title>RedEdge Serial API</title>
+      <link rel="stylesheet" href="../../stylesheets/markdown.css" />
+   </head>
+   <body>
+      <article class="markdown-body">
+         <h1 id="rededge-serial-api">RedEdge Serial API</h1>
+         <p>This document describes the protocol which can be be used by software to control the RedEdge multi-spectral camera. The
+         camera can be controlled using serial via the host connector. For more detailed information the physical connection to the
+         camera, see the RedEdge Users's Guide.</p>
+         <h1 id="table-of-contents">Table of Contents</h1>
+         <ul>
+            <li>
+               <a href="#rededge-serial-api">RedEdge Serial API</a>
+            </li>
+            <li>
+               <a href="#table-of-contents">Table of Contents</a>
+            </li>
+            <li>
+               <a href="#general-protocol-overview">General Protocol Overview</a>
+            </li>
+            <li>
+               <a href="#messages">Messages</a>
+               <ul>
+                  <li>
+                     <a href="#heartbeat">HEARTBEAT</a>
+                  </li>
+                  <li>
+                     <a href="#ping">PING</a>
+                  </li>
+                  <li>
+                     <a href="#gps_raw_int">GPS_RAW_INT</a>
+                  </li>
+                  <li>
+                     <a href="#system_time">SYSTEM_TIME</a>
+                  </li>
+                  <li>
+                     <a href="#attitude">ATTITUDE</a>
+                  </li>
+                  <li>
+                     <a href="#mount_status">MOUNT_STATUS</a>
+                  </li>
+                  <li>
+                     <a href="#global_position_int">GLOBAL_POSITION_INT</a>
+                  </li>
+                  <li>
+                     <a href="#gps_status">GPS_STATUS</a>
+                  </li>
+               </ul>
+            </li>
+         </ul>
+         <h1 id="general-protocol-overview">General Protocol Overview</h1>
+         <p>The API is accessed via serial messages in the Mavlink format (see 
+         <a href="http://en.wikipedia.org/wiki/MAVLink">http://en.wikipedia.org/wiki/MAVLink</a> and 
+         <a href="http://qgroundcontrol.org/mavlink">http://qgroundcontrol.org/mavlink</a>). Mavlink provides an open data format
+         for interaction as well as a suite of tools to assist the programmer in developing and testing the interface. RedEdge uses
+         Mavlink v1.0 messages and communicates with the host at 57600 baud. The camera currently does not provide status back to
+         the host, but accepts host GPS and orientation information over the serial interface.</p>
+         <p>The messages defined below can be sent from the host vehicle to the RedEdge camera. For the sake of bevity, we do not
+         define the messages here. See the Mavlink message definitions at 
+         <a href="http://pixhawk.ethz.ch/mavlink/">http://pixhawk.ethz.ch/mavlink/</a> for message specifics. Listed below are
+         exceptions and recommendations for the use of the standard message definitions.</p>
+         <p>The PING message can be used to ensure round-trip serial connectivity with the RedEdge.</p>
+         <p>Receipt of serial state messages will override any RedEdge internal or external sensor data, such as a connected GPS,
+         for 30 seconds since the last state message was received. For aircraft state and mount status, messages should be sent as
+         often as possible to ensure the latest state information is available to the camera when a capture is taken.</p>
+         <p>Specifically, messages defined in mavlink/message_definitions/ardupilotmega.xml are used. Ardupilotmega.xml includes
+         common.xml, so compiling it should create the required headers. For C/C++, use the mavgenerate.py tool to generate the
+         headers from ardupilotmega.xml, then include common/mavlink.h and ardupilotmega/mavlink.h in your C/C++ project. Python
+         bindings can be used as well, and are found in the mavlink/pymavlink directory.</p>
+         <h1 id="messages">Messages</h1>
+         <h2 id="heartbeat">HEARTBEAT</h2>
+         <p>The RedEdge will send a heartbeat message approximately once per second using the component ID MAV_COMP_ID_CAMERA.
+         While this message can be safely ignored, it can be used to verify the RedEdge is properly powered on.</p>
+         <p>
+            <a href="http://pixhawk.ethz.ch/mavlink/#HEARTBEAT">http://pixhawk.ethz.ch/mavlink/#HEARTBEAT</a>
+         </p>
+         <h2 id="ping">PING</h2>
+         <p>Send the PING message with system_id = 0 and component_id = 0, and with a new sequence number each time, to ensure
+         round-trip communications with the RedEdge. The PING message will be responded to with the same sequence number and the
+         system_id and component_id of the sender (which are present in the message header).</p>
+         <h2 id="gps_raw_int">GPS_RAW_INT</h2>
+         <p>Use this message to send the raw GPS information to the RedEdge as received by the host vehicle. This is the main
+         message providing GPS information to the RedEdge. Forwarding GPS data to the camera as soon as it is received by the host
+         will ensure the latest information is present in a new capture. Use the 64-bit time_usec field to set the camera's UTC
+         time.</p>
+         <p>
+            <a href="http://pixhawk.ethz.ch/mavlink/#GPS_RAW_INT">http://pixhawk.ethz.ch/mavlink/#GPS_RAW_INT</a>
+         </p>
+         <h2 id="system_time">SYSTEM_TIME</h2>
+         <p>This message is required if using GLOBAL_POSITION_INT, as that message does not provide a UTC timestamp. It is used to
+         update UTC time to provide accurate timestamping of images. Provide a 64-bit unix timestamp referenced to UTC time and the
+         UNIX (not GPS) epoch. Most GPS receivers provide this information in a UTC time message.</p>
+         <p>Note: if using GPS_RAW_INT, the 64bit timestamp should be set to UTC time prior to sending.</p>
+         <p>
+            <a href="http://pixhawk.ethz.ch/mavlink/#SYSTEM_TIME">http://pixhawk.ethz.ch/mavlink/#SYSTEM_TIME</a>
+         </p>
+         <h2 id="attitude">ATTITUDE</h2>
+         <p>Vehicle state (roll, pitch, yaw) and vehicle rates can be provided via the ATTITUDE message. Note that this is the
+         state of the host vehicle. The offset of the camera from the host reference frame, whether fixed or on a gimbals, should
+         be provided via the MOUNT_STATUS message defined below.</p>
+         <p>The aircraft orientation is specified in the standard aeronautical coordinate frame, where the X axis points to the
+         front of the vehicle, the Y axis points to the right, and the Z axis points down. Rotation order is Yaw, then Pitch, then
+         Roll, about the Z, Y, then X axes accordingly.</p>
+         <p>
+            <a href="http://pixhawk.ethz.ch/mavlink/#ATTITUDE">http://pixhawk.ethz.ch/mavlink/#ATTITUDE</a>
+         </p>
+         <h2 id="mount_status">MOUNT_STATUS</h2>
+         <p>This message definition is difficult to find, so we will repeat it here. It has 3 values, sent in degrees *100.</p>
+         <pre>
+<code>@param pointing_a - pitch rotation (INT16, deg*100)
+@param pointing_b - roll rotation (INT16, deg*100)
+@param pointing_c - yaw rotation (INT16, deg*100)
+</code>
+</pre>
+         <p>This message can be used to provide the orientation of the camera measured by an external source by sending the
+         `MOUNT_STATUS` message along with the `ATTITUDE` message. Anytime this value has been written in the preceding 5 seconds,
+         it will be considered valied and will be written to image metadata.</p>
+         <p>Using these two messages, two rotations can be specified: An aircraft orientation and a camera orientation. The
+         aircraft orientation gives the orientation of the aircraft relative to the earth frame, and the camera orientation gives
+         the orentiation of the fixed or gimbaled camera relative to the aircraft. If the camera is fixed mounted, the camera
+         orientation can be set to the appropriate static value and only the aircraft orientation needs to be updated.</p>
+         <p>The camera orientation represents the orientation of the camera relative to the aircraft. The default orientation, when
+         the camera angles are all zero, is defined such that the camera is pointed straight down relative to the aircraft
+         (aircraft nadir) with the top of the camera towards the "front" of the aircraft. The rotation order is again yaw, then
+         pitch, then roll, about the camera Z, Y, and X axes accordingly. The camera axes are defined such that at zero rotation
+         angle, the X axis points down (along the camera focal axis) the Z axis points towards the rear of the vehicle, and the Y
+         axis follows right-hand rule and points out the right side of the vehicle.</p>
+         <p>The default value for these angles is zero. For a fixed camera pointed straight down relative to the aircraft, and with
+         the top of the camera toward the front of the aircraft, this default value can be used (pitch = 0.0, roll = 0.0, yaw =
+         0.0).</p>
+         <p>The combination of the aircraft attitude sent in the attitude message and the rotations in the mount status message
+         will be used to derive an earth-fixed camera orientation. It is recommended that when these messages are built on the host
+         aircraft, the values for both the aircraft orientation and the gimbals orientation are latched into memory, then they are
+         sent via these messages. This will ensure that the aircraft orientation and gimbals orientations were acquired at the same
+         moment.</p>
+         <h2 id="global_position_int">GLOBAL_POSITION_INT</h2>
+         <p>Used to update the position from a host state estimate using more than raw GPS, such as a GPS-aided INS system. This
+         may not be the position provided by the GPS receiver, but may be more accurate and/or updated more frequently. Since this
+         message does not have a fix status field, sending it will imply a 3D GPS fix.</p>
+         <p>
+            <a href="http://pixhawk.ethz.ch/mavlink/#GLOBAL_POSITION_INT">http://pixhawk.ethz.ch/mavlink/#GLOBAL_POSITION_INT</a>
+         </p>
+         <h2 id="gps_status">GPS_STATUS</h2>
+         <p>GPS satellite infomation which is updated on the RedEdge WiFi user interface. This message is not required, but if sent
+         the GPS status bars on the RedEdge WiFi interface will be updated.</p>
+         <p>
+            <a href="http://pixhawk.ethz.ch/mavlink/#GPS_STATUS">http://pixhawk.ethz.ch/mavlink/#GPS_STATUS</a>
+         </p>
+      </article>
+   </body>
+</html>
