@@ -69,6 +69,9 @@
                   <li>
                      <a href="#file-access-[/files/*]">File Access [/files/*]</a>
                   </li>
+                  <li>
+                     <a href="#network-status-[/networkstatus]">Network Status [/networkstatus]</a>
+                  </li>
                </ul>
             </li>
          </ul>
@@ -180,7 +183,8 @@
                <tr>
                   <td>network_mode</td>
                   <td>string</td>
-                  <td>Selects whether the camera will act as a master or slave in a MicaSense network. Allowable values: "master", "slave".</td>
+                  <td>Selects whether the camera will act as a master or slave in a MicaSense network. Allowable values: "master",
+                  "slave".</td>
                </tr>
             </tbody>
          </table>
@@ -1224,6 +1228,81 @@
    "directories": []
 }
 </code>
+</pre>
+         <h2 id="network-status-[/networkstatus]">Network Status [/networkstatus]</h2>
+         <p>
+         <strong>URL</strong>: /networkstatus</p>
+         <p>
+         <strong>Supported verbs</strong>: GET</p>
+         <p>The network status API provides information about the MicaSense network, including all RedEdge cameras and DLS's. The
+         devices are presented as an array called "network_map"</p>
+         <p>
+            <strong>Properties</strong>
+         </p>
+         <table>
+            <thead>
+               <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Description</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>bands</td>
+                  <td>array</td>
+                  <td>A list of the center wavelengths of the sensors on the device, in nanometers (nm).</td>
+               </tr>
+               <tr>
+                  <td>device_type</td>
+                  <td>string</td>
+                  <td>The type of device. Will report as either "camera" or "dls".</td>
+               </tr>
+               <tr>
+                  <td>gps_source</td>
+                  <td>string</td>
+                  <td>Indicates where the device is receiving GPS information from. Will report as either an empty string,
+                  "direct", or "host".</td>
+               </tr>
+               <tr>
+                  <td>mode</td>
+                  <td>string</td>
+                  <td>Indicates which network mode the device is operating in.</td>
+               </tr>
+               <tr>
+                  <td>serial</td>
+                  <td>string</td>
+                  <td>Reports the serial number of the device.</td>
+               </tr>
+               <tr>
+                  <td>sw_version</td>
+                  <td>string</td>
+                  <td>Reports the software version currently running on the device.</td>
+               </tr>
+            </tbody>
+         </table>
+         <p>
+         <strong>Example Reponse to 
+         <code>GET /networkstatus</code></strong>:</p>
+         <pre>
+<code>{
+   "network_map": [
+      {  "bands": [475,560,670,670,717],
+         "device_type": "camera",
+         "gps_source": "",
+         "mode": "master",
+         "serial": "1449003LT",
+         "sw_version": "v1.5.3"
+      },
+      {  "bands": [475,560,670,670,717],
+         "device_type": "dls",
+         "gps_source": "direct",
+         "mode": "slave",
+         "serial": "DL01-1525030-SC",
+         "sw_version": "v0.2.34"
+      }
+   ]
+}</code>
 </pre>
       </article>
    </body>
