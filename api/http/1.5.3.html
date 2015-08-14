@@ -1,0 +1,2132 @@
+ <!DOCTYPE html><html><head> <title>RedEdge HTTP API</title><style>
+body {
+  width: 65em;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 30px;
+}
+
+@font-face {
+  font-family: fontawesome-mini;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+.markdown-body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.markdown-body sup {
+  top: -0.5em;
+}
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body .codehilitetable {
+  border: 0;
+  border-spacing: 0;
+}
+
+.markdown-body .codehilitetable tr {
+  border: 0;
+}
+
+.markdown-body .codehilitetable pre,
+.markdown-body div.codehilite {
+  margin: 0;
+}
+
+.markdown-body .linenos,
+.markdown-body .code,
+.markdown-body .codehilitetable td {
+  border: 0;
+  padding: 0;
+}
+
+.markdown-body td:not(.linenos) .linenodiv {
+  padding: 0 !important;
+}
+
+.markdown-body .code {
+  width: 100%;
+}
+
+.markdown-body .linenos div pre,
+.markdown-body .linenodiv pre,
+.markdown-body .linenodiv {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.markdown-body .code div pre,
+.markdown-body .code div {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.4;
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before,
+.markdown-body hr:after {
+  display: table;
+  content: " ";
+}
+
+.markdown-body hr:after {
+  clear: both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  color: #000;
+  padding: 3px 5px;
+  line-height: 10px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  display: inline-block;
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .headeranchor-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+
+.markdown-body .headeranchor-link:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .headeranchor,
+.markdown-body h2 .headeranchor,
+.markdown-body h3 .headeranchor,
+.markdown-body h4 .headeranchor,
+.markdown-body h5 .headeranchor,
+.markdown-body h6 .headeranchor {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+
+.markdown-body h1:hover .headeranchor-link,
+.markdown-body h2:hover .headeranchor-link,
+.markdown-body h3:hover .headeranchor-link,
+.markdown-body h4:hover .headeranchor-link,
+.markdown-body h5:hover .headeranchor-link,
+.markdown-body h6:hover .headeranchor-link {
+  height: 1em;
+  padding-left: 8px;
+  margin-left: -30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .headeranchor-link .headeranchor,
+.markdown-body h2:hover .headeranchor-link .headeranchor,
+.markdown-body h3:hover .headeranchor-link .headeranchor,
+.markdown-body h4:hover .headeranchor-link .headeranchor,
+.markdown-body h5:hover .headeranchor-link .headeranchor,
+.markdown-body h6:hover .headeranchor-link .headeranchor {
+  display: inline-block;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body .admonition {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code,
+.markdown-body samp {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .codehilite {
+  margin-bottom: 16px;
+}
+
+.markdown-body .codehilite pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .codehilite pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+/* Admonition */
+.markdown-body .admonition {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  padding: 0.5em 1em 0.5em 1em;
+  color: #888888;
+  background-color: #F7F7F7;
+  border: 1px solid #888888;
+}
+
+.markdown-body .admonition blockquote {
+  color: rgba(136, 136, 136, 0.5);
+  border-left: 4px solid rgba(136, 136, 136, 0.5);
+}
+
+.markdown-body .admonition table {
+  color: #333;
+}
+
+.markdown-body .admonition p {
+  padding: 0;
+  margin: 0;
+}
+
+.markdown-body .admonition-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.markdown-body .admonition-icon {
+  font: normal normal 16px fontawesome-mini;
+  line-height: 1.5;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  float: left;
+}
+
+.markdown-body .attention {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  border: 1px solid #4F8A10;
+}
+
+.markdown-body .caution {
+  color: #D63301;
+  background-color: #FFCCBA;
+  border: 1px solid #D63301;
+}
+
+.markdown-body .hint {
+  color: #00529B;
+  background-color: #BDE5F8;
+  border: 1px solid #00529B;
+}
+
+.markdown-body .danger {
+  color: #D8000C;
+  background-color: #FFBABA;
+  border: 1px solid #D8000C;
+}
+
+.markdown-body .question {
+  color: #00049b;
+  background-color: #BDC8F8;
+  border: 1px solid #00049b;
+}
+
+.markdown-body .note {
+  color: #9F6000;
+  background-color: #FEEFB3;
+  border: 1px solid #9F6000;
+}
+
+.markdown-body .attention {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  border: 1px solid #4F8A10;
+}
+
+.markdown-body .caution blockquote {
+  color: rgba(214, 51, 1, .5);
+  border-left: 4px solid rgba(214, 51, 1, .5);
+}
+
+.markdown-body .hint blockquote {
+  color: rgba(0, 82, 155, .5);
+  border-left: 4px solid rgba(0, 82, 155, .5);
+}
+
+.markdown-body .danger blockquote {
+  color: rgba(216, 0, 12, .5);
+  border-left: 4px solid rgba(216, 0, 12, .5);
+}
+
+.markdown-body .question blockquote {
+  color: rgba(0, 4, 155, .5);
+  border-left: 4px solid rgba(0, 4, 155, .5);;
+}
+
+.markdown-body .note blockquote {
+  color: rgba(159, 96, 0, .5);
+  border-left: 4px solid rgba(159, 96, 0, .5);
+}
+
+.markdown-body .admonition-icon:before {
+  content: "\f040\00a0";
+}
+
+.markdown-body .attention > .admonition-icon:before {
+  content: "\f058\00a0";
+}
+
+.markdown-body .caution > .admonition-icon:before {
+  content: "\f06a\00a0";
+}
+
+.markdown-body .hint > .admonition-icon:before {
+  content: "\f05a\00a0";
+}
+
+.markdown-body .danger > .admonition-icon:before {
+  content: "\f056\00a0";
+}
+
+.markdown-body .question > .admonition-icon:before {
+  content: "\f059\00a0";
+}
+
+.markdown-body .note > .admonition-icon:before {
+  content: "\f040\00a0";
+}
+
+/* progress bar*/
+.markdown-body .progress {
+  display: block;
+  width: 300px;
+  margin: 10px 0;
+  height: 24px;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #F8F8F8;
+  position: relative;
+  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
+}
+
+.markdown-body .progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: bold;
+  width: 100%; margin: 0;
+  line-height: 24px;
+  color: #333;
+  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.markdown-body .progress-bar {
+  height: 24px;
+  float: left;
+  border-right: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #34c2e3;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5);
+  background-size: 30px 30px;
+  background-image: -webkit-linear-gradient(
+    135deg, rgba(255, 255, 255, .4) 27%,
+    transparent 27%,
+    transparent 53%, rgba(255, 255, 255, .4) 53%,
+    rgba(255, 255, 255, .4) 77%,
+    transparent 77%, transparent
+  );
+  background-image: -moz-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 53%, rgba(255, 255, 255, .4) 53%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -ms-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 53%, rgba(255, 255, 255, .4) 53%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -o-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 53%, rgba(255, 255, 255, .4) 53%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 53%, rgba(255, 255, 255, .4) 53%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+}
+
+.markdown-body .progress-100plus .progress-bar {
+  background-color: #1ee038;
+}
+
+.markdown-body .progress-80plus .progress-bar {
+  background-color: #86e01e;
+}
+
+.markdown-body .progress-60plus .progress-bar {
+  background-color: #f2d31b;
+}
+
+.markdown-body .progress-40plus .progress-bar {
+  background-color: #f2b01e;
+}
+
+.markdown-body .progress-20plus .progress-bar {
+  background-color: #f27011;
+}
+
+.markdown-body .progress-0plus .progress-bar {
+  background-color: #f63a0f;
+}
+
+.markdown-body .gloss .progress-bar {
+  box-shadow:
+    inset -1px 1px 0 rgba(255, 255, 255, .5),
+    inset 0 -4px 12px rgba(255, 255, 255, .7),
+    inset 0 4px 12px rgba(255, 255, 255, .7),
+    inset 0 -12px 0 rgba(0, 0, 0, .05),
+    inset 1px -1px 0 rgba(255, 255, 255, .2);
+}
+
+.markdown-body .candystripe-animate .progress-bar{
+  -webkit-animation: animate-stripes 3s linear infinite;
+  -moz-animation: animate-stripes 3s linear infinite;
+  animation: animate-stripes 3s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@-moz-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+/* Multimarkdown Critic Blocks */
+.markdown-body .critic_mark {
+  background: #ff0;
+}
+
+.markdown-body .critic_delete {
+  color: #c82829;
+  text-decoration: line-through;
+}
+
+.markdown-body .critic_insert {
+  color: #718c00 ;
+  text-decoration: underline;
+}
+
+.markdown-body .critic_comment {
+  color: #8e908c;
+  font-style: italic;
+}
+
+.markdown-body .headeranchor {
+  font: normal normal 16px octicons-anchor;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headeranchor:before {
+  content: '\f05c';
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+/* Media */
+@media only screen and (min-width: 480px) {
+  .markdown-body {
+    font-size:14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .markdown-body {
+    font-size:16px;
+  }
+}
+
+@media print {
+  .markdown-body * {
+    background: transparent !important;
+    color: black !important;
+    filter:none !important;
+    -ms-filter: none !important;
+  }
+
+  .markdown-body {
+    font-size:12pt;
+    max-width:100%;
+    outline:none;
+    border: 0;
+  }
+
+  .markdown-body a,
+  .markdown-body a:visited {
+    text-decoration: underline;
+  }
+
+  .markdown-body .headeranchor-link {
+    display: none;
+  }
+
+  .markdown-body a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  .markdown-body abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .markdown-body .ir a:after,
+  .markdown-body a[href^="javascript:"]:after,
+  .markdown-body a[href^="#"]:after {
+    content: "";
+  }
+
+  .markdown-body pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .markdown-body pre,
+  .markdown-body blockquote {
+    border: 1px solid #999;
+    padding-right: 1em;
+    page-break-inside: avoid;
+  }
+
+  .markdown-body .progress,
+  .markdown-body .progress-bar {
+    box-shadow: none;
+  }
+
+  .markdown-body tr,
+  .markdown-body img {
+    page-break-inside: avoid;
+  }
+
+  .markdown-body img {
+    max-width: 100% !important;
+  }
+
+  .markdown-body p,
+  .markdown-body h2,
+  .markdown-body h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .markdown-body h2,
+  .markdown-body h3 {
+    page-break-after: avoid;
+  }
+}
+</style></head>
+<body><article class="markdown-body">
+<h1 id="rededge-http-control-api">RedEdge HTTP Control API</h1>
+
+<p>This document describes the protocol which can be be used by software to control the RedEdge multi-spectral camera. The camera can be controlled using HTTP via either the ethernet connector or the 802.11 WIFI access point. For more detailed information on connecting to the camera, see the RedEdge Users&#39;s Guide.</p>
+
+<h1 id="table-of-contents">Table of Contents</h1>
+
+<p><ul>
+<li>
+<a href="#rededge-http-control-api">RedEdge HTTP Control API</a>
+</li>
+<li>
+<a href="#table-of-contents">Table of Contents</a>
+</li>
+<li>
+<a href="#general-protocol-overview">General Protocol Overview</a>
+</li>
+<li>
+<a href="#routes">Routes</a>
+<ul>
+<li>
+<a href="#config-[/config]">Config [/config]</a>
+</li>
+<li>
+<a href="#camera-exposure-[/exposure]">Camera Exposure [/exposure]</a>
+</li>
+<li>
+<a href="#version-information-[/version]">Version Information [/version]</a>
+</li>
+<li>
+<a href="#status-[/status]">Status [/status]</a>
+</li>
+<li>
+<a href="#command-capture-[/capture]">Command Capture [/capture]</a>
+</li>
+<li>
+<a href="#capture-status-request-[/capture/:id]">Capture Status Request [/capture/:id]</a>
+</li>
+<li>
+<a href="#camera-position-[/gps]">Camera position [/gps]</a>
+</li>
+<li>
+<a href="#camera-orientation-[/orientation]">Camera Orientation [/orientation]</a>
+</li>
+<li>
+<a href="#vignette-calibration-[/calibration/vignette]">Vignette Calibration [/calibration/vignette]</a>
+</li>
+<li>
+<a href="#distortion-calibration-[/calibration/distortion]">Distortion Calibration [/calibration/distortion]</a>
+</li>
+<li>
+<a href="#camera-information-[/camera_info]">Camera Information [/camera_info]</a>
+</li>
+<li>
+<a href="#kml-captures-[/captures.kml]">KML Captures [/captures.kml]</a>
+</li>
+<li>
+<a href="#wifi-configuration-[/wifi]">Wifi Configuration [/wifi]</a>
+</li>
+<li>
+<a href="#file-access-[/files/*]">File Access [/files/*]</a>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+
+<h1 id="general-protocol-overview">General Protocol Overview</h1>
+
+<p>The API is accessed via HTTP connection to port 80 at the camera IP address. All data is exchanged in the JSON format. </p>
+
+<p>The actual value of the IP address depends on the configuration. When accessing the camera via its WIFI access point, the camera IP address will be 192.168.10.254. When the camera is connected to an Ethernet network, the camera IP address will be 192.168.1.83.</p>
+
+<p>NOTE: Future software updates will allow the camera to support the use of user-assigned static IP addresses, assignment of IP addresses via DHCP, and will support a broadcast-based device discovery protocol for locating cameras on a network.</p>
+
+<h1 id="routes">Routes</h1>
+
+<h2 id="config-[/config]">Config [/config]</h2>
+
+<p>The config object contains camera configuration options. These options are persistent between camera power cycles, except where exceptions are noted.</p>
+
+<p><strong>URL</strong>: /config/</p>
+
+<p><strong>Supported verbs</strong>: GET, POST</p>
+
+<p>Object properties: </p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>streaming_enable</td>
+<td>boolean</td>
+<td>Enable continuous rapid capture of JPEG previews</td>
+</tr>
+<tr>
+<td>preview_band</td>
+<td>string</td>
+<td>Selects band(s) to be rendered in preview JPEG <br/>Allowable values: &quot;band1&quot;, &quot;band2&quot;, &quot;band3&quot;, &quot;band4&quot;, &quot;band5&quot;, &quot;multi&quot;</td>
+</tr>
+<tr>
+<td>operating_alt</td>
+<td>integer</td>
+<td>Aircraft operating altitude above ground (meters)</td>
+</tr>
+<tr>
+<td>overlap_along_track</td>
+<td>integer</td>
+<td>Desired along track overlap percentage (0-100)</td>
+</tr>
+<tr>
+<td>overlap_cross_track</td>
+<td>integer</td>
+<td>Desired cross track overlap percentage (0-100)</td>
+</tr>
+<tr>
+<td>auto_cap_mode</td>
+<td>string</td>
+<td>Auto capture mode. Allowable values: &quot;disabled&quot;, &quot;overlap&quot;, &quot;timer&quot;, &quot;ext&quot;</td>
+</tr>
+<tr>
+<td>timer_period</td>
+<td>float</td>
+<td>Period between timer captures (seconds)</td>
+</tr>
+<tr>
+<td>ext_trigger_mode</td>
+<td>string</td>
+<td>Allowable values: &quot;rising&quot;, &quot;falling&quot;, &quot;longpwm&quot;, &quot;shortpwm&quot;</td>
+</tr>
+<tr>
+<td>pwm_trigger_threshold</td>
+<td>float</td>
+<td>The long/short pulse width threshold for PWM input, in miliseconds</td>
+</tr>
+<tr>
+<td>enabled_bands_raw</td>
+<td>integer</td>
+<td>Bit mask of bands that are enabled for raw capture storage</td>
+</tr>
+<tr>
+<td>enabled_bands_jpeg</td>
+<td>integer</td>
+<td>Bit mask of bands enabled for jpeg capture and storage</td>
+</tr>
+<tr>
+<td>enable_man_exposure</td>
+<td>boolean</td>
+<td>When true, the user-provided exposure settings are used instead of the automatic exposure control. This field is not persistent.</td>
+</tr>
+</tbody></table>
+
+<p>Update (POST) requests may provide any subset of the config properties as parameters and only those properties that are provided will be modified. </p>
+
+<p><strong>Example JSON Data for POST</strong>: 
+Providing the following JSON object as the body of a POST to /config will update the &#39;streaming_enable&#39; and &#39;timer_period&#39; options, while leaving all other options unchanged.</p>
+
+<pre><code>{
+    &quot;streaming_enable&quot; : false,
+    &quot;timer_period&quot; : 1.0
+}
+</code></pre>
+
+<h2 id="camera-exposure-[/exposure]">Camera Exposure [/exposure]</h2>
+
+<p><strong>URL</strong>: /exposure/</p>
+
+<p><strong>Supported verbs</strong>: GET, POST </p>
+
+<p>The camera exposure object controls the camera&#39;s exposure mode, and sets manual exposure values. Manual exposure values are only used when the enable_man_exposure field in the config object is set to true. The exposure settings are <strong>not persistent</strong> and the camera will revert to the default behavior of automatic exposure control when it is powered off. </p>
+
+<p>Note: Automatic exposure mode is recommended during normal operation.  The camera has automatic gain and exposure control (AGC) rules which are designed for aerial data collection. The AGC rules will prevent blurring in most cases by first increasing imager gain, and will prevent over-exposure of bright subjects.</p>
+
+<p>The exposure properties are expressed in miliseconds. The gain properties must be integers with a value of 1, 2, 4 or 8. </p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>exposure1</td>
+<td>float</td>
+<td>Exposure (in ms) for sensor #1</td>
+</tr>
+<tr>
+<td>exposure2</td>
+<td>float</td>
+<td>Exposure (in ms) for sensor #2</td>
+</tr>
+<tr>
+<td>exposure3</td>
+<td>float</td>
+<td>Exposure (in ms) for sensor #3</td>
+</tr>
+<tr>
+<td>exposure4</td>
+<td>float</td>
+<td>Exposure (in ms) for sensor #4</td>
+</tr>
+<tr>
+<td>exposure5</td>
+<td>float</td>
+<td>Exposure (in ms) for sensor #5</td>
+</tr>
+<tr>
+<td>gain1</td>
+<td>int</td>
+<td>Gain for sensor #1. Allowed values: [1,2,4,8]</td>
+</tr>
+<tr>
+<td>gain2</td>
+<td>int</td>
+<td>Gain for sensor #2. Allowed values: [1,2,4,8]</td>
+</tr>
+<tr>
+<td>gain3</td>
+<td>int</td>
+<td>Gain for sensor #3. Allowed values: [1,2,4,8]</td>
+</tr>
+<tr>
+<td>gain4</td>
+<td>int</td>
+<td>Gain for sensor #4. Allowed values: [1,2,4,8]</td>
+</tr>
+<tr>
+<td>gain5</td>
+<td>int</td>
+<td>Gain for sensor #5. Allowed values: [1,2,4,8]</td>
+</tr>
+</tbody></table>
+
+<p>Example object: </p>
+
+<pre><code>{
+    &quot;exposure1&quot; : 0.06,
+    &quot;exposure2&quot; : 1.0,
+    &quot;exposure3&quot; : 8.0,
+    &quot;exposure4&quot; : 25.0,
+    &quot;exposure5&quot; : 0.5,
+    &quot;gain1&quot; : 1,
+    &quot;gain2&quot; : 2,
+    &quot;gain3&quot; : 4,
+    &quot;gain4&quot; : 8,
+    &quot;gain5&quot; : 1,
+}
+</code></pre>
+
+<h2 id="version-information-[/version]">Version Information [/version]</h2>
+
+<p><strong>URL</strong>: /version</p>
+
+<p><strong>Supported Verbs</strong>: GET </p>
+
+<p>This read-only object contains the software version and the device serial number. </p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sw_version</td>
+<td>string</td>
+<td>The version of software installed on the camera</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>string</td>
+<td>The camera serial number</td>
+</tr>
+</tbody></table>
+
+<p>Example response: </p>
+
+<pre><code>{
+    &quot;sw_version&quot; : &quot;v1.2.3&quot;,
+    &quot;serial&quot; : &quot;1220001&quot;
+}
+</code></pre>
+
+<h2 id="status-[/status]">Status [/status]</h2>
+
+<p><strong>URL</strong>: /status</p>
+
+<p><strong>Supported Verbs</strong>: GET</p>
+
+<p>This read-only object returns the current camera status information. </p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: center">Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">sd_gb_free</td>
+<td style="text-align: center">float</td>
+<td>The amount of free space on the SD card (GB)</td>
+</tr>
+<tr>
+<td style="text-align: left">sd_gb_total</td>
+<td style="text-align: center">float</td>
+<td>The total amount of storage on the SD card (GB)</td>
+</tr>
+<tr>
+<td style="text-align: left">sd_warn</td>
+<td style="text-align: center">bool</td>
+<td>When true, indicates the low SD space warning threshold is met</td>
+</tr>
+<tr>
+<td style="text-align: left">sd_status</td>
+<td style="text-align: center">string</td>
+<td>Status of the SD card, one of &quot;Ok, NotPresent, ReadError, Full&quot;</td>
+</tr>
+<tr>
+<td style="text-align: left">bus_volts</td>
+<td style="text-align: center">float</td>
+<td>The measured supply voltage</td>
+</tr>
+<tr>
+<td style="text-align: left">gps_used_sats</td>
+<td style="text-align: center">int</td>
+<td>The number of satellites used by GPS fix</td>
+</tr>
+<tr>
+<td style="text-align: left">gps_vis_sats</td>
+<td style="text-align: center">int</td>
+<td>The number of visible GPS satellites</td>
+</tr>
+<tr>
+<td style="text-align: left">gps_warn</td>
+<td style="text-align: center">bool</td>
+<td>True when the GPS receiver reports interference detected</td>
+</tr>
+<tr>
+<td style="text-align: left">gps_lat</td>
+<td style="text-align: center">float</td>
+<td>The current latitude (radians)</td>
+</tr>
+<tr>
+<td style="text-align: left">gps_lon</td>
+<td style="text-align: center">float</td>
+<td>The current longitude (radians)</td>
+</tr>
+<tr>
+<td style="text-align: left">course</td>
+<td style="text-align: center">float</td>
+<td>The direction of travel in NED</td>
+</tr>
+<tr>
+<td style="text-align: left">alt_agl</td>
+<td style="text-align: center">float</td>
+<td>Altitude above ground level</td>
+</tr>
+<tr>
+<td style="text-align: left">alt_msl</td>
+<td style="text-align: center">float</td>
+<td>Altitude above mean sea level</td>
+</tr>
+<tr>
+<td style="text-align: left">p_acc</td>
+<td style="text-align: center">float</td>
+<td>Positional accuracy of GPS fix</td>
+</tr>
+<tr>
+<td style="text-align: left">utc_time</td>
+<td style="text-align: center">datetime</td>
+<td>Format YYYY-MM-DDTHH:MM:SS.SSS</td>
+</tr>
+<tr>
+<td style="text-align: left">vel_2d</td>
+<td style="text-align: center">float</td>
+<td>Horizontal velocity (m/s)</td>
+</tr>
+<tr>
+<td style="text-align: left">sv_info</td>
+<td style="text-align: center">array</td>
+<td>Array of svinfo objects (see below)</td>
+</tr>
+<tr>
+<td style="text-align: left">auto_cap_active</td>
+<td style="text-align: center">bool</td>
+<td>True indicates that the camera&#39;s automatic capture mode is activated</td>
+</tr>
+</tbody></table>
+
+<p><strong>SVINFO Sub-object</strong></p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: center">Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">azimuth</td>
+<td style="text-align: center">float</td>
+<td>Satellite azimuth (deg)</td>
+</tr>
+<tr>
+<td style="text-align: left">elevation</td>
+<td style="text-align: center">float</td>
+<td>Satellite elevation (deg)</td>
+</tr>
+<tr>
+<td style="text-align: left">channel</td>
+<td style="text-align: center">int</td>
+<td>Receiver channel</td>
+</tr>
+<tr>
+<td style="text-align: left">cno</td>
+<td style="text-align: center">int</td>
+<td>Satellite carrier-to-noise ratio</td>
+</tr>
+<tr>
+<td style="text-align: left">used_flag</td>
+<td style="text-align: center">bool</td>
+<td>Satellite is being used in the position fix</td>
+</tr>
+<tr>
+<td style="text-align: left">diff_flag</td>
+<td style="text-align: center">bool</td>
+<td>Satellite is using differential corrections</td>
+</tr>
+<tr>
+<td style="text-align: left">orbit_info</td>
+<td style="text-align: center">bool</td>
+<td>Receiver has some orbital infomation about this satellite</td>
+</tr>
+<tr>
+<td style="text-align: left">orbit<em>is</em>eph</td>
+<td style="text-align: center">bool</td>
+<td>Orbital information is ephemeris data</td>
+</tr>
+<tr>
+<td style="text-align: left">sv_healthy</td>
+<td style="text-align: center">bool</td>
+<td>This satellite is healthy and can be used for positioning</td>
+</tr>
+<tr>
+<td style="text-align: left">svid</td>
+<td style="text-align: center">int</td>
+<td>Space Vehicle ID</td>
+</tr>
+<tr>
+<td style="text-align: left">quality</td>
+<td style="text-align: center">int</td>
+<td>Quality indicator for this satellite</td>
+</tr>
+</tbody></table>
+
+<p>Example GET response: </p>
+
+<pre><code>{
+    &quot;alt_agl&quot;: 14.798,
+    &quot;alt_msl&quot;: 283.55,
+    &quot;auto_cap_active&quot;: false,
+    &quot;bus_volts&quot;: 3.695,
+    &quot;course&quot;: 169.4142636445688,
+    &quot;gps_lat&quot;: 36.2709446,
+    &quot;gps_lon&quot;: -104.7104612,
+    &quot;gps_time&quot;: &quot;2014-11-13T18:34:12.345Z&quot;,
+    &quot;gps_used_sats&quot;: 5,
+    &quot;gps_vis_sats&quot;: 16,
+    &quot;gps_warn&quot;: false,
+    &quot;p_acc&quot;: 0,
+    &quot;sd_gb_free&quot;: 0,
+    &quot;sd_gb_total&quot;: 0,
+    &quot;sd_warn&quot;: true,
+    &quot;sd_status&quot;: &quot;NotPresent&quot;,     
+    &quot;utc_time&quot;: &quot;2014-11-13T18:34:0.000Z&quot;,
+    &quot;vel_2d&quot;: 0.08,
+    &quot;sv_info&quot;: [
+        {
+            &quot;azimuth&quot;: 0.8203047513961792,
+            &quot;channel&quot;: 9,
+            &quot;cno&quot;: 41,
+            &quot;diff_flag&quot;: false,
+            &quot;elevation&quot;: 0.6108652353286743,
+            &quot;orbit_info&quot;: true,
+            &quot;orbit_is_eph&quot;: true,
+            &quot;quality&quot;: 7,
+            &quot;sv_healthy&quot;: false,
+            &quot;svid&quot;: 5,
+            &quot;used_flag&quot;: false
+        },
+        {
+            &quot;azimuth&quot;: 0,
+            &quot;channel&quot;: 14,
+            &quot;cno&quot;: 15,
+            &quot;diff_flag&quot;: false,
+            &quot;elevation&quot;: -1.588249564170837,
+            &quot;orbit_info&quot;: false,
+            &quot;orbit_is_eph&quot;: false,
+            &quot;quality&quot;: 3,
+            &quot;sv_healthy&quot;: false,
+            &quot;svid&quot;: 8,
+            &quot;used_flag&quot;: false
+        },
+        ...
+    ]
+}
+</code></pre>
+
+<h2 id="command-capture-[/capture]">Command Capture [/capture]</h2>
+
+<p><strong>URL</strong>: /capture</p>
+
+<p><strong>Supported verbs</strong>: GET,POST</p>
+
+<p>The camera can be commanded to take a capture by either a GET or POST request to this URL. Both actions have the same effect. The command can take several arguments, provided as parameters in the URL or as a JSON body. </p>
+
+<p>When using the preview option, the a new JPEG preview image will be generated based on the preview_band option in the configuration settings. This preview is the image displayed on the web server user interface. </p>
+
+<p>The cache_jpg and cache_raw parameters allow the user to create and cache images in camera RAM, for temporary access without impacting SD card data thoughput.  The images saved to the SD card for any given capture are still controlled by the main configuration settings.  This allows, for example, a user to cache jpegs from two bands to be retrieved quickly during flight, while still saving RAW images to the SD card for later retreival. Note that cached image files are only available temporarily. Cached files are kept only for the last two capture commands which had non-zero cache_raw or cache_jpeg arguments, so it is important if you are downloading these cached files that you finish downloading the file before issueing more than one subsequent capture command (only captures with caching enabled count here). </p>
+
+<p><strong>Arguments</strong></p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>preview</td>
+<td>bool</td>
+<td>If true, updates the current preview image. Defaults to &#39;false&#39;.</td>
+</tr>
+<tr>
+<td>anti_sat</td>
+<td>bool</td>
+<td>If true, strong anti-saturation rules are used for the capture</td>
+</tr>
+<tr>
+<td>cache_jpeg</td>
+<td>int</td>
+<td>Bitmask for bands from which to capture and cache JPEG images. Defaults to 0.</td>
+</tr>
+<tr>
+<td>cache_raw</td>
+<td>int</td>
+<td>Bitmask for bands from which to capture and cache RAW (tiff) images. Defaults to 0.</td>
+</tr>
+<tr>
+<td>store_capture</td>
+<td>bool</td>
+<td>Store this image to the SD card based on configuration settings. <br>Defaults to true. (JPEG and/or RAW may be stored depending on configuration)</td>
+</tr>
+<tr>
+<td>block</td>
+<td>bool</td>
+<td>When &#39;true&#39;, the HTTP request will not return until the capture is complete. Defaults to &#39;false&#39;.</td>
+</tr>
+</tbody></table>
+
+<p><strong>Example URL:</strong> <code>/capture?preview=true</code> captures an image, generating a preview JPEG and saving RAW files to the SD card</p>
+
+<p>For bit masks, bit 0 corresponds to imager #1, bit 1 to imager #2, and so forth. As an example, to capture all five bands, the bit mask value should be 31 (In binary: 11111). To capture only band #4, the value should be 8 (01000). </p>
+
+<p>The response will always be a JSON object, however the contents of the JSON object can vary depending on the provided arguments. </p>
+
+<p><strong>Response Properties</strong></p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Property</th>
+<th style="text-align: center">Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">status</td>
+<td style="text-align: center">string</td>
+<td>One of &#39;pending&#39;, &#39;complete&#39;, &#39;error&#39;</td>
+</tr>
+<tr>
+<td style="text-align: left">id</td>
+<td style="text-align: center">string</td>
+<td>ID representing this capture. Save this to retrieve the status of a capture later.</td>
+</tr>
+<tr>
+<td style="text-align: left">time <br/> (<em>optional</em>)</td>
+<td style="text-align: center">string</td>
+<td>ISO8601 datetime string providing the UTC time of actual image capture. This property is only present if the block argument is true</td>
+</tr>
+<tr>
+<td style="text-align: left">jpeg_cache_path <br/> (<em>optional</em>)</td>
+<td style="text-align: center">object</td>
+<td>An object containing a property for each band for which JPEG cacheing was enabled. (e.g. &#39;1&#39;, &#39;2&#39;, ...). The value of each property is the path to retrieve the cached JPEG file for that band. This property is only present if cache_jpg was non-zero and the block arguments was true</td>
+</tr>
+<tr>
+<td style="text-align: left">raw_cache_path <br/> (<em>optional</em>)</td>
+<td style="text-align: center">object</td>
+<td>Like jpeg_cache_path, but for cached raw images</td>
+</tr>
+</tbody></table>
+
+<p>If the block argument is false, then the status property in the response will always be &#39;pending&#39; or &#39;error&#39;. When block is set to true, then the status property will be either &#39;complete&#39; or &#39;error&#39;.</p>
+
+<p>Note that blocking calls return as soon as the capture is complete, and the cached files are available for download. The files may not have been transferred to the SD card storage yet. You may use the /capture/:id route to lookup results for a previous capture (including the location of SD card files after they are saved). </p>
+
+<p><strong>Example Responses</strong>: </p>
+
+<p>In the first response, jpeg and tiff files were commanded to be cached for bands 1, 2, and 5. The store_capture parameter was true, so bands 1-4 were stored as both JPG and raw files. The actual bands that are stored to the card depends on the current configuration settings.</p>
+
+<pre><code>{ 
+    &quot;status&quot; : &quot;complete&quot;,
+    &quot;id&quot; : &quot;i89jfi73irj49f74&quot;,
+    &quot;time&quot; : &quot;2014-10-08T20:27:16.321Z&quot;,
+    &quot;jpeg_cache_path&quot; : {
+        &quot;1&quot; : &quot;/images/i89jfi73irj49f74_1.jpg&quot;,
+        &quot;2&quot; : &quot;/images/i89jfi73irj49f74_2.jpg&quot;,
+        &quot;5&quot; : &quot;/images/i89jfi73irj49f74_5.jpg&quot;
+    },
+    &quot;raw_cache_path&quot; : {
+        &quot;1&quot; : &quot;/images/i89jfi73irj49f74_1.tif&quot;,
+        &quot;2&quot; : &quot;/images/i89jfi73irj49f74_2.tif&quot;,
+        &quot;5&quot; : &quot;/images/i89jfi73irj49f74_5.tif&quot;
+    }  
+}
+</code></pre>
+
+<p>The following response can be expected when block is false, because the capture has not been completed when the object is returned. </p>
+
+<pre><code>{
+    &quot;status&quot; : &quot;pending&quot;,
+    &quot;id&#39; : &quot;i89jfi73irj49f74&quot;
+}  
+</code></pre>
+
+<h2 id="capture-status-request-[/capture/:id]">Capture Status Request [/capture/:id]</h2>
+
+<p><strong>URL</strong>: /capture/:id</p>
+
+<p><strong>Supported verbs</strong>: GET</p>
+
+<p><strong>Example URL</strong>: <code>/capture/i89jfi73irj49f74</code></p>
+
+<p>This route can be called to poll the status of a previously commanded capture. 
+Only those paths that are valid for the capture will be shown. For example, if 
+no cached files were requested for this capture, then the jpeg_cache_path and 
+raw_cache_path fields will not be present. </p>
+
+<p><strong>Example Responses</strong>: </p>
+
+<pre><code>{ 
+    &quot;status&quot; : &quot;complete&quot;,
+    &quot;id&quot; : &quot;i89jfi73irj49f74&quot;,
+    &quot;time&quot; : &quot;2014-10-08T20:27:16.321Z&quot;,
+    &quot;jpeg_cache_path&quot; : {
+        &quot;1&quot; : &quot;/images/i89jfi73irj49f74_1.jpg&quot;,
+        &quot;2&quot; : &quot;/images/i89jfi73irj49f74_2.jpg&quot;,
+        &quot;5&quot; : &quot;/images/i89jfi73irj49f74_5.jpg&quot;
+    },
+    &quot;raw_cache_path&quot; : {
+        &quot;1&quot; : &quot;/images/i89jfi73irj49f74_1.tif&quot;,
+        &quot;2&quot; : &quot;/images/i89jfi73irj49f74_2.tif&quot;,
+        &quot;5&quot; : &quot;/images/i89jfi73irj49f74_5.tif&quot;
+    },        
+    &quot;jpeg_storage_path&quot; : {
+        &quot;1&quot; : &quot;/files/0021SET/000/IMG_0000_1.jpg&quot;,
+        &quot;2&quot; : &quot;/files/0021SET/000/IMG_0000_2.jpg&quot;,
+        &quot;3&quot; : &quot;/files/0021SET/000/IMG_0000_3.jpg&quot;,
+        &quot;4&quot; : &quot;/files/0021SET/000/IMG_0000_4.jpg&quot;
+    },
+    &quot;raw_storage_path&quot; : {
+        &quot;1&quot; : &quot;/files/0021SET/000/IMG_0000_1.tif&quot;,
+        &quot;2&quot; : &quot;/files/0021SET/000/IMG_0000_2.tif&quot;,
+        &quot;3&quot; : &quot;/files/0021SET/000/IMG_0000_3.tif&quot;,
+        &quot;4&quot; : &quot;/files/0021SET/000/IMG_0000_4.tif&quot;
+    }
+}
+</code></pre>
+
+<h2 id="camera-position-[/gps]">Camera position [/gps]</h2>
+
+<p><strong>URL</strong>: /gps</p>
+
+<p><strong>Supported verbs</strong>: GET, POST</p>
+
+<p>This command can be used to retrieve the current gps solution, or to provide a solution to the camera. </p>
+
+<p>This command can be used in lieu of an external GPS attached to the camera to provide the camera with a position (for example, from the aircraft GPS). Anytime this value has been written in the last 30 seconds, it will take priority over a camera attached GPS and will be used instead of the attached GPS when writing image metadata.</p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>latitude</td>
+<td>float</td>
+<td>The camera latitude in radians</td>
+</tr>
+<tr>
+<td>longitude</td>
+<td>float</td>
+<td>The camera longitude in radians</td>
+</tr>
+<tr>
+<td>altitude</td>
+<td>float</td>
+<td>The camera altitude above datum ellipsoid in meters</td>
+</tr>
+<tr>
+<td>vel_n</td>
+<td>float</td>
+<td>The camera northing velocity in m/s</td>
+</tr>
+<tr>
+<td>vel_e</td>
+<td>float</td>
+<td>The camera easting velocity in m/s</td>
+</tr>
+<tr>
+<td>vel_d</td>
+<td>float</td>
+<td>The camera descent rate in m/s</td>
+</tr>
+<tr>
+<td>p_acc</td>
+<td>float</td>
+<td>Camera positional accuracy in meters, one sigma</td>
+</tr>
+<tr>
+<td>v_acc</td>
+<td>float</td>
+<td>Camera vertical accuracy in meters, one sigma</td>
+</tr>
+<tr>
+<td>fix3d</td>
+<td>bool</td>
+<td>True if there is a valid 3D fix</td>
+</tr>
+<tr>
+<td>utc_time</td>
+<td>string</td>
+<td>ISO8601 datetime string UTC time string</td>
+</tr>
+</tbody></table>
+
+<p><strong>Example Message</strong></p>
+
+<pre><code>{
+    &quot;latitude&quot; : 0.1363053,
+    &quot;longitude&quot; : -2.399923234,
+    &quot;altitude&quot; : 332.503,
+    &quot;vel_n&quot; : 0.73,
+    &quot;vel_e&quot; : 1.2,
+    &quot;vel_d&quot; : 0.49,
+    &quot;p_acc&quot; : 2.456,
+    &quot;v_acc&quot; : 1.54,
+    &quot;fix3d&quot; : true
+    &quot;utc_time&quot; : &quot;2014-10-08T20:27:23.321Z&quot;
+}
+</code></pre>
+
+<h2 id="camera-orientation-[/orientation]">Camera Orientation [/orientation]</h2>
+
+<p><strong>URL</strong>: /orientation </p>
+
+<p><strong>Supported verbs</strong>: GET, POST</p>
+
+<p>This command retrieves or sets the current camera orientation.   </p>
+
+<p>This command can be used to provide the orientation of the camera measured by an external source by POST&#39;ing the orientation angles. Anytime this value has been written in the preceding 5 seconds, it will be considered valied and will be written to image metadata. </p>
+
+<p>Two rotations can be specified: An aircraft orientation and a camera orientation. The aircraft orientation gives the orientation of the aircraft relative to the earth frame, and the camera orientation gives the orentiation of the fixed or gimbaled camera relative to the aircraft. If desired, the aircraft orientation can be set to zero, and in the case the camera orientation becomes relative to the earth. Alternatively, if the camera is fixed mounted, the camera orientation can be set to the appropriate static value and only the aircraft orientation is updated. </p>
+
+<p>The aircraft orientation is specified in the standard aeronautical coordinate frame, where the X axis points to the front of the vehicle, the Y axis points to the right, and the Z axis points down. Rotation order is Yaw, then Pitch, then Roll, about the Z, Y, then X axes accordingly. </p>
+
+<p>The camera orientation represents the orientation of the camera relative to the aircraft. The default orientation, when the camera angles are all zero, is defined such that the camera is pointed straight down relative to the aircraft (aircraft nadir) with the top of the camera towards the &quot;front&quot; of the aircraft. The rotation order is again yaw, then pitch, then roll, about the camera Z, Y, and X axes accordingly. The camera axes are defined such that at zero rotation angle, the X axis points down (along the camera focal axis) the Z axis points towards the rear of the vehicle, and the Y axis follows right-hand rule and points out the right side of the vehicle. </p>
+
+<p>The default value for these angles is zero. For a fixed camera pointed straight down relative to the aircraft, and with the top of the camera toward the front of the aircraft, this default value can be used. </p>
+
+<p>** POST properties **</p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>vehicle_roll</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>vehicle_pitch</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>vehicle_yaw</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>camera_roll</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>camera_pitch</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+<tr>
+<td>camera_yaw</td>
+<td>float</td>
+<td>radians</td>
+</tr>
+</tbody></table>
+
+<p><strong>Example POST message</strong></p>
+
+<pre><code>{
+    &quot;vehicle_roll&quot; : -0.1512,
+    &quot;vehicle_pitch&quot; : 0.1363053,
+    &quot;vehicle_yaw&quot; : -0.399923234,
+    &quot;camera_roll&quot; : 0.0,
+    &quot;camera_pitch&quot; : 0.0,
+    &quot;camera_yaw&quot; : 0.0
+}
+</code></pre>
+
+<h2 id="vignette-calibration-[/calibration/vignette]">Vignette Calibration [/calibration/vignette]</h2>
+
+<p><strong>URL</strong>: /calibration/vignette</p>
+
+<p><strong>Supported verbs</strong>: GET</p>
+
+<p>Used to retrieve the lens vignette calibration parameters. One set of parameters is returned for each of the five cameras. </p>
+
+<p><strong>Example URLs</strong>: <code>GET /calibration/vignette</code></p>
+
+<p><strong>Properties</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>k</td>
+<td>array</td>
+<td>Array of vignette calibration coefficients [k0,k1,k2,k3,k4,k5]</td>
+</tr>
+<tr>
+<td>cx</td>
+<td>float</td>
+<td>Vignette center x position in pixels</td>
+</tr>
+<tr>
+<td>cy</td>
+<td>float</td>
+<td>Vignette center y position in pixels</td>
+</tr>
+</tbody></table>
+
+<p><strong>Example data</strong></p>
+
+<pre><code>{
+    &quot;1&quot; : {
+        &#39;k&#39;: [1.2e-1, 2.1e-2, 5.1e-2, 5.1e-3, 5.1e-4, 5.1e-5],
+        &#39;cx&#39;: 623.19,
+        &#39;cy&#39;: 495.24
+    },
+    &quot;2&quot; : {
+        &#39;k&#39;: [1.2e-1, 2.1e-2, 5.1e-2, 5.1e-3, 5.1e-4, 5.1e-5],
+        &#39;cx&#39;: 621.21,
+        &#39;cy&#39;: 477.90
+    },
+    &quot;3&quot;: {
+        ...
+    },
+    &quot;4&quot;: {
+        ...
+    },
+    &quot;5&quot;: {
+        ...
+    }
+}
+
+</code></pre>
+
+<h2 id="distortion-calibration-[/calibration/distortion]">Distortion Calibration [/calibration/distortion]</h2>
+
+<p><strong>URL</strong>: /calibration/distortion</p>
+
+<p><strong>Supported verbs</strong>: GET</p>
+
+<p>Used to retrieve the lens distortion calibration parameters for all five cameras. See the &quot;RedEdge File Format ICD&quot; document for more information regarding the lens calibration parameters.</p>
+
+<p><strong>Properties</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>k</td>
+<td>array</td>
+<td>Array of three lens radial coefficients [k1, k2, k3]</td>
+</tr>
+<tr>
+<td>p</td>
+<td>array</td>
+<td>Array of two tangential coefficients [p1,p2]</td>
+</tr>
+<tr>
+<td>fx</td>
+<td>float</td>
+<td>Effective lens focal length in the x direction in pixels</td>
+</tr>
+<tr>
+<td>fy</td>
+<td>float</td>
+<td>Effective lens focal length in the y direction in pixels</td>
+</tr>
+<tr>
+<td>cx</td>
+<td>float</td>
+<td>Lens center x position in pixels</td>
+</tr>
+<tr>
+<td>cy</td>
+<td>float</td>
+<td>Lens center y position in pixels</td>
+</tr>
+</tbody></table>
+
+<p><strong>Example data</strong></p>
+
+<pre><code>{
+    &quot;1&quot;: {
+        &#39;k&#39; : [1.23e-1, 4.56e-2, 6.78e-3],
+        &#39;p&#39; : [1.23e-1, 4.56e-2],
+        &#39;fx&#39; : 1100.2,
+        &#39;fy&#39; : 1101.7,
+        &#39;cx&#39; : 623.76,
+        &#39;cy&#39; : 473.54
+    },
+    &quot;2&quot;: {
+        &#39;k&#39; : [1.23e-1, 4.56e-2, 6.78e-3],
+        &#39;p&#39; : [1.23e-1, 4.56e-2],
+        &#39;fx&#39; : 1100.2,
+        &#39;fy&#39; : 1101.7,
+        &#39;cx&#39; : 623.76,
+        &#39;cy&#39; : 473.54
+    },
+    &quot;3&quot;: {
+        ...
+    },
+    &quot;4&quot;: {
+        ...
+    },
+    &quot;5&quot;: {
+        ...
+    }
+}
+</code></pre>
+
+<h2 id="camera-information-[/camera_info]">Camera Information [/camera_info]</h2>
+
+<p><strong>URL</strong>: /camera_info</p>
+
+<p><strong>Supported verbs</strong>: GET</p>
+
+<p>This endpoint provides information physical information about the camera, including nominal lens parameters and information about the nominal filters installed for each band.</p>
+
+<p><strong>Example URL</strong>: <code>GET /camera_info</code></p>
+
+<p><strong>Example Response to <code>GET /camera_info</code></strong></p>
+
+<pre><code>{
+    &quot;1&quot; : {
+        &quot;type&quot; : &quot;bandpass&quot;,
+        &quot;center_nm&quot;: 498.2,
+        &quot;bandwidth_nm&quot;: 12,
+        &quot;focal_lenth_px&quot; : 1100.0,
+        &quot;image_width&quot;: 1280,
+        &quot;image_height&quot;: 960
+    },
+    &quot;2&quot; : {
+        &quot;type&quot; : &quot;bandpass&quot;,
+        &quot;center_nm&quot;: 620.3,
+        &quot;bandwidth_nm&quot;: 10,
+        &quot;focal_length_px&quot;: 1100.0,
+        &quot;image_width&quot;: 1280,
+        &quot;image_height&quot;: 960
+    },
+    ...
+}
+</code></pre>
+
+<h2 id="kml-captures-[/captures.kml]">KML Captures [/captures.kml]</h2>
+
+<p><strong>URL</strong>: /captures.kml</p>
+
+<p><strong>Supported verbs</strong>: GET</p>
+
+<p>/captures.kml will return a kml file with the contents of all captures currently on the SD card.  This is especially useful when flying multiple flights across one or more areas to ensure contiuous coverage across those areas.</p>
+
+<p><strong>Example KML File</strong></p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;kml xmlns=&quot;http://www.opengis.net/kml/2.2&quot;&gt;
+    &lt;Document&gt;
+        &lt;Folder&gt;
+            &lt;name&gt;&quot;0000SET&quot;&lt;/name&gt;
+            &lt;Placemark&gt;
+              &lt;name&gt;710&lt;/name&gt;
+              &lt;Point&gt;
+                &lt;coordinates&gt;-110.7228486,32.902748314,37.2748314&lt;/coordinates&gt;
+              &lt;/Point&gt;
+            &lt;/Placemark&gt;
+            &lt;Placemark&gt;
+              &lt;name&gt;711&lt;/name&gt;
+              &lt;Point&gt;
+                &lt;coordinates&gt;-110.72628388,32.902745594,37.2745594&lt;/coordinates&gt;
+              &lt;/Point&gt;
+            &lt;/Placemark&gt;
+        &lt;/Folder&gt;
+    &lt;/Document&gt;
+&lt;/kml&gt;
+</code></pre>
+
+<h2 id="wifi-configuration-[/wifi]">Wifi Configuration [/wifi]</h2>
+
+<p><strong>URL</strong>: /wifi</p>
+
+<p><strong>Supported verbs</strong>: GET, POST</p>
+
+<p><strong>Properties</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>enable</td>
+<td>bool</td>
+<td>set to &#39;false&#39; to disable wifi for this session</td>
+</tr>
+</tbody></table>
+
+<p><strong>Response</strong></p>
+
+<pre><code>{
+    &quot;wifi_enabled&quot; : false
+}
+</code></pre>
+
+<p>NOTE: Disabling wifi from the wifi interface may not return a response. WiFi will be re-enabled when the camera is power-cycled</p>
+
+<h2 id="file-access-[/files/*]">File Access [/files/*]</h2>
+
+<p><strong>URL</strong>: /files/path/on/sd/card</p>
+
+<p><strong>Supported verbs</strong>: GET</p>
+
+<p>The file access API provides a method to get the contents of the SD card currently inserted in the camera. GET can return one of three alternatives: 
+1. If the provided path describes a regular file, the the is returned. 
+2. If the provided path describes a directory, a json object is returned that provides a directory listing as an array of descriptors for sub-directories and files at that path.
+3. If the provided path does not exist, a 404 with JSON error message is returned</p>
+
+<p><strong>Example URL</strong>: <code>GET /files/</code> <code>GET /files/000SET/</code>, <code>GET /files/001SET/000/IMG_1234_1.tif</code></p>
+
+<p><strong>Example Response to <code>GET /files/</code></strong>:</p>
+
+<pre><code>{
+   &quot;files&quot;: []
+   &quot;directories&quot;: [&quot;0000SET&quot;, &quot;0001SET&quot;, &quot;0002SET&quot;]
+}
+</code></pre>
+
+<p><strong>Example Response to <code>GET /files/000SET</code></strong>:</p>
+
+<pre><code>{
+   &quot;files&quot;: [
+      { &quot;name&quot;: &quot;paramlog.dat&quot;, &quot;size&quot;: 3219234 }
+   ],
+   &quot;directories&quot;: [&quot;000&quot;]
+}
+</code></pre>
+
+<p><strong>Example Response to <code>GET /files/000SET/000</code></strong>:</p>
+
+<pre><code>{
+   &quot;files&quot;: [
+      { &quot;name&quot;: &quot;IMG_0000_1.tif&quot;, &quot;size&quot;: 5000000 },
+      { &quot;name&quot;: &quot;IMG_0000_2.tif&quot;, &quot;size&quot;: 5000000 },
+      { &quot;name&quot;: &quot;IMG_0000_3.tif&quot;, &quot;size&quot;: 5000000 },
+      { &quot;name&quot;: &quot;IMG_0000_4.tif&quot;, &quot;size&quot;: 5000000 },
+      { &quot;name&quot;: &quot;IMG_0000_5.tif&quot;, &quot;size&quot;: 5000000 }
+   ],
+   &quot;directories&quot;: []
+}
+</code></pre>
+
+  </article>
+  </body>
+  </html>
