@@ -81,9 +81,8 @@
          <p>The actual value of the IP address depends on the configuration. When accessing the camera via its WIFI access point,
          the camera IP address will be 192.168.10.254. When the camera is connected to an Ethernet network, the camera IP address
          will be 192.168.1.83 by default.</p>
-         <p>NOTE: Future software updates will allow the camera to support the use of user-assigned static IP addresses, assignment
-         of IP addresses via DHCP, and will support a broadcast-based device discovery protocol for locating cameras on a
-         network.</p>
+         <p>NOTE: Future software updates will allow the camera to support assignment of IP addresses via DHCP, and will support a
+         broadcast-based device discovery protocol for locating cameras on a network.</p>
          <h1 id="routes">Routes</h1>
          <h2 id="config-[/config]">Config [/config]</h2>
          <p>The config object contains camera configuration options. These options are persistent between camera power cycles,
@@ -167,13 +166,13 @@
                <tr>
                   <td>gain_exposure_crossover</td>
                   <td>float</td>
-                  <td>Exposure time (in seconds) at which the gain should be bumped up in order to properly expose rather than
+                  <td>Exposure time (in seconds) at which the gain should be increased in order to properly expose rather than
                   increasing the exposure time further.</td>
                </tr>
                <tr>
                   <td>ip_address</td>
                   <td>string</td>
-                  <td>Sets the Ethernet address of the camera. Must be a valid IP Address, e.g. "123.456.789.012".</td>
+                  <td>Sets the Ethernet IP address of the camera. Must be a valid IP address, e.g. "123.456.789.012".</td>
                </tr>
                <tr>
                   <td>raw_format</td>
@@ -195,10 +194,9 @@
          update the 'streaming_enable' and 'timer_period' options, while leaving all other options unchanged.</p>
          <pre>
 <code>{
-    "streaming_enable" : false,
-    "timer_period" : 1.0
-}
-</code>
+   "streaming_enable" : false,
+   "timer_period" : 1.0
+}</code>
 </pre>
          <h2 id="camera-exposure-[/exposure]">Camera Exposure [/exposure]</h2>
          <p>
@@ -278,18 +276,17 @@
          <p>Example object:</p>
          <pre>
 <code>{
-    "exposure1" : 0.06,
-    "exposure2" : 1.0,
-    "exposure3" : 8.0,
-    "exposure4" : 25.0,
-    "exposure5" : 0.5,
-    "gain1" : 1,
-    "gain2" : 2,
-    "gain3" : 4,
-    "gain4" : 8,
-    "gain5" : 1,
-}
-</code>
+   "exposure1" : 0.06,
+   "exposure2" : 1.0,
+   "exposure3" : 8.0,
+   "exposure4" : 25.0,
+   "exposure5" : 0.5,
+   "gain1" : 1,
+   "gain2" : 2,
+   "gain3" : 4,
+   "gain4" : 8,
+   "gain5" : 1,
+}</code>
 </pre>
          <h2 id="version-information-[/version]">Version Information [/version]</h2>
          <p>
@@ -323,8 +320,7 @@
 <code>{
     "sw_version" : "v1.2.3",
     "serial" : "1220001"
-}
-</code>
+}</code>
 </pre>
          <h2 id="status-[/status]">Status [/status]</h2>
          <p>
@@ -506,53 +502,53 @@
          <p>Example GET response:</p>
          <pre>
 <code>{
-    "alt_agl": 14.798,
-    "alt_msl": 283.55,
-    "auto_cap_active": false,
-    "bus_volts": 3.695,
-    "course": 169.4142636445688,
-    "gps_lat": 36.2709446,
-    "gps_lon": -104.7104612,
-    "gps_time": "2014-11-13T18:34:12.345Z",
-    "gps_used_sats": 5,
-    "gps_vis_sats": 16,
-    "gps_warn": false,
-    "p_acc": 0,
-    "sd_gb_free": 0,
-    "sd_gb_total": 0,
-    "sd_warn": true,
-    "sd_status": "NotPresent",     
-    "utc_time": "2014-11-13T18:34:0.000Z",
-    "vel_2d": 0.08,
-    "sv_info": [
-        {
-            "azimuth": 0.8203047513961792,
-            "channel": 9,
-            "cno": 41,
-            "diff_flag": false,
-            "elevation": 0.6108652353286743,
-            "orbit_info": true,
-            "orbit_is_eph": true,
-            "quality": 7,
-            "sv_healthy": false,
-            "svid": 5,
-            "used_flag": false
-        },
-        {
-            "azimuth": 0,
-            "channel": 14,
-            "cno": 15,
-            "diff_flag": false,
-            "elevation": -1.588249564170837,
-            "orbit_info": false,
-            "orbit_is_eph": false,
-            "quality": 3,
-            "sv_healthy": false,
-            "svid": 8,
-            "used_flag": false
-        },
-        ...
-    ]
+   "alt_agl": 14.798,
+   "alt_msl": 283.55,
+   "auto_cap_active": false,
+   "bus_volts": 3.695,
+   "course": 169.4142636445688,
+   "gps_lat": 36.2709446,
+   "gps_lon": -104.7104612,
+   "gps_time": "2014-11-13T18:34:12.345Z",
+   "gps_used_sats": 5,
+   "gps_vis_sats": 16,
+   "gps_warn": false,
+   "p_acc": 0,
+   "sd_gb_free": 0,
+   "sd_gb_total": 0,
+   "sd_warn": true,
+   "sd_status": "NotPresent",
+   "utc_time": "2014-11-13T18:34:0.000Z",
+   "vel_2d": 0.08,
+   "sv_info": [
+      {
+         "azimuth": 0.8203047513961792,
+         "channel": 9,
+         "cno": 41,
+         "diff_flag": false,
+         "elevation": 0.6108652353286743,
+         "orbit_info": true,
+         "orbit_is_eph": true,
+         "quality": 7,
+         "sv_healthy": false,
+         "svid": 5,
+         "used_flag": false
+      },
+      {
+         "azimuth": 0,
+         "channel": 14,
+         "cno": 15,
+         "diff_flag": false,
+         "elevation": -1.588249564170837,
+         "orbit_info": false,
+         "orbit_is_eph": false,
+         "quality": 3,
+         "sv_healthy": false,
+         "svid": 8,
+         "used_flag": false
+      },
+      ...
+   ]
 }
 </code>
 </pre>
@@ -683,31 +679,29 @@
          parameter was true, so bands 1-4 were stored as both JPG and raw files. The actual bands that are stored to the card
          depends on the current configuration settings.</p>
          <pre>
-<code>{ 
-    "status" : "complete",
-    "id" : "i89jfi73irj49f74",
-    "time" : "2014-10-08T20:27:16.321Z",
-    "jpeg_cache_path" : {
-        "1" : "/images/i89jfi73irj49f74_1.jpg",
-        "2" : "/images/i89jfi73irj49f74_2.jpg",
-        "5" : "/images/i89jfi73irj49f74_5.jpg"
-    },
-    "raw_cache_path" : {
-        "1" : "/images/i89jfi73irj49f74_1.tif",
-        "2" : "/images/i89jfi73irj49f74_2.tif",
-        "5" : "/images/i89jfi73irj49f74_5.tif"
-    }  
-}
-</code>
+<code>{
+   "status" : "complete",
+   "id" : "i89jfi73irj49f74",
+   "time" : "2014-10-08T20:27:16.321Z",
+   "jpeg_cache_path" : {
+      "1" : "/images/i89jfi73irj49f74_1.jpg",
+      "2" : "/images/i89jfi73irj49f74_2.jpg",
+      "5" : "/images/i89jfi73irj49f74_5.jpg"
+   },
+   "raw_cache_path" : {
+      "1" : "/images/i89jfi73irj49f74_1.tif",
+      "2" : "/images/i89jfi73irj49f74_2.tif",
+      "5" : "/images/i89jfi73irj49f74_5.tif"
+   }
+}</code>
 </pre>
          <p>The following response can be expected when block is false, because the capture has not been completed when the object
          is returned.</p>
          <pre>
 <code>{
-    "status" : "pending",
-    "id' : "i89jfi73irj49f74"
-}  
-</code>
+   "status" : "pending",
+   "id' : "i89jfi73irj49f74"
+}</code>
 </pre>
          <h2 id="capture-status-request-[/capture/:id]">Capture Status Request [/capture/:id]</h2>
          <p>
@@ -723,34 +717,33 @@
          <p>
          <strong>Example Responses</strong>:</p>
          <pre>
-<code>{ 
-    "status" : "complete",
-    "id" : "i89jfi73irj49f74",
-    "time" : "2014-10-08T20:27:16.321Z",
-    "jpeg_cache_path" : {
-        "1" : "/images/i89jfi73irj49f74_1.jpg",
-        "2" : "/images/i89jfi73irj49f74_2.jpg",
-        "5" : "/images/i89jfi73irj49f74_5.jpg"
-    },
-    "raw_cache_path" : {
-        "1" : "/images/i89jfi73irj49f74_1.tif",
-        "2" : "/images/i89jfi73irj49f74_2.tif",
-        "5" : "/images/i89jfi73irj49f74_5.tif"
-    },        
-    "jpeg_storage_path" : {
-        "1" : "/files/0021SET/000/IMG_0000_1.jpg",
-        "2" : "/files/0021SET/000/IMG_0000_2.jpg",
-        "3" : "/files/0021SET/000/IMG_0000_3.jpg",
-        "4" : "/files/0021SET/000/IMG_0000_4.jpg"
-    },
-    "raw_storage_path" : {
-        "1" : "/files/0021SET/000/IMG_0000_1.tif",
-        "2" : "/files/0021SET/000/IMG_0000_2.tif",
-        "3" : "/files/0021SET/000/IMG_0000_3.tif",
-        "4" : "/files/0021SET/000/IMG_0000_4.tif"
-    }
-}
-</code>
+<code>{
+   "status" : "complete",
+   "id" : "i89jfi73irj49f74",
+   "time" : "2014-10-08T20:27:16.321Z",
+   "jpeg_cache_path" : {
+      "1" : "/images/i89jfi73irj49f74_1.jpg",
+      "2" : "/images/i89jfi73irj49f74_2.jpg",
+      "5" : "/images/i89jfi73irj49f74_5.jpg"
+   },
+   "raw_cache_path" : {
+      "1" : "/images/i89jfi73irj49f74_1.tif",
+      "2" : "/images/i89jfi73irj49f74_2.tif",
+      "5" : "/images/i89jfi73irj49f74_5.tif"
+   },
+   "jpeg_storage_path" : {
+      "1" : "/files/0021SET/000/IMG_0000_1.jpg",
+      "2" : "/files/0021SET/000/IMG_0000_2.jpg",
+      "3" : "/files/0021SET/000/IMG_0000_3.jpg",
+      "4" : "/files/0021SET/000/IMG_0000_4.jpg"
+   },
+   "raw_storage_path" : {
+      "1" : "/files/0021SET/000/IMG_0000_1.tif",
+      "2" : "/files/0021SET/000/IMG_0000_2.tif",
+      "3" : "/files/0021SET/000/IMG_0000_3.tif",
+      "4" : "/files/0021SET/000/IMG_0000_4.tif"
+   }
+}</code>
 </pre>
          <h2 id="camera-position-[/gps]">Camera position [/gps]</h2>
          <p>
@@ -827,18 +820,17 @@
          </p>
          <pre>
 <code>{
-    "latitude" : 0.1363053,
-    "longitude" : -2.399923234,
-    "altitude" : 332.503,
-    "vel_n" : 0.73,
-    "vel_e" : 1.2,
-    "vel_d" : 0.49,
-    "p_acc" : 2.456,
-    "v_acc" : 1.54,
-    "fix3d" : true
-    "utc_time" : "2014-10-08T20:27:23.321Z"
-}
-</code>
+   "latitude" : 0.1363053,
+   "longitude" : -2.399923234,
+   "altitude" : 332.503,
+   "vel_n" : 0.73,
+   "vel_e" : 1.2,
+   "vel_d" : 0.49,
+   "p_acc" : 2.456,
+   "v_acc" : 1.54,
+   "fix3d" : true
+   "utc_time" : "2014-10-08T20:27:23.321Z"
+}</code>
 </pre>
          <h2 id="camera-orientation-[/orientation]">Camera Orientation [/orientation]</h2>
          <p>
@@ -847,10 +839,10 @@
          <strong>Supported verbs</strong>: GET, POST</p>
          <p>This command retrieves or sets the current camera orientation.</p>
          <p>This command can be used to provide the orientation of the camera measured by an external source by POST'ing the
-         orientation angles. Anytime this value has been written in the preceding 5 seconds, it will be considered valied and will
+         orientation angles. Anytime this value has been written in the preceding 5 seconds, it will be considered valid and will
          be written to image metadata.</p>
          <p>Two rotations can be specified: An aircraft orientation and a camera orientation. The aircraft orientation gives the
-         orientation of the aircraft relative to the earth frame, and the camera orientation gives the orentiation of the fixed or
+         orientation of the aircraft relative to the earth frame, and the camera orientation gives the orientation of the fixed or
          gimbaled camera relative to the aircraft. If desired, the aircraft orientation can be set to zero, and in the case the
          camera orientation becomes relative to the earth. Alternatively, if the camera is fixed mounted, the camera orientation
          can be set to the appropriate static value and only the aircraft orientation is updated.</p>
@@ -912,14 +904,13 @@
          </p>
          <pre>
 <code>{
-    "vehicle_roll" : -0.1512,
-    "vehicle_pitch" : 0.1363053,
-    "vehicle_yaw" : -0.399923234,
-    "camera_roll" : 0.0,
-    "camera_pitch" : 0.0,
-    "camera_yaw" : 0.0
-}
-</code>
+   "vehicle_roll" : -0.1512,
+   "vehicle_pitch" : 0.1363053,
+   "vehicle_yaw" : -0.399923234,
+   "camera_roll" : 0.0,
+   "camera_pitch" : 0.0,
+   "camera_yaw" : 0.0
+}</code>
 </pre>
          <h2 id="vignette-calibration-[/calibration/vignette]">Vignette Calibration [/calibration/vignette]</h2>
          <p>
@@ -965,28 +956,26 @@
          </p>
          <pre>
 <code>{
-    "1" : {
-        'k': [1.2e-1, 2.1e-2, 5.1e-2, 5.1e-3, 5.1e-4, 5.1e-5],
-        'cx': 623.19,
-        'cy': 495.24
-    },
-    "2" : {
-        'k': [1.2e-1, 2.1e-2, 5.1e-2, 5.1e-3, 5.1e-4, 5.1e-5],
-        'cx': 621.21,
-        'cy': 477.90
-    },
-    "3": {
-        ...
-    },
-    "4": {
-        ...
-    },
-    "5": {
-        ...
-    }
-}
-
-</code>
+   "1" : {
+      'k': [1.2e-1, 2.1e-2, 5.1e-2, 5.1e-3, 5.1e-4, 5.1e-5],
+      'cx': 623.19,
+      'cy': 495.24
+   },
+   "2" : {
+      'k': [1.2e-1, 2.1e-2, 5.1e-2, 5.1e-3, 5.1e-4, 5.1e-5],
+      'cx': 621.21,
+      'cy': 477.90
+   },
+   "3": {
+      ...
+   },
+   "4": {
+      ...
+   },
+   "5": {
+      ...
+   }
+}</code>
 </pre>
          <h2 id="distortion-calibration-[/calibration/distortion]">Distortion Calibration [/calibration/distortion]</h2>
          <p>
@@ -1044,33 +1033,32 @@
          </p>
          <pre>
 <code>{
-    "1": {
-        'k' : [1.23e-1, 4.56e-2, 6.78e-3],
-        'p' : [1.23e-1, 4.56e-2],
-        'fx' : 1100.2,
-        'fy' : 1101.7,
-        'cx' : 623.76,
-        'cy' : 473.54
-    },
-    "2": {
-        'k' : [1.23e-1, 4.56e-2, 6.78e-3],
-        'p' : [1.23e-1, 4.56e-2],
-        'fx' : 1100.2,
-        'fy' : 1101.7,
-        'cx' : 623.76,
-        'cy' : 473.54
-    },
-    "3": {
-        ...
-    },
-    "4": {
-        ...
-    },
-    "5": {
-        ...
-    }
-}
-</code>
+   "1": {
+      'k' : [1.23e-1, 4.56e-2, 6.78e-3],
+      'p' : [1.23e-1, 4.56e-2],
+      'fx' : 1100.2,
+      'fy' : 1101.7,
+      'cx' : 623.76,
+      'cy' : 473.54
+   },
+   "2": {
+      'k' : [1.23e-1, 4.56e-2, 6.78e-3],
+      'p' : [1.23e-1, 4.56e-2],
+      'fx' : 1100.2,
+      'fy' : 1101.7,
+      'cx' : 623.76,
+      'cy' : 473.54
+   },
+   "3": {
+      ...
+   },
+   "4": {
+      ...
+   },
+   "5": {
+      ...
+   }
+}</code>
 </pre>
          <h2 id="camera-information-[/camera_info]">Camera Information [/camera_info]</h2>
          <p>
@@ -1088,23 +1076,23 @@
          </p>
          <pre>
 <code>{
-    "1" : {
-        "type" : "bandpass",
-        "center_nm": 498.2,
-        "bandwidth_nm": 12,
-        "focal_lenth_px" : 1100.0,
-        "image_width": 1280,
-        "image_height": 960
-    },
-    "2" : {
-        "type" : "bandpass",
-        "center_nm": 620.3,
-        "bandwidth_nm": 10,
-        "focal_length_px": 1100.0,
-        "image_width": 1280,
-        "image_height": 960
-    },
-    ...
+   "1" : {
+      "type" : "bandpass",
+      "center_nm": 498.2,
+      "bandwidth_nm": 12,
+      "focal_lenth_px" : 1100.0,
+      "image_width": 1280,
+      "image_height": 960
+   },
+   "2" : {
+      "type" : "bandpass",
+      "center_nm": 620.3,
+      "bandwidth_nm": 10,
+      "focal_length_px": 1100.0,
+      "image_width": 1280,
+      "image_height": 960
+   },
+   ...
 }
 </code>
 </pre>
@@ -1121,25 +1109,24 @@
          <pre>
 <code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;kml xmlns="http://www.opengis.net/kml/2.2"&gt;
-    &lt;Document&gt;
-        &lt;Folder&gt;
-            &lt;name&gt;"0000SET"&lt;/name&gt;
-            &lt;Placemark&gt;
-              &lt;name&gt;710&lt;/name&gt;
-              &lt;Point&gt;
-                &lt;coordinates&gt;-110.7228486,32.902748314,37.2748314&lt;/coordinates&gt;
-              &lt;/Point&gt;
-            &lt;/Placemark&gt;
-            &lt;Placemark&gt;
-              &lt;name&gt;711&lt;/name&gt;
-              &lt;Point&gt;
-                &lt;coordinates&gt;-110.72628388,32.902745594,37.2745594&lt;/coordinates&gt;
-              &lt;/Point&gt;
-            &lt;/Placemark&gt;
-        &lt;/Folder&gt;
-    &lt;/Document&gt;
-&lt;/kml&gt;
-</code>
+   &lt;Document&gt;
+      &lt;Folder&gt;
+         &lt;name&gt;"0000SET"&lt;/name&gt;
+         &lt;Placemark&gt;
+            &lt;name&gt;710&lt;/name&gt;
+            &lt;Point&gt;
+               &lt;coordinates&gt;-110.7228486,32.902748314,37.2748314&lt;/coordinates&gt;
+            &lt;/Point&gt;
+         &lt;/Placemark&gt;
+         &lt;Placemark&gt;
+            &lt;name&gt;711&lt;/name&gt;
+            &lt;Point&gt;
+               &lt;coordinates&gt;-110.72628388,32.902745594,37.2745594&lt;/coordinates&gt;
+            &lt;/Point&gt;
+         &lt;/Placemark&gt;
+      &lt;/Folder&gt;
+   &lt;/Document&gt;
+&lt;/kml&gt;</code>
 </pre>
          <h2 id="wifi-configuration-[/wifi]">Wifi Configuration [/wifi]</h2>
          <p>
@@ -1171,8 +1158,7 @@
          <pre>
 <code>{
     "wifi_enabled" : false
-}
-</code>
+}</code>
 </pre>
          <p>NOTE: Disabling wifi from the wifi interface may not return a response. WiFi will be re-enabled when the camera is
          power-cycled</p>
@@ -1182,14 +1168,20 @@
          <p>
          <strong>Supported verbs</strong>: GET</p>
          <p>The file access API provides a method to get the contents of the SD card currently inserted in the camera. GET can
-         return one of three alternatives: 1. If the provided path describes a regular file, the the is returned. 2. If the
-         provided path describes a directory, a json object is returned that provides a directory listing as an array of
-         descriptors for sub-directories and files at that path. 3. If the provided path does not exist, a 404 with JSON error
-         message is returned</p>
+         return one of three alternatives:</p>
+         <ol>
+            <li>If the provided path describes a regular file, the file is returned.</li>
+            <li>If the provided path describes a directory, a json object is returned that provides a directory listing as an array
+            of descriptors for sub-directories and files at that path.</li>
+            <li>If the provided path does not exist, a 404 with JSON error message is returned</li>
+         </ol>
          <p>
-         <strong>Example URL</strong>: 
-         <code>GET /files/</code> 
-         <code>GET /files/000SET/</code>, 
+         <strong>Example URLs</strong>:
+         <br />
+         <code>GET /files/</code>
+         <br />
+         <code>GET /files/000SET/</code>
+         <br />
          <code>GET /files/001SET/000/IMG_1234_1.tif</code></p>
          <p>
          <strong>Example Response to 
@@ -1198,8 +1190,7 @@
 <code>{
    "files": []
    "directories": ["0000SET", "0001SET", "0002SET"]
-}
-</code>
+}</code>
 </pre>
          <p>
          <strong>Example Response to 
@@ -1210,8 +1201,7 @@
       { "name": "paramlog.dat", "size": 3219234 }
    ],
    "directories": ["000"]
-}
-</code>
+}</code>
 </pre>
          <p>
          <strong>Example Response to 
@@ -1226,14 +1216,13 @@
       { "name": "IMG_0000_5.tif", "size": 5000000 }
    ],
    "directories": []
-}
-</code>
+}</code>
 </pre>
          <h2 id="network-status-[/networkstatus]">Network Status [/networkstatus]</h2>
          <p>
          <strong>URL</strong>: /networkstatus</p>
          <p>
-         <strong>Supported verbs</strong>: GET</p>
+         <strong>Supported Verbs</strong>: GET</p>
          <p>The network status API provides information about the MicaSense network, including all RedEdge cameras and DLS's. The
          devices are presented as an array called "network_map".</p>
          <p>
@@ -1286,20 +1275,20 @@
          <code>GET /networkstatus</code></strong>:</p>
          <pre>
 <code>{
-   "network_map": [
-      {  "bands": [475,560,670,670,717],
-         "device_type": "camera",
-         "gps_source": "",
-         "mode": "master",
-         "serial": "1449003LT",
-         "sw_version": "v1.5.3"
+   "network_map" : [
+      {  "bands" : [475,560,670,670,717],
+         "device_type" : "camera",
+         "gps_source" : "",
+         "mode" : "master",
+         "serial" : "1449003LT",
+         "sw_version" : "v1.5.3"
       },
-      {  "bands": [475,560,670,670,717],
-         "device_type": "dls",
-         "gps_source": "direct",
-         "mode": "slave",
-         "serial": "DL01-1525030-SC",
-         "sw_version": "v0.2.34"
+      {  "bands" : [475,560,670,670,717],
+         "device_type" : "dls",
+         "gps_source" : "direct",
+         "mode" : "slave",
+         "serial" : "DL01-1525030-SC",
+         "sw_version" : "v0.2.34"
       }
    ]
 }</code>
