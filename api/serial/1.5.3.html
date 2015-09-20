@@ -88,6 +88,17 @@
          message providing GPS information to the RedEdge. Forwarding GPS data to the camera as soon as it is received by the host
          will ensure the latest information is present in a new capture. Use the 64-bit time_usec field to set the camera's UTC
          time.</p>
+         <p>UNIX time is separate from GPS time by a fixed base epoch offset and a changing number of leap seconds (a value that
+         most GPS receivers provide). The base offset is +315964800 seconds between UNIX time and GPS time (UNIX is referenced to
+         1970-Jan-1 while GPS is referenced to 1980-Jan-6). The current number of leap seconds is 17.</p>
+         <p>Most GPS receivers provide a UTC time message, but it may or may not be microseconds referenced to the Unix epoch,
+         which is what we want. However, most of them provide GPS week number (WN) plus time of week (TOW), plus number of leap
+         seconds (LS), which makes the math easier for embedded processors.</p>
+         <p>With those GPS time inputs, UNIX epoch UTC times can be calculated by:</p>
+<pre>Base offset + (GPS Week Number * Seconds in week) + GPS Time of Week - Leap Seconds.
+  315964800 + (      WN        *      604800    ) +       TOW        -      LS</pre>
+         <p>LS currently equals 17.</p>
+         <p>Depending on the receiver/formatting/etc. it may be required to also add in a nanoseconds term to get sub-second resolution.</p>
          <p>
             <a href="http://pixhawk.ethz.ch/mavlink/#GPS_RAW_INT">http://pixhawk.ethz.ch/mavlink/#GPS_RAW_INT</a>
          </p>
