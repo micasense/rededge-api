@@ -28,10 +28,10 @@ import requests
 
 #Read the GPS data from the camera
 gps_data = requests.get('http://192.168.10.254/gps')
-print "Raw data : " + str(gps_data.json())
+print "Raw data : " + str(gps_data.text)
 print "Has 3d fix: " + str(gps_data.json()['fix3d'])
 
 #Post a message to the camera commanding a capture, block until complete
 capture_params = { 'store_capture' : True, 'block' : True }
-capture_data = requests.post("http://192.168.10.254/capture", data=capture_params)
+capture_data = requests.post("http://192.168.10.254/capture", json=capture_params)
 print capture_data.json()
