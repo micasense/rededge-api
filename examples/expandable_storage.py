@@ -55,7 +55,7 @@ def rededge_file_transfer(r):
                 startTime = datetime.now()
             else:
                 #Grab remaining captures
-                if(tdelta.total_seconds() >= 5):
+                if(tdelta.total_seconds() >= 30):
                     while(len(r.json()['files']) is not 0):
                         print "Captures left in folder: %s" % str(len(r.json()['files']))
                         get_captures(r, folder_index[0], subfolder_count)
