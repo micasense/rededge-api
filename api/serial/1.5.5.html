@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="generator"
+      content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+      <title>RedEdge Serial API</title>
+      <link rel="stylesheet" href="../../stylesheets/markdown.css" />
+   </head>
+   <body>
+      <article class="markdown-body">
+         <h1 id="rededge-serial-api">RedEdge Serial API</h1>
+         <p>This document describes the protocol which can be be used by software to control the RedEdge multi-spectral camera. The
+         camera can be controlled using serial via the host connector. For more detailed information the physical connection to the
+         camera, see the RedEdge Integration Guide on the Downloads page of <a href="https://atlas.micasense.com/">ATLAS</a>.</p>
+         <h1 id="table-of-contents">Table of Contents</h1>
+         <ul>
+            <li>
+               <a href="#rededge-serial-api">RedEdge Serial API</a>
+            </li>
+            <li>
+               <a href="#table-of-contents">Table of Contents</a>
+            </li>
+            <li>
+               <a href="#general-protocol-overview">General Protocol Overview</a>
+               <ul>
+                  <li>
+                     <a href="#communicating">Communicating</a>
+                  </li>
+                  <li>
+                     <a href="#gps">GPS</a>
+                  </li>
+                  <li>
+                     <a href="#commanding-captures">Commanding Captures</a>
+                  </li>
+               </ul>
+            </li>
+            <li>
+               <a href="#messages">Messages</a>
+               <ul>
+                  <li>
+                     <a href="#heartbeat">HEARTBEAT</a>
+                  </li>
+                  <li>
+                     <a href="#ping">PING</a>
+                  </li>
+                  <li>
+                     <a href="#gps_raw_int">GPS_RAW_INT</a>
+                  </li>
+                  <li>
+                     <a href="#system_time">SYSTEM_TIME</a>
+                  </li>
+                  <li>
+                     <a href="#attitude">ATTITUDE</a>
+                  </li>
+                  <li>
+                     <a href="#mount_status">MOUNT_STATUS</a>
+                  </li>
+                  <li>
+                     <a href="#global_position_int">GLOBAL_POSITION_INT</a>
+                  </li>
+                  <li>
+                     <a href="#gps_status">GPS_STATUS</a>
+                  </li>
+                  <li>
+                     <a href="#digicam_configure">DIGICAM_CONFIGURE</a>
+                  </li>
+                  <li>
+                     <a href="#digicam_control">DIGICAM_CONTROL</a>
+                  </li>
+                  <li>
+                     <a href="#camera_status">CAMERA_STATUS</a>
+                  </li>
+                  <li>
+                     <a href="#camera_feedback">CAMERA_FEEDBACK</a>
+                  </li>
+               </ul>
+            </li>
+         </ul>
+         <h1 id="general-protocol-overview">General Protocol Overview</h1>
+         <p>The API is accessed via serial messages in the Mavlink format (see 
+         <a href="http://en.wikipedia.org/wiki/MAVLink">http://en.wikipedia.org/wiki/MAVLink</a> and 
+         <a href="http://qgroundcontrol.org/mavlink/start">http://qgroundcontrol.org/mavlink</a>). Mavlink provides an open data format
+         for interaction as well as a suite of tools to assist the programmer in developing and testing the interface. RedEdge uses
+         Mavlink v1.0 messages and communicates with the host at 57600 baud.</p>
+         <h2 id="communicating">Communicating</h2>
+         <p>The <a href="#heartbeat">HEARTBEAT</a> message can ensure that the RedEdge is booted and ready to receive MAVLink packets.</p>
+         <p>The <a href="#ping">PING</a> message can be used to ensure round-trip serial connectivity with the RedEdge.</p>
+         
+         <h2 id="gps">GPS</h2>
+         <p>Receipt of serial state messages will override any RedEdge internal or external sensor data, such as a connected GPS,
+         for 30 seconds since the last state message was received. For aircraft state and mount status, messages should be sent as
+         often as possible to ensure the latest state information is available to the camera when a capture is taken.</p>
+         <p>There are two supported ways to provide GPS data to the RedEdge. The simplest method is to send the <a href="#gps_raw_int">
+         GPS_RAW_INT</a> message, as this single message contains both the time and position information. The other supported way is to
+         send both <a href="#system_time">SYSTEM_TIME</a> and <a href="#global_position_int">GLOBAL_POSITION_INT</a> together. Sending
+         GPS in both styles at the same time is not recommended.</p>
+         
+         <h2 id="commanding-captures">Commanding Captures</h2>
+         <p>The <a href="#digicam_configure">DIGICAM_CONFIGURE</a> message can be used to set up the camera imagers<p>
+         <p>The <a href="#digicam_control">DIGICAM_CONTROL</a> message will command a capture, and the camera will send a
+         <a href="#camera_status">CAMERA_STATUS</a> and a <a href="#camera_feedback">CAMERA_FEEDBACK</a> message in response</p>
+         
+         <h1 id="messages">Messages</h1>
+         
+         <h2 id="heartbeat">HEARTBEAT (0)</h2>
+         <p>The RedEdge will send a heartbeat message approximately once per second using the component ID MAV_COMP_ID_CAMERA.
+         While this message can be safely ignored, it can be used to verify the RedEdge is properly powered on.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="http://pixhawk.ethz.ch/mavlink/#HEARTBEAT">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Type</td>
+               <td>uint8_t</td>
+               <td>Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)</td>
+               <td>Sent as 0 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Autopilot</td>
+               <td>uint8_t</td>
+               <td>
+                  <ol>
+                     <li value="0">MAV_AUTOPILOT_GENERIC - Generic autopilot, full support for everything</li>
+                     <li>MAV_AUTOPILOT_RESERVED - Reserved for future use.</li>
+                     <li>MAV_AUTOPILOT_SLUGS - SLUGS autopilot, http://slugsuav.soe.ucsc.edu</li>
+                     <li>MAV_AUTOPILOT_ARDUPILOTMEGA - ArduPilotMega / ArduCopter, http://diydrones.com</li>
+                     <li>MAV_AUTOPILOT_OPENPILOT - OpenPilot, http://openpilot.org</li>
+                     <li>MAV_AUTOPILOT_GENERIC_WAYPOINTS_ONLY - Generic autopilot only supporting simple waypoints</li>
+                     <li>MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY - Generic autopilot supporting waypoints and other simple navigation commands</li>
+                     <li>MAV_AUTOPILOT_GENERIC_MISSION_FULL - Generic autopilot supporting the full mission command set</li>
+                     <li>MAV_AUTOPILOT_INVALID - No valid autopilot, e.g. a GCS or other MAVLink component</li>
+                     <li>MAV_AUTOPILOT_PPZ - PPZ UAV - http://nongnu.org/paparazzi</li>
+                     <li>MAV_AUTOPILOT_UDB - UAV Dev Board</li>
+                     <li>MAV_AUTOPILOT_FP - FlexiPilot</li>
+                     <li>MAV_AUTOPILOT_PX4 - PX4 Autopilot - http://pixhawk.ethz.ch/px4/</li>
+                     <li>MAV_AUTOPILOT_SMACCMPILOT - SMACCMPilot - http://smaccmpilot.org</li>
+                     <li>MAV_AUTOPILOT_AUTOQUAD - AutoQuad -- http://autoquad.org</li>
+                     <li>MAV_AUTOPILOT_ARMAZILA - Armazila -- http://armazila.com</li>
+                     <li>MAV_AUTOPILOT_AEROB - Aerob -- http://aerob.ru</li>
+                     <li>MAV_AUTOPILOT_ASLUAV - ASLUAV autopilot -- http://www.asl.ethz.ch</li>
+                  </ol>
+               </td>
+               <td>Sent as 1 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Base Mode</td>
+               <td>uint8_t</td>
+               <td>
+                  <ol>
+                     <li value="128">MAV_MODE_FLAG_SAFETY_ARMED - 0b10000000 MAV safety set to armed. Motors are enabled / running / can start. Ready to fly.</li>
+                     <li value="64">MAV_MODE_FLAG_MANUAL_INPUT_ENABLED - 0b01000000 remote control input is enabled.</li>
+                     <li value="32">MAV_MODE_FLAG_HIL_ENABLED - 0b00100000 hardware in the loop simulation. All motors / actuators are blocked, but internal software is full operational.</li>
+                     <li value="16">MAV_MODE_FLAG_STABILIZE_ENABLED - 0b00010000 system stabilizes electronically its attitude (and optionally position). It needs however further control inputs to move around.</li>
+                     <li value="8">MAV_MODE_FLAG_GUIDED_ENABLED - 0b00001000 guided mode enabled, system flies MISSIONs / mission items.</li>
+                     <li value="4">MAV_MODE_FLAG_AUTO_ENABLED - 0b00000100 autonomous mode enabled, system finds its own goal positions. Guided flag can be set or not, depends on the actual implementation.</li>
+                     <li value="2">MAV_MODE_FLAG_TEST_ENABLED - 0b00000010 system has a test mode enabled. This flag is intended for temporary system tests and should not be used for stable implementations.</li>
+                     <li value="1">MAV_MODE_FLAG_CUSTOM_MODE_ENABLED - 0b00000001 Reserved for future use.</li>
+                  </ol>
+               </td>
+               <td>Sent as 2 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Custom Mode</td>
+               <td>uint32_t</td>
+               <td>A bitfield for use for autopilot-specific flags.</td>
+               <td>Sent as 3 (ignored)</td>
+            </tr>
+            <tr>
+               <td>System Status</td>
+               <td>uint8_t</td>
+               <td>
+                  <ol>
+                     <li value="0">MAV_STATE_UNINIT - Uninitialized system, state is unknown.</li>
+                     <li>MAV_STATE_BOOT - System is booting up.</li>
+                     <li>MAV_STATE_CALIBRATING - System is calibrating and not flight-ready.</li>
+                     <li>MAV_STATE_STANDBY - System is grounded and on standby. It can be launched any time.</li>
+                     <li>MAV_STATE_ACTIVE - System is active and might be already airborne. Motors are engaged.</li>
+                     <li>MAV_STATE_CRITICAL - System is in a non-normal flight mode. It can however still navigate.</li>
+                     <li>MAV_STATE_EMERGENCY - System is in a non-normal flight mode. It lost control over parts or over the whole airframe. It is in mayday and going down.</li>
+                     <li>MAV_STATE_POWEROFF - System just initialized its power-down sequence, will shut down now.</li>
+                  </ol>
+               </td>
+               <td>Sent as 4 (ignored)</td>
+            </tr>
+            <tr>
+               <td>MAVLink Version</td>
+               <td>uint8_t</td>
+               <td>MAVLink version, not writable by user</td>
+               <td>Same as official</td>
+            </tr>
+         </table>
+         
+         <h2 id="ping">PING (4)</h2>
+         <p>Send the PING message with system_id = 0 and component_id = 0, and with a new sequence number each time, to ensure
+         round-trip communications with the RedEdge. The PING message will be responded to with the same sequence number and the
+         system_id and component_id of the sender (which are present in the message header).</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="https://pixhawk.ethz.ch/mavlink/#PING">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Time Unix</td>
+               <td>uint64_t</td>
+               <td>Timestamp (microseconds since UNIX epoch or microseconds since system boot)</td>
+               <td>Ignored</td>
+            </tr>
+            <tr>
+               <td>Sequence</td>
+               <td>uint32_t</td>
+               <td>PING sequence</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>System ID</td>
+               <td>uint8_t</td>
+               <td>0: request ping from all receiving systems, if greater than 0: message is a ping response and number is the system id of the requesting system</td>
+               <td>See description above</td>
+            </tr>
+            <tr>
+               <td>Component ID</td>
+               <td>uint8_t</td>
+               <td>0: request ping from all receiving components, if greater than 0: message is a ping response and number is the system id of the requesting system</td>
+               <td>See description above</td>
+            </tr>
+         </table>
+         
+         <h2 id="gps_raw_int">GPS_RAW_INT (24)</h2>
+         <p>Use this message to send the raw GPS information to the RedEdge as received by the host vehicle. This is the main
+         message providing GPS information to the RedEdge. Forwarding GPS data to the camera as soon as it is received by the host
+         will ensure the latest information is present in a new capture. Use the 64-bit time_usec field to set the camera's UTC
+         time.</p>
+         <p>UNIX time is separate from GPS time by a fixed base epoch offset and a changing number of leap seconds (a value that
+         most GPS receivers provide). The base offset is +315964800 seconds between UNIX time and GPS time (UNIX is referenced to
+         1970-Jan-1 while GPS is referenced to 1980-Jan-6). The current number of leap seconds is 17.</p>
+         <p>Most GPS receivers provide a UTC time message, but it may or may not be microseconds referenced to the Unix epoch,
+         which is what we want. However, most of them provide GPS week number (WN) plus time of week (TOW), plus number of leap
+         seconds (LS), which makes the math easier for embedded processors.</p>
+         <p>With those GPS time inputs, UNIX epoch UTC times can be calculated by:</p>
+<pre>Base offset + (GPS Week Number * Seconds in week) + GPS Time of Week - Leap Seconds.
+  315964800 + (      WN        *      604800    ) +       TOW        -      LS</pre>
+         <p>As of 2015 Nov 11, LS equals 17.</p>
+         <p>Depending on the receiver/formatting/etc. it may be required to also add in a nanoseconds term to get sub-second resolution.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="https://pixhawk.ethz.ch/mavlink/#GPS_RAW_INT">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Time Unix</td>
+               <td>uint64_t</td>
+               <td>Timestamp (microseconds since UNIX epoch or microseconds since system boot)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Fix Type</td>
+               <td>uint8_t</td>
+               <td>
+                  <ol>
+                     <li value="0">No fix</li>
+                     <li>No fix</li>
+                     <li>2D fix</li>
+                     <li>3D fix</li>
+                     <li>DGPS</li>
+                     <li>RTK</li>
+                  </ol>
+               </td>
+               <td>
+                  <= 2: no fix
+                  > 2: 3D fix
+               </td>
+            </tr>
+            <tr>
+               <td>Latitude</td>
+               <td>int32_t</td>
+               <td>Latitude (WGS84), in degrees * 1E7</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Longitude</td>
+               <td>int32_t</td>
+               <td>Longitude (WGS84), in degrees * 1E7</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Altitude (MSL)</td>
+               <td>int32_t</td>
+               <td>Altitude (AMSL, NOT WGS84), in meters * 1000 (positive for up).</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Estimated Position Horizontal</td>
+               <td>uint16_t</td>
+               <td>GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: UINT16_MAX</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Estimated Position Vertical</td>
+               <td>uint16_t</td>
+               <td>GPS VDOP vertical dilution of position in cm (m*100). If unknown, set to: UINT16_MAX</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Speed</td>
+               <td>uint16_t</td>
+               <td>GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Course Over Ground</td>
+               <td>uint16_t</td>
+               <td>Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees.
+                     If unknown, set to: UINT16_MAX</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Satellites Visible</td>
+               <td>uint8_t</td>
+               <td>Number of satellites visible. If unknown, set to 255</td>
+               <td>Same as official</td>
+            </tr>
+         </table>
+         
+         <h2 id="system_time">SYSTEM_TIME (2)</h2>
+         <p>This message is required if using GLOBAL_POSITION_INT, as that message does not provide a UTC timestamp. It is used to
+         update UTC time to provide accurate timestamping of images. Provide a 64-bit unix timestamp referenced to UTC time and the
+         UNIX (not GPS) epoch. Most GPS receivers provide this information in a UTC time message.</p>
+         <p>Note: if using GPS_RAW_INT, the 64bit timestamp should be set to UTC time prior to sending.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="https://pixhawk.ethz.ch/mavlink/#SYSTEM_TIME">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Time Unix</td>
+               <td>uint64_t</td>
+               <td>Timestamp of the master clock in microseconds since UNIX epoch.</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Time Boot</td>
+               <td>uint32_t</td>
+               <td>Timestamp of the component clock since boot time in milliseconds.</td>
+               <td>Ignored</td>
+            </tr>
+         </table>
+         
+         <h2 id="attitude">ATTITUDE (30)</h2>
+         <p>Vehicle state (roll, pitch, yaw) and vehicle rates can be provided via the ATTITUDE message. Note that this is the
+         state of the host vehicle. The offset of the camera from the host reference frame, whether fixed or on a gimbals, should
+         be provided via the MOUNT_STATUS message defined below.</p>
+         <p>The aircraft orientation is specified in the standard aeronautical coordinate frame, where the X axis points to the
+         front of the vehicle, the Y axis points to the right, and the Z axis points down. Rotation order is Yaw, then Pitch, then
+         Roll, about the Z, Y, then X axes accordingly.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="http://pixhawk.ethz.ch/mavlink/#ATTITUDE">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Time Boot</td>
+               <td>uint32_t</td>
+               <td>Timestamp (milliseconds since system boot)</td>
+               <td>Ignored</td>
+            </tr>
+            <tr>
+               <td>Roll</td>
+               <td>single precision float</td>
+               <td>Roll angle (rad, -pi..+pi)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Pitch</td>
+               <td>single precision float</td>
+               <td>Pitch angle (rad, -pi..+pi)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Yaw</td>
+               <td>single precision float</td>
+               <td>Yaw angle (rad, -pi..+pi)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Roll Rate</td>
+               <td>single precision float</td>
+               <td>Roll angular velocity (rad/s)</td>
+               <td>Ignored</td>
+            </tr>
+            <tr>
+               <td>Pitch Rate</td>
+               <td>single precision float</td>
+               <td>Pitch angular velocity (rad/s)</td>
+               <td>Ignored</td>
+            </tr>
+            <tr>
+               <td>Yaw Rate</td>
+               <td>single precision float</td>
+               <td>Yaw angular velocity (rad/s)</td>
+               <td>Ignored</td>
+            </tr>
+         </table>
+         
+         <h2 id="mount_status">MOUNT_STATUS (158)</h2>
+         <p>This message can be used to provide the orientation of the camera measured by an external source by sending the
+         MOUNT_STATUS message along with the ATTITUDE message. Anytime this value has been written in the preceding 5 seconds,
+         it will be considered valied and will be written to image metadata.</p>
+         <p>Using these two messages, two rotations can be specified: An aircraft orientation and a camera orientation. The
+         aircraft orientation gives the orientation of the aircraft relative to the earth frame, and the camera orientation gives
+         the orentiation of the fixed or gimbaled camera relative to the aircraft. If the camera is fixed mounted, the camera
+         orientation can be set to the appropriate static value and only the aircraft orientation needs to be updated.</p>
+         <p>The camera orientation represents the orientation of the camera relative to the aircraft. The default orientation, when
+         the camera angles are all zero, is defined such that the camera is pointed straight down relative to the aircraft
+         (aircraft nadir) with the top of the camera towards the "front" of the aircraft. The rotation order is again yaw, then
+         pitch, then roll, about the camera Z, Y, and X axes accordingly. The camera axes are defined such that at zero rotation
+         angle, the X axis points down (along the camera focal axis) the Z axis points towards the rear of the vehicle, and the Y
+         axis follows right-hand rule and points out the right side of the vehicle.</p>
+         <p>The default value for these angles is zero. For a fixed camera pointed straight down relative to the aircraft, and with
+         the top of the camera toward the front of the aircraft, this default value can be used (pitch = 0.0, roll = 0.0, yaw =
+         0.0).</p>
+         <p>The combination of the aircraft attitude sent in the attitude message and the rotations in the mount status message
+         will be used to derive an earth-fixed camera orientation. It is recommended that when these messages are built on the host
+         aircraft, the values for both the aircraft orientation and the gimbals orientation are latched into memory, then they are
+         sent via these messages. This will ensure that the aircraft orientation and gimbals orientations were acquired at the same
+         moment.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="https://github.com/mavlink/c_library/blob/master/ardupilotmega/mavlink_msg_mount_status.h">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>pointing_a</td>
+               <td>int32_t</td>
+               <td>Pitch (deg*100)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>pointing_b</td>
+               <td>int32_t</td>
+               <td>Roll (deg*100)</td>
+               <td>Same as official</td>
+            </tr><tr>
+               <td>pointing_c</td>
+               <td>int32_t</td>
+               <td>Yaw (deg*100)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Target System</td>
+               <td>uint8_t</td>
+               <td>System ID</td>
+               <td>Ignored</td>
+            </tr>
+            <tr>
+               <td>Target Component</td>
+               <td>uint8_t</td>
+               <td>Component ID</td>
+               <td>Ignored</td>
+            </tr>
+         </table>
+         
+         <h2 id="global_position_int">GLOBAL_POSITION_INT (33)</h2>
+         <p>Used to update the position from a host state estimate using more than raw GPS, such as a GPS-aided INS system. This
+         may not be the position provided by the GPS receiver, but may be more accurate and/or updated more frequently. Since this
+         message does not have a fix status field, sending it will imply a 3D GPS fix.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="http://pixhawk.ethz.ch/mavlink/#GLOBAL_POSITION_INT">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Time Boot</td>
+               <td>uint32_t</td>
+               <td>Timestamp (milliseconds since system boot)</td>
+               <td>Ignored</td>
+            </tr>
+            <tr>
+               <td>Latitude</td>
+               <td>int32_t</td>
+               <td>Latitude, expressed as * 1E7</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Longitude</td>
+               <td>int32_t</td>
+               <td>Longitude, expressed as * 1E7</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Altitude (MSL)</td>
+               <td>int32_t</td>
+               <td>Altitude in meters, expressed as * 1000 (millimeters), AMSL (not WGS84 - note that virtually all GPS
+                     modules provide the AMSL as well)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Altitude (Relative)</td>
+               <td>int32_t</td>
+               <td>Altitude above ground in meters, expressed as * 1000 (millimeters)</td>
+               <td>Ignored</td>
+            </tr>
+            <tr>
+               <td>Velocity X</td>
+               <td>int16_t</td>
+               <td>Ground X Speed (Latitude), expressed as m/s * 100</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Velocity Y</td>
+               <td>int16_t</td>
+               <td>Ground Y Speed (Longitude), expressed as m/s * 100</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Velocity Z</td>
+               <td>int16_t</td>
+               <td>Ground Z Speed (Altitude), expressed as m/s * 100</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Heading</td>
+               <td>uint16_t</td>
+               <td>Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX</td>
+               <td>Ignored</td>
+            </tr>
+         </table>
+         
+         <h2 id="gps_status">GPS_STATUS (25)</h2>
+         <p>GPS satellite information which is updated on the RedEdge WiFi user interface. This message is not required, but if sent
+         the GPS status bars on the RedEdge WiFi interface will be updated.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="http://pixhawk.ethz.ch/mavlink/#GPS_STATUS">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Satellites Visible</td>
+               <td>uint8_t</td>
+               <td>Number of satellites visible</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Satellite PRN</td>
+               <td>uint8_t[20]</td>
+               <td>Global satellite ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Satellite Used</td>
+               <td>uint8_t[20]</td>
+               <td>
+                  <ol>
+                     <li value="0">Satellite not used</li>
+                     <li>Used for localization</li>
+                  </ol>
+               </td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Satellite Elevation</td>
+               <td>uint8_t[20]</td>
+               <td>Elevation of satellite, degrees. 0-90, where 0 is directly above the receiver, 90 is on the horizon</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Satellite Azimuth</td>
+               <td>uint8_t[20]</td>
+               <td>Direction of satellite, with 0-360 degrees scaled to the range 0-255</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Satellite SNR</td>
+               <td>uint8_t[20]</td>
+               <td>Signal to noise ratio of the satellite</td>
+               <td>Same as official</td>
+            </tr>
+         </table>
+         
+         <h2 id="digicam_configure">DIGICAM_CONFIGURE (154)</h2>
+         <p>Manual and Automatic mode are global switches and impact all cameras. For this reason, if commanding each imager to
+         different manual settings, ensure that no messages are sent with auto mode enabled or all imagers will switch to auto mode.</p>
+         <p>The camera can set all of the imagers to manual mode in a single DIGICAM_CONFIGURE message by using the Extra Command
+         value of 255. Alternatively, one DIGICAM_CONFIGURE message can be sent for each imager (numbers 0-4 for a stock camera) with an
+         individual gain and exposure setting for each.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="http://mavlink.org/messages/ardupilotmega#DIGICAM_CONFIGURE">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Mode</td>
+               <td>uint8_t</td>
+               <td>
+                  <ol>
+                     <li>ProgramAuto</li>
+                     <li>Aperture Priority</li>
+                     <li>Shutter Priority</li>
+                     <li>Manual</li>
+                     <li>IntelligentAuto</li>
+                     <li>SuperiorAuto</li>
+                  </ol>
+               </td>
+               <td>
+                  <ol>
+                     <li value="1">Auto gain/exposure</li>
+                     <li value="4">Manual</li>
+                  </ol>
+                  All other values have no effect
+               </td>
+            </tr>
+            <tr>
+               <td>Shutter Speed</td>
+               <td>uint16_t</td>
+               <td>Shutter speed (seconds divisor). For example, to specify 1/60sec, send 60</td>
+               <td>As described in the official description<br/>Ignored unless Mode set to Manual</td>
+            </tr>
+            <tr>
+               <td>Aperture</td>
+               <td>uint8_t</td>
+               <td>Aperture: F stop number</td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+            <tr>
+               <td>ISO</td>
+               <td>uint8_t</td>
+               <td>Enumeration of ISO number e.g. 80, 100, 200, etc.</td>
+               <td>
+                  Gain:
+                  <ol>
+                     <li value="1">ISO100</li>
+                     <li value="2">ISO200</li>
+                     <li value="4">ISO400</li>
+                     <li value="8">ISO800</li>
+                  </ol>
+                  Ignored unless Mode is set to Manual
+               </td>
+            </tr>
+            <tr>
+               <td>Exposure Mode</td>
+               <td>uint8_t</td>
+               <td>Exposure type enumerator</td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Command ID</td>
+               <td>uint8_t</td>
+               <td>Command Identity</td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Engine Cut-Off</td>
+               <td>uint8_t</td>
+               <td>Main engine cut-off time before camera trigger in seconds/10 (0 means no cut-off)</td>
+               <td>This is for the aircraft, should be set to the value recommended by the manufacturer (ignored)</td>
+            </tr>
+            <tr>
+               <td>Extra Command</td>
+               <td>uint8_t</td>
+               <td>Extra Command</td>
+               <td>Sensor number (0-4) of which sensor to set manual settings. Set to 255 for all.</td>
+            </tr>
+            <tr>
+               <td>Extra Value</td>
+               <td>single precision float</td>
+               <td>Extra Value</td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+         </table>
+         
+         <h2 id="digicam_control">DIGICAM_CONTROL (155)</h2>
+         <p>The DIGICAM_CONTROL message is used to command captures. Only the "Shutter Command" field is currently used,
+         but default values are provided for the other parameters for future API compatibility.</p>
+         <p>All sensors configured to capture (e.g. via the WiFi /config route) will be captured.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="http://mavlink.org/messages/ardupilotmega#DIGICAM_CONTROL">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>On/Off</td>
+               <td>uint8_t</td>
+               <td>Session control (on/off or show/hide lens):
+                  <ol>
+                     <li value="0">Turn off the camera / hide the lens</li>
+                     <li>Turn on the camera /Show the lens</li>
+                  </ol>
+               </td>
+               <td>Set to 1 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Zoom Position</td>
+               <td>uint8_t</td>
+               <td>Zoom's absolute position. 2x, 3x, 10x, etc.</td>
+               <td>Set to 1 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Zoom Step</td>
+               <td>int8_t</td>
+               <td>Zooming step value to offset zoom from the current position</td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Focus Lock</td>
+               <td>uint8_t</td>
+               <td>Focus Locking, Unlocking or Re-locking:
+                  <ol>
+                     <li value="0">Ignore</li>
+                     <li>Unlock</li>
+                     <li>Lock</li>
+                  </ol>
+               </td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Shutter Command</td>
+               <td>uint8_t</td>
+               <td>Shooting command. Any non-zero value triggers the camera</td>
+               <td>
+                  <ol>
+                     <li value="0">(or any number not defined below) Don't trigger</li>
+                     <li>Trigger a flight capture (anti-sat mode disabled)</li>
+                     <li>Trigger a panel capture (anti-sat mode enabled)</li>
+                  </ol>
+               </td>
+            </tr>
+            <tr>
+               <td>CommandID</td>
+               <td>uint8_t</td>
+               <td>Command Identity</td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Extra Command</td>
+               <td>uint8_t</td>
+               <td>Extra Command</td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+            <tr>
+               <td>Extra Value</td>
+               <td>single precision float</td>
+               <td>Extra Value</td>
+               <td>Set to 0 (ignored)</td>
+            </tr>
+         </table>
+         
+         <h2 id="camera_status">CAMERA_STATUS (179)</h2>
+         <p>If a capture is commanded via MAVLink, a CAMERA_STATUS message with event type "TRIGGER" will be sent back on success</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="http://mavlink.org/messages/ardupilotmega#CAMERA_STATUS">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Time</td>
+               <td>uint64_t</td>
+               <td>Image timestamp (microseconds since UNIX epoch, according to camera clock)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Target System</td>
+               <td>uint8_t</td>
+               <td>System ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Camera Index</td>
+               <td>uint8_t</td>
+               <td>Camera ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Image Index</td>
+               <td>uint16_t</td>
+               <td>Image Index</td>
+               <td>Capture number commanded by MAVLink (ignores all other captures, such as WiFi, button, and external trigger)</td>
+            </tr>
+            <tr>
+               <td>Event ID</td>
+               <td>uint8_t</td>
+               <td>
+                  <ol>
+                     <li value="0">CAMERA_STATUS_TYPE_HEARTBEAT - Camera heartbeat, announce camera component ID at 1Hz</li>
+                     <li>CAMERA_STATUS_TYPE_TRIGGER - Camera image triggered</li>
+                     <li>CAMERA_STATUS_TYPE_DISCONNECT - Camera connection lost</li>
+                     <li>CAMERA_STATUS_TYPE_ERROR - Camera unknown error</li>
+                     <li>CAMERA_STATUS_TYPE_LOWBATT - Camera battery low. Parameter p1 shows reported voltage</li>
+                     <li>CAMERA_STATUS_TYPE_LOWSTORE - Camera storage low. Parameter p1 shows reported shots remaining</li>
+                     <li>CAMERA_STATUS_TYPE_LOWSTOREV - Camera storage low. Parameter p1 shows reported video minutes remaining</li>
+                  </ol>
+               </td>
+               <td>
+                  <ol>
+                     <li value="1">CAMERA_STATUS_TYPE_TRIGGER - Camera image triggered</li>
+                  </ol>
+               </td>
+            </tr>
+            <tr>
+               <td>P1</td>
+               <td>single precision float</td>
+               <td>Parameter 1</td>
+               <td>Sent as 0</td>
+            </tr>
+            <tr>
+               <td>P2</td>
+               <td>single precision float</td>
+               <td>Parameter 2</td>
+               <td>Sent as 0</td>
+            </tr>
+            <tr>
+               <td>P3</td>
+               <td>single precision float</td>
+               <td>Parameter 3</td>
+               <td>Sent as 0</td>
+            </tr>
+            <tr>
+               <td>P4</td>
+               <td>single precision float</td>
+               <td>Parameter 4</td>
+               <td>Sent as 0</td>
+            </tr>
+         </table>
+         
+         <h2 id="camera_feedback">CAMERA_FEEDBACK (180)</h2>
+         <p>If a capture is commanded via MAVLink, a CAMERA_FEEDBACK message with "Flags" type "CAMERA_FEEDBACK_CLOSEDLOOP" will be
+         sent back on success</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="http://mavlink.org/messages/ardupilotmega#CAMERA_FEEDBACK">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Time</td>
+               <td>uint64_t</td>
+               <td>Image timestamp (microseconds since UNIX epoch), as passed in by CAMERA_STATUS message (or autopilot if no CCB)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Target System</td>
+               <td>uint8_t</td>
+               <td>System ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Camera Index</td>
+               <td>uint8_t</td>
+               <td>Camera ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Image Index</td>
+               <td>uint16_t</td>
+               <td>Image Index</td>
+               <td>Capture number commanded by MAVLink (ignores all other captures, such as WiFi, button, and external trigger)</td>
+            </tr>
+            <tr>
+               <td>Latitude</td>
+               <td>int32_t</td>
+               <td>Latitude in (deg * 1E7)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Longitude</td>
+               <td>int32_t</td>
+               <td>Longitude in (deg * 1E7)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Altitude (MSL)</td>
+               <td>single precision float</td>
+               <td>Altitude Absolute (meters AMSL)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Altitude Relative</td>
+               <td>single precision float</td>
+               <td>Altitude Relative (meters above HOME location)</td>
+               <td>Altitude (in meters) above estimated ground level</td>
+            </tr>
+            <tr>
+               <td>Roll</td>
+               <td>single precision float</td>
+               <td>Camera Roll angle (earth frame, degrees, +-180)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Pitch</td>
+               <td>single precision float</td>
+               <td>Camera Pitch angle (earth frame, degrees, +-180)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Yaw</td>
+               <td>single precision float</td>
+               <td>Camera Yaw (earth frame, degrees, 0-360, true)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Focal Length</td>
+               <td>single precision float</td>
+               <td>Focal Length (mm)</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Flags</td>
+               <td>uint8_t</td>
+               <td>
+                  <ol>
+                     <li value="0">CAMERA_FEEDBACK_PHOTO - Shooting photos, not video</li>
+                     <li>CAMERA_FEEDBACK_VIDEO - Shooting video, not stills</li>
+                     <li>CAMERA_FEEDBACK_BADEXPOSURE - Unable to achieve requested exposure (e.g. shutter speed too low)</li>
+                     <li>CAMERA_FEEDBACK_CLOSEDLOOP - Closed loop feedback from camera, we know for sure it has successfully taken a picture</li>
+                     <li>CAMERA_FEEDBACK_OPENLOOP - Open loop camera, an image trigger has been requested but we can't know for sure it has successfully taken a picture</li>
+                  </ol>
+               </td>
+               <td>
+                  <ol>
+                     <li value="3">CAMERA_FEEDBACK_CLOSEDLOOP - camera has successfully taken a picture</li>
+                  </ol>
+               </td>
+            </tr>
+         </table>
+      </article>
+   </body>
+</html>

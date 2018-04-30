@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="generator"
+      content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+      <meta charset="utf-8" />
+      <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+      <title>RedEdge API by MicaSense</title>
+      <link rel="stylesheet" href="stylesheets/styles.css" />
+      <link rel="stylesheet" href="stylesheets/pygment_trac.css" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+      <!--[if lt IE 9]>
+      <script src="//raw.githubusercontent.com/aFarkas/html5shiv/master/dist/html5shiv.min.js"></script>
+      <![endif]-->
+   </head>
+   <body>
+   <div class="wrapper">
+      <header>
+         <h1>RedEdge API</h1>
+         <p>MicaSense RedEdge camera API documentation and example code.</p>
+         <ul>
+            <li>
+               <a href="#welcome">Introduction</a>
+            </li>
+            <li>
+               <a href="#about-apis">About the APIs</a>
+            </li>
+            <li>
+               <a href="#documentation">Documentation</a>
+               <ul>
+                  <li>
+                     <a href="#v330">v3.3.0</a>
+                  </li>
+                  <li>
+                     <a href="#v1530">v1.5.30 - v3.2.0</a>
+                  </li>
+                  <li>
+                     <a href="#v159">v1.5.9 - v1.5.29</a>
+                  </li>
+                  <li>
+                     <a href="#v155">v1.5.5 - v1.5.8</a>
+                  </li>
+                  <li>
+                     <a href="#v150">v1.5.0 - v1.5.4</a>
+                  </li>
+                  <li>
+                     <a href="#v132">v1.3.2 - v1.4.6</a>
+                  </li>
+               </ul>
+            </li>
+            <li>
+               <a href="#examples">Example Code</a>
+            </li>
+         </ul>
+      </header>
+      <section>
+         <h2>
+         <a id="welcome" class="anchor" href="#welcome" aria-hidden="true"></a>
+         Welcome to the RedEdge API page</h2>
+         <p>The RedEdge camera is designed for quick and easy integration into just about any platform. However, for more control,
+         you can talk to the RedEdge by serial port, Ethernet, or WiFi.</p>
+         <p>API documentation is organized by the camera firmware version it describes. We'll always do our best to 
+         <strong>not</strong> break anything with new releases, but sometimes new features may be released that were not present in
+         older software versions, so it is always best to check your firmware version and read the appropriate version. Of course,
+         you can always upgrade your camera to the latest firmware! Log on to 
+         <a href="https://atlas.micasense.com/">MicaSense Atlas</a> or 
+         <a href="http://www.micasense.com/#contact">contact us</a> for the latest.</p>
+         <p>
+         <strong>Don't know what version you have?</strong> Connect to the camera WiFi, and you can read the version from the
+         bottom of the 'config' page.</p>
+         
+         <h2><a id="about-apis" class="anchor" href="about-apis" aria-hidden="true"></a> About the APIs</h2>
+         <h3>
+         <a id="http-api" class="anchor" href="#http-api" aria-hidden="true"></a> HTTP API</h3>
+         <p>The HTTP API is the most powerful way to interface to the RedEdge. You can use this API using either the Ethernet
+         connector or the WiFi access point.</p>
+         <h3>
+         <a id="serial-api" class="anchor" href="#serial-api" aria-hidden="true"></a> Serial API</h3>
+         <p>The Serial API provides a MavLink interface to the RedEdge. You can use this API by connecting your MavLink-capable
+         system to the host serial port on the camera.</p>
+         
+         <h2>
+         <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"></a> Documentation</h2>
+         <dl>
+            <dt><a id="v330" class="anchor" href="#v330" aria-hidden="true"></a> v3.3.0</dt>
+            <dd>
+               <a href="api/http/3.3.0.html">HTTP API Documentation for v3.3.0</a>
+            </dd>
+            <dd>
+               <a href="api/serial/3.3.0.html">Serial API Documentation for v3.3.0</a>
+            </dd>
+            <dt><a id="v1530" class="anchor" href="#v1530" aria-hidden="true"></a> v1.5.30</dt>
+            <dd>
+               <a href="api/http/1.5.30.html">HTTP API Documentation for v1.5.30</a>
+            </dd>
+            <dd>
+               <a href="api/serial/1.5.30.html">Serial API Documentation for v1.5.30</a>
+            </dd>
+            
+            <dt><a id="v159" class="anchor" href="#v159" aria-hidden="true"></a> v1.5.9 - v1.5.29</dt>
+            <dd>
+               <a href="api/http/1.5.9.html">HTTP API Documentation for v1.5.9 - v1.5.19</a>
+            </dd>
+            <dd>
+               <a href="api/serial/1.5.9.html">Serial API Documentation for v1.5.9 - v1.5.19</a>
+            </dd>
+            
+            <dt><a id="v155" class="anchor" href="#v155" aria-hidden="true"></a> v1.5.5 - v1.5.8</dt>
+            <dd>
+               <a href="api/http/1.5.5.html">HTTP API Documentation for v1.5.5 - v1.5.8</a>
+            </dd>
+            <dd>
+               <a href="api/serial/1.5.5.html">Serial API Documentation for v1.5.5 - v1.5.8</a>
+            </dd>
+            
+            <dt><a id="v150" class="anchor" href="#v150" aria-hidden="true"></a> v1.5.0 - v1.5.4</dt>
+            <dd>
+               <a href="api/http/1.5.0.html">HTTP API Documentation for v1.5.0 - v1.5.4</a>
+            </dd>
+            <dd>
+               <a href="api/serial/1.5.0.html">Serial API Documentation for v1.5.0 - v1.5.4</a>
+            </dd>
+            
+            <dt><a id="v132" class="anchor" href="#v132" aria-hidden="true"></a> v1.3.2 - v1.4.6</dt>
+            <dd>
+               <a href="api/http/1.3.2.html">HTTP API Documentation for v1.3.2 - v1.4.6</a>
+            </dd>
+            <dd>
+               <a href="api/serial/1.3.2.html">Serial API Documentation for v1.3.2 - v1.4.6</a>
+            </dd>
+         </dl>
+         
+         <h2><a id="examples" class="anchor" href="#examples" aria-hidden="true"></a> Example Code</h2>
+         <dl>
+            <dt><a href="examples/mavlink_serial.py">mavlink_serial.py</a></dt>
+            <dd>An example python program that can be used to verify communication with the RedEdge. A typical use of the script is:
+               <pre>
+<code>python mavlink_serial.py --device /dev/ttyUSB0 --baud 57600</code></pre>
+            </dd>
+            <dt><a href="examples/gps_wifi.py">gps_wifi.py</a></dt>
+            <dd>An example python program that can be used to get the camera's GPS location and command a capture. A typical usage of 
+            the script is:<pre>
+<code>python gps_wifi.py</code></pre></dd>
+            <dt><a href="examples/expandable_storage.py">expandable_storage.py</a></dt>
+            <dd>An example python program which can be used to store captures from the RedEdge camera to an external storage device using a Raspberry Pi. A typical usage of the script is:<pre>
+<code>sudo python expandable_storage.py</code></pre></dd>
+         </dl>
+      </section>
+      <footer>
+         <img src="./images/MicaSense_Logo_clr.png" title="MicaSense" />
+      </footer>
+   </div>
+   <script src="javascripts/scale.fix.js"></script> 
+   <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js'
+type='text/javascript'%3E%3C/script%3E"));
+      
+</script> 
+   <script type="text/javascript">
+      try {
+      var pageTracker = _gat._getTracker("UA-50862965-2");
+      pageTracker._trackPageview();
+      } catch(err) {}
+      
+</script></body>
+</html>
