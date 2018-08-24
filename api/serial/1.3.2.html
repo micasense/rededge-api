@@ -66,7 +66,7 @@
          exceptions and recommendations for the use of the standard message definitions.</p>
          <p>The PING message can be used to ensure round-trip serial connectivity with the RedEdge.</p>
          <p>Receipt of serial state messages will override any RedEdge internal or external sensor data, such as a connected GPS,
-         for 30 seconds since the last state message was received. For aircraft state and mount status, messages should be sent as
+         for 5 seconds since the last state message was received. For aircraft state and mount status, messages should be sent as
          often as possible to ensure the latest state information is available to the camera when a capture is taken.</p>
          <p>Specifically, messages defined in mavlink/message_definitions/ardupilotmega.xml are used. Ardupilotmega.xml includes
          common.xml, so compiling it should create the required headers. For C/C++, use the mavgenerate.py tool to generate the

@@ -95,7 +95,7 @@
          
          <h2 id="gps">GPS</h2>
          <p>Receipt of serial state messages will override any RedEdge internal or external sensor data, such as a connected GPS,
-         for 30 seconds since the last state message was received. For aircraft state and mount status, messages should be sent as
+         for 5 seconds since the last state message was received. For aircraft state and mount status, messages should be sent as
          often as possible to ensure the latest state information is available to the camera when a capture is taken.</p>
          <p>There are two supported ways to provide GPS data to the RedEdge. The simplest method is to send the <a href="#gps_raw_int">
          GPS_RAW_INT</a> message, as this single message contains both the time and position information. The other supported way is to
