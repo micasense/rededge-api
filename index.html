@@ -24,28 +24,10 @@
             </li>
             <li>
                <a href="#about-apis">About the APIs</a>
-            </li>
-            <li>
-               <a href="#documentation">Documentation</a>
                <ul>
-                  <li>
-                     <a href="#v330">v3.3.0</a>
-                  </li>
-                  <li>
-                     <a href="#v1530">v1.5.30 - v3.2.0</a>
-                  </li>
-                  <li>
-                     <a href="#v159">v1.5.9 - v1.5.29</a>
-                  </li>
-                  <li>
-                     <a href="#v155">v1.5.5 - v1.5.8</a>
-                  </li>
-                  <li>
-                     <a href="#v150">v1.5.0 - v1.5.4</a>
-                  </li>
-                  <li>
-                     <a href="#v132">v1.3.2 - v1.4.6</a>
-                  </li>
+                  <li><a href="#altum-api">Using RedEdge APIs with Altum</a></li>
+                  <li><a href="#http-api">HTTP API</a></li>
+                  <li><a href="#serial-api">Serial API</a></li>
                </ul>
             </li>
             <li>
@@ -54,83 +36,67 @@
          </ul>
       </header>
       <section>
-         <h2>
-         <a id="welcome" class="anchor" href="#welcome" aria-hidden="true"></a>
-         Welcome to the RedEdge API page</h2>
+         <h1><a id="welcome" class="anchor" href="#welcome" aria-hidden="true"></a>
+             Welcome to the RedEdge API page</h1>
          <p>The RedEdge camera is designed for quick and easy integration into just about any platform. However, for more control,
-         you can talk to the RedEdge by serial port, Ethernet, or WiFi.</p>
-         <p>API documentation is organized by the camera firmware version it describes. We'll always do our best to 
-         <strong>not</strong> break anything with new releases, but sometimes new features may be released that were not present in
-         older software versions, so it is always best to check your firmware version and read the appropriate version. Of course,
-         you can always upgrade your camera to the latest firmware! Log on to 
-         <a href="https://atlas.micasense.com/">MicaSense Atlas</a> or 
-         <a href="http://www.micasense.com/#contact">contact us</a> for the latest.</p>
-         <p>
-         <strong>Don't know what version you have?</strong> Connect to the camera WiFi, and you can read the version from the
-         bottom of the 'config' page.</p>
+            you can talk to the RedEdge by serial port, Ethernet, or WiFi.</p>
+         <p>API documentation indicates what camera firmware versions it is compatible with. We'll always do our best to 
+            <strong>not</strong> break anything with new releases, but sometimes new features may be released that were not present in
+            older software versions, so it is always best to check your firmware version and note the relevant sections. Of course,
+            you can always upgrade your camera to the latest firmware! Log on to 
+            <a href="https://atlas.micasense.com/">MicaSense Atlas</a> or 
+            <a href="http://www.micasense.com/contact">contact us</a> for the latest.</p>
+         <p><strong>Don't know what version you have?</strong> Connect to the camera WiFi, and you can read the version from the
+            bottom of the 'config' page.</p>
+      </section>
+
+      <section>
+         <h1><a id="about-apis" class="anchor" href="about-apis" aria-hidden="true"></a>
+             About the APIs</h1>
          
-         <h2><a id="about-apis" class="anchor" href="about-apis" aria-hidden="true"></a> About the APIs</h2>
-         <h3>
-         <a id="http-api" class="anchor" href="#http-api" aria-hidden="true"></a> HTTP API</h3>
+         <h2><a id="altum-api" class="anchor" href="#altum-api" aria-hidden="true"></a>
+            Using the RedEdge APIs with Altum</h2>
+         <p>RedEdge and Altum have different versioning numbers. The version numbers provided in these documents are only applicable
+            to RedEdge versions. However, the table below shows which RedEdge API versions are compatible with which Altum versions.</p>
+         <table>
+            <thead>
+               <tr>
+                  <th>Altum Versions</th>
+                  <th>Compatible RedEdge API Version</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>v1.0.0-v1.2.x</td>
+                  <td>v4.1.0</td>
+               </tr>
+               <tr>
+                  <td>v1.3.0-v1.3.x</td>
+                  <td>v5.0.0</td>
+               </tr>
+               <tr>
+                  <td>v1.4.0</td>
+                  <td>v5.2.0</td>
+               </tr>
+            </tbody>
+         </table>
+
+         <h2><a id="http-api" class="anchor" href="#http-api" aria-hidden="true"></a>
+             HTTP API</h2>
          <p>The HTTP API is the most powerful way to interface to the RedEdge. You can use this API using either the Ethernet
-         connector or the WiFi access point.</p>
-         <h3>
-         <a id="serial-api" class="anchor" href="#serial-api" aria-hidden="true"></a> Serial API</h3>
-         <p>The Serial API provides a MavLink interface to the RedEdge. You can use this API by connecting your MavLink-capable
-         system to the host serial port on the camera.</p>
-         
-         <h2>
-         <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"></a> Documentation</h2>
-         <dl>
-            <dt><a id="v330" class="anchor" href="#v330" aria-hidden="true"></a> v3.3.0</dt>
-            <dd>
-               <a href="api/http/3.3.0.html">HTTP API Documentation for v3.3.0</a>
-            </dd>
-            <dd>
-               <a href="api/serial/3.3.0.html">Serial API Documentation for v3.3.0</a>
-            </dd>
-            <dt><a id="v1530" class="anchor" href="#v1530" aria-hidden="true"></a> v1.5.30</dt>
-            <dd>
-               <a href="api/http/1.5.30.html">HTTP API Documentation for v1.5.30</a>
-            </dd>
-            <dd>
-               <a href="api/serial/1.5.30.html">Serial API Documentation for v1.5.30</a>
-            </dd>
-            
-            <dt><a id="v159" class="anchor" href="#v159" aria-hidden="true"></a> v1.5.9 - v1.5.29</dt>
-            <dd>
-               <a href="api/http/1.5.9.html">HTTP API Documentation for v1.5.9 - v1.5.19</a>
-            </dd>
-            <dd>
-               <a href="api/serial/1.5.9.html">Serial API Documentation for v1.5.9 - v1.5.19</a>
-            </dd>
-            
-            <dt><a id="v155" class="anchor" href="#v155" aria-hidden="true"></a> v1.5.5 - v1.5.8</dt>
-            <dd>
-               <a href="api/http/1.5.5.html">HTTP API Documentation for v1.5.5 - v1.5.8</a>
-            </dd>
-            <dd>
-               <a href="api/serial/1.5.5.html">Serial API Documentation for v1.5.5 - v1.5.8</a>
-            </dd>
-            
-            <dt><a id="v150" class="anchor" href="#v150" aria-hidden="true"></a> v1.5.0 - v1.5.4</dt>
-            <dd>
-               <a href="api/http/1.5.0.html">HTTP API Documentation for v1.5.0 - v1.5.4</a>
-            </dd>
-            <dd>
-               <a href="api/serial/1.5.0.html">Serial API Documentation for v1.5.0 - v1.5.4</a>
-            </dd>
-            
-            <dt><a id="v132" class="anchor" href="#v132" aria-hidden="true"></a> v1.3.2 - v1.4.6</dt>
-            <dd>
-               <a href="api/http/1.3.2.html">HTTP API Documentation for v1.3.2 - v1.4.6</a>
-            </dd>
-            <dd>
-               <a href="api/serial/1.3.2.html">Serial API Documentation for v1.3.2 - v1.4.6</a>
-            </dd>
-         </dl>
-         
-         <h2><a id="examples" class="anchor" href="#examples" aria-hidden="true"></a> Example Code</h2>
+            connector or the WiFi access point.</p>
+         <p><a href="api/http.html">Full HTTP API Documentation</a></p>
+
+         <h2><a id="serial-api" class="anchor" href="#serial-api" aria-hidden="true"></a>
+             Serial API</h2>
+         <p>The Serial API provides a MAVLink interface to the RedEdge. You can use this API by connecting your MAVLink-capable
+            system to the host serial port on the camera.</p>
+         <p><a href="api/serial.html">Full Serial API Documentation</a></p>
+      </section>
+
+      <section>
+         <h1><a id="examples" class="anchor" href="#examples" aria-hidden="true"></a>
+             Example Code</h1>
          <dl>
             <dt><a href="examples/mavlink_serial.py">mavlink_serial.py</a></dt>
             <dd>An example python program that can be used to verify communication with the RedEdge. A typical use of the script is:

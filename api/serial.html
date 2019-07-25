@@ -4,7 +4,7 @@
       <meta name="generator"
       content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
       <title>RedEdge Serial API</title>
-      <link rel="stylesheet" href="../../stylesheets/markdown.css" />
+      <link rel="stylesheet" href="../stylesheets/markdown.css" />
    </head>
    <body>
       <article class="markdown-body">
@@ -73,18 +73,25 @@
                   <li>
                      <a href="#camera_feedback">CAMERA_FEEDBACK</a>
                   </li>
+                  <li>
+                     <a href="#param_set">PARAM_SET</a>
+                  </li>
                </ul>
             </li>
          </ul>
          <h1 id="general-protocol-overview">General Protocol Overview</h1>
          <p>The API is accessed via serial messages in the Mavlink format (see 
          <a href="http://en.wikipedia.org/wiki/MAVLink">http://en.wikipedia.org/wiki/MAVLink</a> and 
-         <a href="http://qgroundcontrol.org/mavlink/start">http://qgroundcontrol.org/mavlink</a>). Mavlink provides an open data format
-         for interaction as well as a suite of tools to assist the programmer in developing and testing the interface. RedEdge uses
-         Mavlink v1.0 messages and communicates with the host at 57600 baud.</p>
+         <a href="https://mavlink.io/en/about/overview.html">https://mavlink.io/en/about/overview.html</a>). Mavlink provides an
+         open data format for interaction as well as a suite of tools to assist the programmer in developing and testing the
+         interface. RedEdge uses Mavlink v1.0 messages and communicates with the host at 57600 baud.</p>
          <h2 id="communicating">Communicating</h2>
          <p>The <a href="#heartbeat">HEARTBEAT</a> message can ensure that the RedEdge is booted and ready to receive MAVLink packets.</p>
          <p>The <a href="#ping">PING</a> message can be used to ensure round-trip serial connectivity with the RedEdge.</p>
+         <p>MAVLink messages include a <em>Target System</em> parameter. The RedEdge will adopt the Target System Id
+         of any message it receives, and defaults to 255 otherwise.</p>
+         <p>Many MAVLink messages include a <em>Target Component</em> parameter. The RedEdge will ignore any command that does not
+         specify MAV_COMP_ID_CAMERA or MAV_COMP_ID_ALL as the Target Component.</p>
          
          <h2 id="gps">GPS</h2>
          <p>Receipt of serial state messages will override any RedEdge internal or external sensor data, such as a connected GPS,
@@ -103,13 +110,14 @@
          <h1 id="messages">Messages</h1>
          
          <h2 id="heartbeat">HEARTBEAT (0)</h2>
+         <p><strong>Versions</strong>: v1.3.2-</p>
          <p>The RedEdge will send a heartbeat message approximately once per second using the component ID MAV_COMP_ID_CAMERA.
          While this message can be safely ignored, it can be used to verify the RedEdge is properly powered on.</p>
          <table>
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="http://pixhawk.ethz.ch/mavlink/#HEARTBEAT">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/common.html#HEARTBEAT">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -194,6 +202,7 @@
          </table>
          
          <h2 id="ping">PING (4)</h2>
+         <p><strong>Versions</strong>: v1.3.2-</p>
          <p>Send the PING message with system_id = 0 and component_id = 0, and with a new sequence number each time, to ensure
          round-trip communications with the RedEdge. The PING message will be responded to with the same sequence number and the
          system_id and component_id of the sender (which are present in the message header).</p>
@@ -201,7 +210,7 @@
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="https://pixhawk.ethz.ch/mavlink/#PING">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/common.html#PING">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -231,26 +240,27 @@
          </table>
          
          <h2 id="gps_raw_int">GPS_RAW_INT (24)</h2>
+         <p><strong>Versions</strong>: v1.3.2-</p>
          <p>Use this message to send the raw GPS information to the RedEdge as received by the host vehicle. This is the main
          message providing GPS information to the RedEdge. Forwarding GPS data to the camera as soon as it is received by the host
          will ensure the latest information is present in a new capture. Use the 64-bit time_usec field to set the camera's UTC
          time.</p>
          <p>UNIX time is separate from GPS time by a fixed base epoch offset and a changing number of leap seconds (a value that
          most GPS receivers provide). The base offset is +315964800 seconds between UNIX time and GPS time (UNIX is referenced to
-         1970-Jan-1 while GPS is referenced to 1980-Jan-6). The current number of leap seconds is 17.</p>
+         1970-Jan-1 while GPS is referenced to 1980-Jan-6).</p>
          <p>Most GPS receivers provide a UTC time message, but it may or may not be microseconds referenced to the Unix epoch,
          which is what we want. However, most of them provide GPS week number (WN) plus time of week (TOW), plus number of leap
          seconds (LS), which makes the math easier for embedded processors.</p>
          <p>With those GPS time inputs, UNIX epoch UTC times can be calculated by:</p>
 <pre>Base offset + (GPS Week Number * Seconds in week) + GPS Time of Week - Leap Seconds.
   315964800 + (      WN        *      604800    ) +       TOW        -      LS</pre>
-         <p>As of 2015 Nov 11, LS equals 17.</p>
+         <p>As of 2019 May 05, LS equals 18.</p>
          <p>Depending on the receiver/formatting/etc. it may be required to also add in a nanoseconds term to get sub-second resolution.</p>
          <table>
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="https://pixhawk.ethz.ch/mavlink/#GPS_RAW_INT">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/common.html#GPS_RAW_INT">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -273,8 +283,8 @@
                   </ol>
                </td>
                <td>
-                  <= 2: no fix
-                  > 2: 3D fix
+                  &lt;= 2: no fix
+                  <br />&gt; 2: 3D fix
                </td>
             </tr>
             <tr>
@@ -329,6 +339,7 @@
          </table>
          
          <h2 id="system_time">SYSTEM_TIME (2)</h2>
+         <p><strong>Versions</strong>: v1.3.2-</p>
          <p>This message is required if using GLOBAL_POSITION_INT, as that message does not provide a UTC timestamp. It is used to
          update UTC time to provide accurate timestamping of images. Provide a 64-bit unix timestamp referenced to UTC time and the
          UNIX (not GPS) epoch. Most GPS receivers provide this information in a UTC time message.</p>
@@ -337,7 +348,7 @@
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="https://pixhawk.ethz.ch/mavlink/#SYSTEM_TIME">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/common.html#SYSTEM_TIME">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -355,6 +366,7 @@
          </table>
          
          <h2 id="attitude">ATTITUDE (30)</h2>
+         <p><strong>Versions</strong>: v1.3.2-</p>
          <p>Vehicle state (roll, pitch, yaw) and vehicle rates can be provided via the ATTITUDE message. Note that this is the
          state of the host vehicle. The offset of the camera from the host reference frame, whether fixed or on a gimbals, should
          be provided via the MOUNT_STATUS message defined below.</p>
@@ -365,7 +377,7 @@
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="http://pixhawk.ethz.ch/mavlink/#ATTITUDE">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/common.html#ATTITUDE">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -413,6 +425,7 @@
          </table>
          
          <h2 id="mount_status">MOUNT_STATUS (158)</h2>
+         <p><strong>Versions</strong>: v1.3.2-</p>
          <p>This message can be used to provide the orientation of the camera measured by an external source by sending the
          MOUNT_STATUS message along with the ATTITUDE message. Anytime this value has been written in the preceding 5 seconds,
          it will be considered valied and will be written to image metadata.</p>
@@ -468,11 +481,12 @@
                <td>Target Component</td>
                <td>uint8_t</td>
                <td>Component ID</td>
-               <td>Ignored</td>
+               <td>Same as official</td>
             </tr>
          </table>
          
          <h2 id="global_position_int">GLOBAL_POSITION_INT (33)</h2>
+         <p><strong>Versions</strong>: v1.3.2-</p>
          <p>Used to update the position from a host state estimate using more than raw GPS, such as a GPS-aided INS system. This
          may not be the position provided by the GPS receiver, but may be more accurate and/or updated more frequently. Since this
          message does not have a fix status field, sending it will imply a 3D GPS fix.</p>
@@ -480,7 +494,7 @@
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="http://pixhawk.ethz.ch/mavlink/#GLOBAL_POSITION_INT">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/common.html#GLOBAL_POSITION_INT">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -541,13 +555,14 @@
          </table>
          
          <h2 id="gps_status">GPS_STATUS (25)</h2>
+         <p><strong>Versions</strong>: v1.3.2-</p>
          <p>GPS satellite information which is updated on the RedEdge WiFi user interface. This message is not required, but if sent
          the GPS status bars on the RedEdge WiFi interface will be updated.</p>
          <table>
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="http://pixhawk.ethz.ch/mavlink/#GPS_STATUS">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/common.html#GPS_STATUS">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -594,6 +609,10 @@
          </table>
          
          <h2 id="digicam_configure">DIGICAM_CONFIGURE (154)</h2>
+         <p><strong>Versions</strong>: v1.5.5-</p>
+         <p>NOTE: At some point, MAVLink.io decided to add a
+            <a href="https://mavlink.io/en/messages/common.html#MAV_CMD_DO_DIGICAM_CONFIGURE">MAV_CMD_DO_DIGICAM_CONFIGURE</a>,
+            which, confusingly, does NOT have the same definition or 154 designation as the DIGICAM_CONFIGURE message.</p>
          <p>Manual and Automatic mode are global switches and impact all cameras. For this reason, if commanding each imager to
          different manual settings, ensure that no messages are sent with auto mode enabled or all imagers will switch to auto mode.</p>
          <p>The camera can set all of the imagers to manual mode in a single DIGICAM_CONFIGURE message by using the Extra Command
@@ -603,7 +622,7 @@
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="http://mavlink.org/messages/ardupilotmega#DIGICAM_CONFIGURE">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/ardupilotmega.html#DIGICAM_CONFIGURE">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -687,6 +706,10 @@
          </table>
          
          <h2 id="digicam_control">DIGICAM_CONTROL (155)</h2>
+         <p><strong>Versions</strong>: v1.5.5-</p>
+         <p>NOTE: At some point, MAVLink.io decided to add a
+            <a href="https://mavlink.io/en/messages/common.html#MAV_CMD_DO_DIGICAM_CONTROL">MAV_CMD_DO_DIGICAM_CONTROL</a>,
+            which, confusingly, does NOT have the same definition or 155 designation as the DIGICAM_CONTROL message.</p>
          <p>The DIGICAM_CONTROL message is used to command captures. Only the "Shutter Command" field is currently used,
          but default values are provided for the other parameters for future API compatibility.</p>
          <p>All sensors configured to capture (e.g. via the WiFi /config route) will be captured.</p>
@@ -694,7 +717,7 @@
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="http://mavlink.org/messages/ardupilotmega#DIGICAM_CONTROL">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/ardupilotmega.html#DIGICAM_CONTROL">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -765,12 +788,17 @@
          </table>
          
          <h2 id="camera_status">CAMERA_STATUS (179)</h2>
+         <p><strong>Versions</strong>: v1.5.5-</p>
+         <p>NOTE: At some point, MAVLink.io decided to assign
+            <a href="https://mavlink.io/en/messages/common.html#MAV_CMD_DO_SET_HOME">MAV_CMD_DO_SET_HOME</a> to 179, conflicting
+            with the CAMERA_STATUS message's designation. As of v6.0.0 we do not recognize the MAV_CMD_DO_SET_HOME message,
+            and still use 179 for this message.</p>
          <p>If a capture is commanded via MAVLink, a CAMERA_STATUS message with event type "TRIGGER" will be sent back on success</p>
          <table>
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="http://mavlink.org/messages/ardupilotmega#CAMERA_STATUS">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/ardupilotmega.html#CAMERA_STATUS">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -844,13 +872,18 @@
          </table>
          
          <h2 id="camera_feedback">CAMERA_FEEDBACK (180)</h2>
+         <p><strong>Versions</strong>: v1.5.5-</p>
+         <p>NOTE: At some point, MAVLink.io</a> decided to assign
+            <a href="https://mavlink.io/en/messages/common.html#MAV_CMD_DO_SET_PARAMETER">MAV_CMD_DO_SET_PARAMETER</a> to 180,
+            conflicting with the CAMERA_FEEDBACK message's designation. As of v6.0.0 we do not recognize the
+            MAV_CMD_DO_SET_PARAMETER message, and still use 180 for this message.</p>
          <p>If a capture is commanded via MAVLink, a CAMERA_FEEDBACK message with "Flags" type "CAMERA_FEEDBACK_CLOSEDLOOP" will be
          sent back on success</p>
          <table>
             <tr>
                <th>Field Name</th>
                <th>Type</th>
-               <th><a href="http://mavlink.org/messages/ardupilotmega#CAMERA_FEEDBACK">Official Description</a></th>
+               <th><a href="https://mavlink.io/en/messages/ardupilotmega.html#CAMERA_FEEDBACK">Official Description</a></th>
                <th>RedEdge Implementation</th>
             </tr>
             <tr>
@@ -941,6 +974,68 @@
                   <ol>
                      <li value="3">CAMERA_FEEDBACK_CLOSEDLOOP - camera has successfully taken a picture</li>
                   </ol>
+               </td>
+            </tr>
+         </table>
+         
+         <h2 id="param_set">PARAM_SET (23)</h2>
+         <p><strong>Versions</strong>: v1.5.30-</p>
+         <p>Allows for configuraiton of miscellaneous settings, not already captured by another MAVLink message</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="https://mavlink.io/en/messages/common.html#PARAM_SET">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Target System</td>
+               <td>uint8_t</td>
+               <td>System ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Target Component</td>
+               <td>uint8_t</td>
+               <td>Component ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Param ID</td>
+               <td>char[16]</td>
+               <td>Onboard parameter id, terminated by NULL if the length is less than 16 human-readable
+                     chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars -
+                     applications have to provide 16+1 bytes storage if the ID is stored as string</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Param Value</td>
+               <td>float</td>
+               <td>Onboard parameter value</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Param Type</td>
+               <td>uint8_t</td>
+               <td>Onboard parameter type: see the MAV_PARAM_TYPE enum for supported data types.</td>
+               <td>Same as official</td>
+            </tr>
+         </table>
+         <p>Supported Parameters</p>
+         <table>
+            <tr>
+               <th>Param ID</th>
+               <th>Param Type</th>
+               <th>Description</th>
+            </tr>
+            <tr>
+               <td>wifi</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Set to 1.0 to turn WiFi module on</li>
+                     <li>Set to 0.0 to turn WiFi module off</li>
+                  </ul>
                </td>
             </tr>
          </table>

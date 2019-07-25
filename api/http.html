@@ -4,7 +4,7 @@
       <meta name="generator"
       content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
       <title>RedEdge HTTP API</title>
-      <link rel="stylesheet" href="../../stylesheets/markdown.css" />
+      <link rel="stylesheet" href="../stylesheets/markdown.css" />
    </head>
    <body>
       <article class="markdown-body">
@@ -14,69 +14,40 @@
          information on connecting to the camera, see the RedEdge Users's Guide.</p>
          <h1 id="table-of-contents">Table of Contents</h1>
          <ul>
-            <li>
-               <a href="#rededge-http-control-api">RedEdge HTTP Control API</a>
-            </li>
-            <li>
-               <a href="#table-of-contents">Table of Contents</a>
-            </li>
-            <li>
-               <a href="#general-protocol-overview">General Protocol Overview</a>
-            </li>
+            <li><a href="#rededge-http-control-api">RedEdge HTTP Control API</a></li>
+            <li><a href="#table-of-contents">Table of Contents</a></li>
+            <li><a href="#general-protocol-overview">General Protocol Overview</a></li>
             <li>
                <a href="#routes">Routes</a>
                <ul>
-                  <li>
-                     <a href="#capture">Command Capture [/capture]</a>
-                  </li>
-                  <li>
-                     <a href="#capture-id">Capture Status Request [/capture/:id]</a>
-                  </li>
-                  <li>
-                     <a href="#captures-kmz">KMZ Captures [/captures.kmz]</a>
-                  </li>
-                  <li>
-                     <a href="#exposure">Camera Exposure [/exposure]</a>
-                  </li>
-                  <li>
-                     <a href="#gps">Camera Position [/gps]</a>
-                  </li>
-                  <li>
-                     <a href="#orientation">Camera Orientation [/orientation]</a>
-                  </li>
-                  <li>
-                     <a href="#config">Config [/config]</a>
-                  </li>
-                  <li>
-                     <a href="#status">Status [/status]</a>
-                  </li>
-                  <li>
-                     <a href="#networkstatus">Network Status [/networkstatus]</a>
-                  </li>
-                  <li>
-                     <a href="#version">Version Information [/version]</a>
-                  </li>
-                  <li>
-                     <a href="#files">File Access [/files/*]</a>
-                  </li>
-                  <li>
-                     <a href="#deletefile">File Deletion [/deletefile/*]</a>
-                  </li>
-                  <li>
-                     <a href="#reformatsdcard">Reformat SD Card [/reformatsdcard]</a>
-                  </li>
-                  <li>
-                     <a href="#wifi">Wifi Configuration [/wifi]</a>
-                  </li>
-                  <li>
-                     <a href="#camera-info">Camera Information [/camera_info]</a>
-                  </li>
-                  <li>
-                     <a href="#calibration-distortion">Distortion Calibration [/calibration/distortion]</a>
-                  </li>
-                  <li>
-                     <a href="#calibration-vignette">Vignette Calibration [/calibration/vignette]</a>
-                  </li>
+                  <li><a href="#capture">Command Capture [/capture]</a></li>
+                  <li><a href="#capture-id">Capture Status Request [/capture/:id]</a></li>
+                  <li><a href="#captures-kmz">KMZ Captures [/captures.kmz]</a></li>
+                  <li><a href="#exposure">Camera Exposure [/exposure]</a></li>
+                  <li><a href="#detect-panel">Detect Panel Control [/detect_panel]</a></li>
+                  <li><a href="#gps">Camera Position [/gps]</a></li>
+                  <li><a href="#orientation">Camera Orientation [/orientation]</a></li>
+                  <li><a href="#capture-state">State at Capture Time [/capture_state]</a></li>
+                  <li><a href="#config">Config [/config]</a></li>
+                  <li><a href="#pin-mux">Pin Configuration Options [/pin_mux]</a></li>
+                  <li><a href="#status">Status [/status]</a></li>
+                  <li><a href="#networkstatus">Network Status [/networkstatus]</a></li>
+                  <li><a href="#timesources">Time Sources Information [/timesources]</a></li>
+                  <li><a href="#version">Version Information [/version]</a></li>
+                  <li><a href="#files">File Access [/files/*]</a></li>
+                  <li><a href="#deletefile">File Deletion [/deletefile/*]</a></li>
+                  <li><a href="#reformatsdcard">Reformat SD Card [/reformatsdcard]</a></li>
+                  <li><a href="#wifi">Wifi Configuration [/wifi]</a></li>
+                  <li><a href="#camera-info">Camera Information [/camera_info]</a></li>
+                  <li><a href="#calibration-distortion">Distortion Calibration [/calibration/distortion]</a></li>
+                  <li><a href="#calibration-rig-relatives">Rig Relatives Calibration [/calibration/rig_relatives]</a></li>
+                  <li><a href="#calibration-vignette">Vignette Calibration [/calibration/vignette]</a></li>
+               </ul>
+            </li>
+            <li>
+               <a href="#deprecated-or-removed-routes">Deprecated or Removed Routes</a>
+               <ul>
+                  <li><a href="#captures-kml">KML Captures [/captures.kml]</a></li>
                </ul>
             </li>
          </ul>
@@ -86,13 +57,14 @@
          <p>The actual value of the IP address depends on the configuration. When accessing the camera via its WIFI access point,
          the camera IP address will be 192.168.10.254. When the camera is connected to an Ethernet network, the camera IP address
          will be 192.168.1.83 by default.</p>
-         <p>NOTE: Future software updates will allow the camera to support assignment of IP addresses via DHCP, and will support a
+         <p>NOTE: Future software updates may allow the camera to support assignment of IP addresses via DHCP, and may support a
          broadcast-based device discovery protocol for locating cameras on a network.</p>
          
          <h1 id="routes">Routes</h1>
          
          <div class="route">
             <h2 id="capture">Command Capture [/capture]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /capture</p>
             <p><strong>Supported verbs</strong>: GET, POST</p>
             <div class="summary">
@@ -115,110 +87,142 @@
                      <tr>
                         <th>Argument</th>
                         <th>Type</th>
+                        <th>Default</th>
                         <th>Description</th>
+                        <th>Versions</th>
                      </tr>
                   </thead>
                   <tbody>
                      <tr>
-                        <td>preview</td>
-                        <td>bool</td>
-                        <td>If true, updates the current preview image. Defaults to 'false'.</td>
-                     </tr>
-                     <tr>
                         <td>anti_sat</td>
                         <td>bool</td>
+                        <td>false</td>
                         <td>If true, strong anti-saturation rules are used for the capture</td>
-                     </tr>
-                     <tr>
-                        <td>cache_jpeg</td>
-                        <td>int</td>
-                        <td>Bitmask for bands from which to capture and cache JPEG images. Defaults to 0.</td>
-                     </tr>
-                     <tr>
-                        <td>cache_raw</td>
-                        <td>int</td>
-                        <td>Bitmask for bands from which to capture and cache RAW (tiff) images. Defaults to 0.</td>
-                     </tr>
-                     <tr>
-                        <td>store_capture</td>
-                        <td>bool</td>
-                        <td>Store this image to the SD card based on configuration settings.
-                        <br />Defaults to true. (JPEG and/or RAW may be stored depending on configuration)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>block</td>
                         <td>bool</td>
-                        <td>When 'true', the HTTP request will not return until the capture is complete. Defaults to 'false'.</td>
+                        <td>false</td>
+                        <td>When 'true', the HTTP request will not return until the capture is complete.</td>
+                        <td>v1.3.2-</td>
+                     </tr>
+                     <tr>
+                        <td>detect_panel</td>
+                        <td>bool</td>
+                        <td>false</td>
+                        <td>When 'true', the camera will not return an image until a MicaSense reflectance panel is detected. Also see <a href="#detect-panel">/detect_panel</a></td>
+                        <td>v5.0.0-</td>
+                     </tr>
+                     <tr>
+                        <td>preview</td>
+                        <td>bool</td>
+                        <td>false</td>
+                        <td>When 'true', updates the current preview image.</td>
+                        <td>v1.3.2-</td>
+                     </tr>
+                     <tr>
+                        <td>cache_jpeg</td>
+                        <td>int</td>
+                        <td><a href="#config">/config</a>'s enabled_bands_jpeg</td>
+                        <td>Bitmask for bands from which to capture and cache JPEG images. See note below.</td>
+                        <td>v1.3.2-</td>
+                     </tr>
+                     <tr>
+                        <td>cache_raw</td>
+                        <td>int</td>
+                        <td><a href="#config">/config</a>'s enabled_bands_raw</td>
+                        <td>Bitmask for bands from which to capture and cache RAW (tiff) images. See note below.</td>
+                        <td>v1.3.2-</td>
+                     </tr>
+                     <tr>
+                        <td>store_capture</td>
+                        <td>bool</td>
+                        <td>true</td>
+                        <td>Store this image to the SD card based on configuration settings.
+                        <br />(JPEG and/or RAW may be stored depending on configuration)</td>
+                        <td>v1.3.2-</td>
+                     </tr>
+                     <tr>
+                        <td>use_post_capture_state</td>
+                        <td>bool</td>
+                        <td>false</td>
+                        <td>When 'true', the camera will try and retrieve state information from the
+                            <a href="#capture-state">/capture_state</a> route before falling back on default values.</td>
+                        <td>v6.0.0-</td>
                      </tr>
                   </tbody>
                </table>
-            </div>
-            <div class="examples">
-               <p>
-                  <strong>Example URL:</strong>:<br />
-                  <code>/capture?preview=true</code> captures an image, generating a preview JPEG and saving RAW files to the SD card
-               </p>
-               <p>For bit masks, bit 0 corresponds to imager #1, bit 1 to imager #2, and so forth. As an example, to capture all five
-               bands, the bit mask value should be 31 (in binary: 11111). To capture only band #4, the value should be 8 (01000).</p>
-               <p>The response will always be a JSON object, however the contents of the JSON object can vary depending on the provided
-               arguments.</p>
+               <p>NOTE: For bit masks, bit 0 corresponds to imager #1, bit 1 to imager #2, and so forth. As an example, to capture all five
+                  bands, the bit mask value should be 31 (in binary: 11111). To capture only band #4, the value should be 8 (01000).</p>
             </div>
             <div class="props">
                <p><strong>Response Properties</strong></p>
+               <p>The response will always be a JSON object, however the contents of the JSON object can vary depending on the provided
+                  arguments.</p>
                <table>
                   <thead>
                      <tr>
-                        <th style="text-align: left">Property</th>
-                        <th style="text-align: center">Type</th>
+                        <th>Property</th>
+                        <th>Type</th>
                         <th>Description</th>
+                        <th>Versions</th>
                      </tr>
                   </thead>
                   <tbody>
                      <tr>
-                        <td style="text-align: left">status</td>
-                        <td style="text-align: center">string</td>
+                        <td>status</td>
+                        <td>string</td>
                         <td>One of 'pending', 'complete', 'error'</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">id</td>
-                        <td style="text-align: center">string</td>
+                        <td>id</td>
+                        <td>string</td>
                         <td>ID representing this capture. Save this to retrieve the status of a capture later.</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">time
+                        <td>time
                         <br />( 
                         <em>optional</em>)</td>
-                        <td style="text-align: center">string</td>
+                        <td>string</td>
                         <td>ISO8601 datetime string providing the UTC time of actual image capture. This property is only present if the
-                        block argument is true</td>
+                            block argument is true</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">jpeg_cache_path
-                        <br />( 
-                        <em>optional</em>)</td>
-                        <td style="text-align: center">object</td>
+                        <td>jpeg_cache_path
+                        <br />(<em>optional</em>)</td>
+                        <td>object</td>
                         <td>An object containing a property for each band for which JPEG cacheing was enabled. (e.g. '1', '2', ...). The
-                        value of each property is the path to retrieve the cached JPEG file for that band. This property is only present
-                        if cache_jpg was non-zero and the block arguments was true</td>
+                            value of each property is the path to retrieve the cached JPEG file for that band. This property is only present
+                            if cache_jpg was non-zero and the block arguments was true</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">raw_cache_path
-                        <br />( 
-                        <em>optional</em>)</td>
-                        <td style="text-align: center">object</td>
+                        <td>raw_cache_path
+                        <br />(<em>optional</em>)</td>
+                        <td>object</td>
                         <td>Like jpeg_cache_path, but for cached raw images</td>
+                        <td>v1.3.2-</td>
                      </tr>
                   </tbody>
                </table>
                <p>If the block argument is false, then the status property in the response will always be 'pending' or 'error'. When
-               block is set to true, then the status property will be either 'complete' or 'error'.</p>
+                  block is set to true, then the status property will be either 'complete' or 'error'.</p>
                <p>Note that blocking calls return as soon as the capture is complete, and the cached files are available for download.
-               The files may not have been transferred to the SD card storage yet. You may use the /capture/:id route to lookup results
-               for a previous capture (including the location of SD card files after they are saved).</p>
+                  The files may not have been transferred to the SD card storage yet. You may use the /capture/:id route to lookup results
+                  for a previous capture (including the location of SD card files after they are saved).</p>
             </div>
             <div class="examples">
                <div class="example">
-                  <p><strong>Example Response to <code>GET /capture?store_capture=true&amp;cache_jpeg=19&amp;cache_raw=19&amp;block=true</code></strong>:</p>
+                  <p><strong>Example Request</strong>:<br />
+                     <code>GET /capture?preview=true</code> captures an image, generating a preview JPEG and saving RAW files to the SD card
+                  </p>
+               </div>
+               <div class="example">
+                  <p><strong>Example Response to <code>GET /capture?store_capture=true&amp;cache_jpeg=19&amp;cache_raw=31&amp;block=true</code></strong>:</p>
                   <p>JPEG and TIFF files are commanded to be cached for bands 1, 2, and 5. The store_capture
                   parameter was true, so the actual raw bands that are stored to the card depends on the current configuration
                   settings. The response shown below assumes that all 5 bands are set to save on capture</p>
@@ -241,8 +245,8 @@
 }</pre>
                </div>
                <div class="example">
-                  <p>The following response can be expected when block is false, because the capture has not been completed when the object
-                  is returned.</p>
+                  <p>The following response can be expected when block is 'false', because the capture has not been completed when the
+                     object is returned.</p>
                   <pre>{
    "status" : "pending",
    "id' : "i89jfi73irj49f74"
@@ -253,6 +257,7 @@
 
          <div class="route">
             <h2 id="capture-id">Capture Status Request [/capture/:id]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /capture/:id</p>
             <p><strong>Supported verbs</strong>: GET</p>
             <div class="summary">
@@ -300,14 +305,15 @@
 
          <div class="route">
             <h2 id="captures-kmz">KMZ Captures [/captures.kmz]</h2>
+            <p><strong>Versions</strong>: v1.5.10-</p>
             <p><strong>URL</strong>: /captures.kmz</p>
             <p><strong>Supported verbs</strong>: GET</p>
             <div class="summary">
                <p>/captures.kmz will return a kmz file with the contents of all captures currently on the SD card. This is especially
                useful when flying multiple flights across one or more areas to ensure continuous coverage across those areas.</p>
                <p>
-                  <em>Note: The KML file previously provided by this route is still accessable by downloading the KMZ, and extracting
-                  the kml file from it.</em>
+                  <em>Note: The KML file provided by the <a href="#captures-kml">/captures.kml</a> route is still accessable by
+                      downloading the KMZ, and extracting the kml file from it.</em>
                </p>
             </div>
             <div class="examples">
@@ -341,6 +347,7 @@
 
          <div class="route">
             <h2 id="exposure">Camera Exposure [/exposure]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /exposure</p>
             <p><strong>Supported verbs</strong>: GET, POST</p>
             <div class="summary">
@@ -360,59 +367,32 @@
                      <tr>
                         <th>Property</th>
                         <th>Type</th>
+                        <th>Default</th>
                         <th>Description</th>
+                        <th>Versions</th>
                      </tr>
                   </thead>
                   <tbody>
                      <tr>
-                        <td>exposure1</td>
+                        <td>enable_man_exposure</td>
+                        <td>bool</td>
+                        <td>(<em>none</em>)</td>
+                        <td>When 'true', the camera will use the manually set exposure and gain values, rather than performing AGC.</td>
+                        <td>v1.3.2-</td>
+                     </tr>
+                     <tr>
+                        <td>exposure[1-5]</td>
                         <td>float</td>
-                        <td>Exposure (in ms) for sensor #1</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Exposure (in ms) for sensor [1-5]</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td>exposure2</td>
-                        <td>float</td>
-                        <td>Exposure (in ms) for sensor #2</td>
-                     </tr>
-                     <tr>
-                        <td>exposure3</td>
-                        <td>float</td>
-                        <td>Exposure (in ms) for sensor #3</td>
-                     </tr>
-                     <tr>
-                        <td>exposure4</td>
-                        <td>float</td>
-                        <td>Exposure (in ms) for sensor #4</td>
-                     </tr>
-                     <tr>
-                        <td>exposure5</td>
-                        <td>float</td>
-                        <td>Exposure (in ms) for sensor #5</td>
-                     </tr>
-                     <tr>
-                        <td>gain1</td>
+                        <td>gain[1-5]</td>
                         <td>int</td>
-                        <td>Gain for sensor #1. Allowed values: [1,2,4,8]</td>
-                     </tr>
-                     <tr>
-                        <td>gain2</td>
-                        <td>int</td>
-                        <td>Gain for sensor #2. Allowed values: [1,2,4,8]</td>
-                     </tr>
-                     <tr>
-                        <td>gain3</td>
-                        <td>int</td>
-                        <td>Gain for sensor #3. Allowed values: [1,2,4,8]</td>
-                     </tr>
-                     <tr>
-                        <td>gain4</td>
-                        <td>int</td>
-                        <td>Gain for sensor #4. Allowed values: [1,2,4,8]</td>
-                     </tr>
-                     <tr>
-                        <td>gain5</td>
-                        <td>int</td>
-                        <td>Gain for sensor #5. Allowed values: [1,2,4,8]</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Gain for sensor [1-5]. Allowed values: [1,2,4,8]</td>
+                        <td>v1.3.2-</td>
                      </tr>
                   </tbody>
                </table>
@@ -421,6 +401,7 @@
                <div class="example">
                   <p>Example object:</p>
                   <pre>{
+   "enable_man_exposure" : false
    "exposure1" : 0.06,
    "exposure2" : 1.0,
    "exposure3" : 8.0,
@@ -437,14 +418,13 @@
          </div>
 
          <div class="route">
-            <h2 id="gps">Camera position [/gps]</h2>
-            <p><strong>URL</strong>: /gps</p>
+            <h2 id="detect-panel">Detect Panel Control [/detect_panel]</h2>
+            <p><strong>Versions</strong>: v5.0.0-</p>
+            <p><strong>URL</strong>: /detect_panel</p>
             <p><strong>Supported verbs</strong>: GET, POST</p>
             <div class="summary">
-               <p>This command can be used to retrieve the current gps solution, or to provide a solution to the camera.</p>
-               <p>This command can be used in lieu of an external GPS attached to the camera to provide the camera with a position (for
-               example, from the aircraft GPS). Anytime this value has been written in the last 5 seconds, it will take priority over a
-               camera attached GPS and will be used instead of the attached GPS when writing image metadata.</p>
+               <p>This route reports the current state of the panel detection algorithm. You can also send it an abort command, in which case any
+                  currently running panel detection will complete its capture regardless of whether a panel was successfully found</p>
             </div>
             <div class="props">
                <table>
@@ -452,59 +432,135 @@
                      <tr>
                         <th>Property</th>
                         <th>Type</th>
+                        <th>Default</th>
                         <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>abort_detect_panel</td>
+                        <td>bool</td>
+                        <td>false</td>
+                        <td>When 'true', any actively running panel detection captures will be forced to complete.</td>
+                     </tr>
+                     <tr>
+                        <td>detect_panel</td>
+                        <td>bool</td>
+                        <td>(<em>none</em>)</td>
+                        <td>When 'true', a panel detection capture is active</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="examples">
+               <div class="example">
+                  <p>Example POST to cancel a panel detection capture:</p>
+                  <pre>{
+   "abort_detect_panel" : true
+}</pre>
+               </div>
+               <div class="example">
+                  <p>Example response to the POST example above:</p>
+                  <pre>{
+   "detect_panel" : false
+}</pre>
+               </div>
+            </div>
+         </div>
+
+         <div class="route">
+            <h2 id="gps">Camera Position [/gps]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
+            <p><strong>URL</strong>: /gps</p>
+            <p><strong>Supported verbs</strong>: GET, POST</p>
+            <div class="summary">
+               <p>This command can be used to retrieve the active location, velocity, and time, or to provide these values to the camera.</p>
+               <p>This command can be used in lieu of an external GPS attached to the camera to provide the camera with a position (for
+               example, from the aircraft GPS). Anytime this value has been written in the last 5 seconds, it will take priority over a
+               camera attached GPS and will be used instead of the attached GPS when writing image metadata.</p>
+               <p>See <a href="#capture-state">/capture_state</a> for an additional option for injecting image metadata.</p>
+            </div>
+            <div class="props">
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                        <th>Versions</th>
                      </tr>
                   </thead>
                   <tbody>
                      <tr>
                         <td>latitude</td>
                         <td>float</td>
+                        <td>NaN</td>
                         <td>The camera latitude in radians</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>longitude</td>
                         <td>float</td>
+                        <td>NaN</td>
                         <td>The camera longitude in radians</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>altitude</td>
                         <td>float</td>
+                        <td>NaN</td>
                         <td>The camera altitude above datum ellipsoid in meters</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>vel_n</td>
                         <td>float</td>
+                        <td>NaN</td>
                         <td>The camera northing velocity in m/s</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>vel_e</td>
                         <td>float</td>
+                        <td>NaN</td>
                         <td>The camera easting velocity in m/s</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>vel_d</td>
                         <td>float</td>
+                        <td>NaN</td>
                         <td>The camera descent rate in m/s</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>p_acc</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>Camera positional accuracy in meters, one sigma</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>v_acc</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>Camera vertical accuracy in meters, one sigma</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>fix3d</td>
                         <td>bool</td>
+                        <td>(<em>none</em>)</td>
                         <td>True if there is a valid 3D fix</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>utc_time</td>
                         <td>string</td>
+                        <td>(<em>none</em>)</td>
                         <td>ISO8601 datetime string UTC time string</td>
+                        <td>v1.3.2-</td>
                      </tr>
                   </tbody>
                </table>
@@ -530,6 +586,7 @@
 
          <div class="route">
             <h2 id="orientation">Camera Orientation [/orientation]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /orientation</p>
             <p><strong>Supported verbs</strong>: GET, POST</p>
             <div class="summary">
@@ -551,8 +608,8 @@
                pitch, then roll, about the camera Z, Y, and X axes accordingly. The camera axes are defined such that at zero rotation
                angle, the X axis points down (along the camera focal axis) the Z axis points towards the rear of the vehicle, and the Y
                axis follows right-hand rule and points out the right side of the vehicle.</p>
-               <p>The default value for these angles is zero. For a fixed camera pointed straight down relative to the aircraft, and with
-               the top of the camera toward the front of the aircraft, this default value can be used.</p>
+               <p>For a fixed camera pointed straight down relative to the aircraft, and with the top of the camera toward the front of
+                  the aircraft, the value of 0 can be used for all angles.</p>
             </div>
             <div class="props">
                <p>POST properties</p>
@@ -561,39 +618,53 @@
                      <tr>
                         <th>Property</th>
                         <th>Type</th>
+                        <th>Default</th>
                         <th>Description</th>
+                        <th>Versions</th>
                      </tr>
                   </thead>
                   <tbody>
                      <tr>
                         <td>aircraft_phi</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>radians</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>aircraft_theta</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>radians</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>aircraft_psi</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>radians</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>camera_phi</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>radians</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>camera_theta</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>radians</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>camera_psi</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>radians</td>
+                        <td>v1.3.2-</td>
                      </tr>
                   </tbody>
                </table>
@@ -614,7 +685,152 @@
          </div>
 
          <div class="route">
+            <h2 id="capture-state">State at Capture Time [/capture_state]</h2>
+            <p><strong>Versions</strong>: v6.0.0-</p>
+            <p><strong>URL</strong>: /capture_state</p>
+            <p><strong>Supported verbs</strong>: POST</p>
+            <div class="summary">
+               <p>If the 'use_post_capture_state' argument is set to 'true' when a <a href="#capture">/capture</a> command is made, then sending POST
+                  data to this route within 1 second of the top of frame will result in the provided data being written to the image metadata, instead
+                  of any other potential sources of these data, such as a directly connected GPS.</p>
+               <p>Data provided to this route is accepted in logical groups, where all parameters in the group must be present, or else all parameters
+                  in that group will be ignored, and any valid value the camera has from other sources will be used instead. For instance, providing
+                  a latitude and logitude, but no altitude will result in all of those parameters being collectively ignored, and the image will
+                  instead get a latitude, longitude, and altitude from an alternate data source.</p>
+               <p>The groups are as follows:</p>
+               <ul>
+                  <li>aircraft_attitude: aircraft_phi, aircraft_theta, aircraft_psi</li>
+                  <li>camera_attitude: camera_phi, camera_theta, camera_psi</li>
+                  <li>gps: latitude, longitude, altitude</li>
+                  <li>accuracy: p_acc, v_acc</li>
+                  <li>utc_time: utc_time</li>
+               </ul>
+               <p>The response to a successful POST is a list of these groups, and whether they were 'set' or 'ignored' by the POST</p>
+               <p>If a POST is sent outside of the window for acceptance, or two POSTs are sent for a single capture, a 409 status
+                  is returned, indicating a conflict between the POST supplied data and what was actually written to the file metadata,
+                  along with an error string indicating why the data were rejected.</p>
+            </div>
+            <div class="props">
+               <p>POST properties</p>
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>aircraft_phi</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>radians</td>
+                     </tr>
+                     <tr>
+                        <td>aircraft_theta</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>radians</td>
+                     </tr>
+                     <tr>
+                        <td>aircraft_psi</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>radians</td>
+                     </tr>
+                     <tr>
+                        <td>camera_phi</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>radians</td>
+                     </tr>
+                     <tr>
+                        <td>camera_theta</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>radians</td>
+                     </tr>
+                     <tr>
+                        <td>camera_psi</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>radians</td>
+                     </tr>
+                     <tr>
+                        <td>latitude</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>The camera latitude in radians</td>
+                     </tr>
+                     <tr>
+                        <td>longitude</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>The camera longitude in radians</td>
+                     </tr>
+                     <tr>
+                        <td>altitude</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>The camera altitude above datum ellipsoid in meters</td>
+                     </tr>
+                     <tr>
+                        <td>p_acc</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Camera positional accuracy in meters, one sigma</td>
+                     </tr>
+                     <tr>
+                        <td>v_acc</td>
+                        <td>float</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Camera vertical accuracy in meters, one sigma</td>
+                     </tr>
+                     <tr>
+                        <td>utc_time</td>
+                        <td>string</td>
+                        <td>(<em>none</em>)</td>
+                        <td>ISO8601 datetime string UTC time string</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="examples">
+               <div class="example">
+                  <p><strong>Example POST message</strong>:</p>
+                  <pre>{
+   "aircraft_psi" : 0,
+   "utc_time" : "2019-05-01T01:02:03.456Z",
+   "latitude" : 1.23456,
+   "longitude" : -0.987654,
+   "altitude" : 31.4159
+}</pre>
+               </div>
+               <div class="example">
+                  <p><strong>Example response to above POST message</strong>:</p>
+                  <pre>{
+  "accuracy": "ignored",
+  "aircraft_attitude": "ignored",
+  "camera_attitude": "ignored",
+  "gps": "set",
+  "utc_time": "set"
+}</pre>
+               </div>
+               <div class="example">
+                  <p><strong>Example response to a POST message sent outside of the timing window allowed</strong>:</p>
+                  <p><em>Response status: 409</em></p>
+                  <pre>{
+  "error": "Data received too late for capture. Ignoring."
+}</pre>
+               </div>
+            </div>
+         </div>
+
+         <div class="route">
             <h2 id="config">Config [/config]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /config/</p>
             <p><strong>Supported verbs</strong>: GET, POST</p>
             <div class="summary">
@@ -630,93 +846,221 @@
                      <tr>
                         <th>Property</th>
                         <th>Type</th>
+                        <th>Default</th>
                         <th>Description</th>
+                        <th>Versions</th>
                      </tr>
                   </thead>
                   <tbody>
                      <tr>
                         <td>streaming_enable</td>
                         <td>boolean</td>
-                        <td>Enable continuous rapid capture of JPEG previews</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Enable continuous rapid capture of JPEG previews.
+                            <br />This setting is NOT persistent across power cycles.</td>
+                        <td>v1.3.2-</td>
+                     </tr>
+                     <tr>
+                        <td>streaming_allowed</td>
+                        <td>boolean</td>
+                        <td>(<em>none</em>)</td>
+                        <td>When 'true', prevents streaming_enable from working</td>
+                        <td>v3.2.0-</td>
                      </tr>
                      <tr>
                         <td>preview_band</td>
                         <td>string</td>
+                        <td>(<em>none</em>)</td>
                         <td>Selects band(s) to be rendered in preview JPEG
-                        <br />Allowable values: "band1", "band2", "band3", "band4", "band5", "multi"</td>
+                            <br />Allowable values: "band1", "band2", "band3", "band4", "band5", "band6"*, "multi"
+                            <br />* "band6" is only valid for cameras with 6 or more bands
+                            <br />This setting is NOT persistent across power cycles.</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>operating_alt</td>
                         <td>integer</td>
+                        <td>(<em>none</em>)</td>
                         <td>Aircraft operating altitude above ground (meters)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>overlap_along_track</td>
                         <td>integer</td>
+                        <td>(<em>none</em>)</td>
                         <td>Desired along track overlap percentage (0-100)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>overlap_cross_track</td>
                         <td>integer</td>
+                        <td>(<em>none</em>)</td>
                         <td>Desired cross track overlap percentage (0-100)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>auto_cap_mode</td>
                         <td>string</td>
+                        <td>(<em>none</em>)</td>
                         <td>Auto capture mode. Allowable values: "disabled", "overlap", "timer", "ext"</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>timer_period</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>Period between timer captures (seconds)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>ext_trigger_mode</td>
                         <td>string</td>
+                        <td>(<em>none</em>)</td>
                         <td>Allowable values: "rising", "falling", "longpwm", "shortpwm"</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>pwm_trigger_threshold</td>
                         <td>float</td>
-                        <td>The long/short pulse width threshold for PWM input, in miliseconds</td>
+                        <td>(<em>none</em>)</td>
+                        <td>The long/short pulse width threshold for PWM input, in milliseconds</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>enabled_bands_raw</td>
                         <td>integer</td>
+                        <td>(<em>none</em>)</td>
                         <td>Bit mask of bands that are enabled for raw capture storage</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>enabled_bands_jpeg</td>
                         <td>integer</td>
+                        <td>(<em>none</em>)</td>
                         <td>Bit mask of bands enabled for jpeg capture and storage</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>enable_man_exposure</td>
                         <td>boolean</td>
+                        <td>(<em>none</em>)</td>
                         <td>When true, the user-provided exposure settings are used instead of the automatic exposure control. This field
                         is not persistent.</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>gain_exposure_crossover</td>
                         <td>float</td>
+                        <td>(<em>none</em>)</td>
                         <td>Exposure time (in seconds) at which the gain should be increased in order to properly expose rather than
                         increasing the exposure time further.</td>
+                        <td>v1.5.0-</td>
                      </tr>
                      <tr>
                         <td>ip_address</td>
                         <td>string</td>
+                        <td>(<em>none</em>)</td>
                         <td>Sets the Ethernet IP address of the camera. Must be a valid IP address, e.g. "123.456.789.012".</td>
+                        <td>v1.5.0-</td>
                      </tr>
                      <tr>
                         <td>raw_format</td>
                         <td>string</td>
+                        <td>(<em>none</em>)</td>
                         <td>Selects what raw output format the camera saves as. Allowable values: "TIFF", "DNG".</td>
+                        <td>v1.5.0-</td>
                      </tr>
                      <tr>
                         <td>network_mode</td>
                         <td>string</td>
+                        <td>(<em>none</em>)</td>
                         <td>Selects whether the camera will act as a master or slave in a MicaSense network. Allowable values: "master",
                         "slave".</td>
+                        <td>v1.5.0-</td>
+                     </tr>
+                     <tr>
+                        <td>ext_trigger_out_enable</td>
+                        <td>bool</td>
+                        <td>(<em>none</em>)</td>
+                        <td>When 'true', top of frame pulses will be generated on a camera-specific pin.
+                            <br />Note that activating this feature may cause damage to the camera if the pin is also driven by an external device.
+                            <br />See <code>pin_modes</code> for new method of enabling top of frame output</td>
+                        <td>v1.5.20-v5.1.12</td>
+                     </tr>
+                     <tr>
+                        <td>ext_trigger_out_pulse_high</td>
+                        <td>bool</td>
+                        <td>(<em>none</em>)</td>
+                        <td>When 'true', top of frame pulses will be generated by resting low, with the rising edge of the pulse indicating
+                            the top of frame of a capture. Otherwise, the top of frame pulse will be generated by resting high, with the
+                            falling edge of the pulse indicating the top of frame of a capture.</td>
+                        <td>v1.5.20-</td>
+                     </tr>
+                     <tr>
+                        <td>agc_minimum_mean</td>
+                        <td>double</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Sets the minimum normalized mean value for each image during Automatic Gain Control (AGC).
+                            <br />Valid values are from 0.0 to 1.0, inclusive.
+                            <br />Changed from volatile to persistent in v4.2.2</td>
+                        <td>v4.1.0-</td>
+                     </tr>
+                     <tr>
+                        <td>audio_enable</td>
+                        <td>bool</td>
+                        <td>(<em>none</em>)</td>
+                        <td>When 'true', the camera is allowed to produce sounds. Note that not all camera models have a method of producing sound, in
+                            which case this field is not a functional parameter.</td>
+                        <td>v5.0.0-</td>
+                     </tr>
+                     <tr>
+                        <td>audio_select_bitfield</td>
+                        <td>unsigned int</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Bitfield that masks individual audio features. Setting a bit to 0 will disable the individual associated audio feature.
+                            <br />
+                            <table>
+                              <thead>
+                                 <tr>
+                                    <th>Bit</th>
+                                    <th>Feature</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr>
+                                    <td>0</td>
+                                    <td>Tone when a normal capture is taken (anti_sat=false)</td>
+                                 </tr>
+                                 <tr>
+                                    <td>1</td>
+                                    <td>Tone when a panel capture is taken (anti_sat=true)</td>
+                                 </tr>
+                                 <tr>
+                                    <td>2</td>
+                                    <td>Tone when a panel detection is active</td>
+                                 </tr>
+                              </tbody>
+                            </table></td>
+                        <td>v5.0.0-</td>
+                     </tr>
+                     <tr>
+                        <td>pin_modes</td>
+                        <td>object</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Sets the mode of configurable pins on the camera. The object should contain integer-named fields, with integer values
+                            matching the desired function enumeration.
+                            <br />Note that setting a pin as an output may cause damage to the camera if the pin is also driven by an external device.
+                            <br />See <a href="#pin-mux">/pin_mux</a> for details on the enumeration and pins.</td>
+                        <td>v6.0.0-</td>
+                     </tr>
+                     <tr>
+                        <td>injected_gps_delay</td>
+                        <td>double</td>
+                        <td>(<em>none</em>)</td>
+                        <td>Sets the fixed expected delay in seconds between the timestamp contained in the GPS source (whether that be from a directly
+                            connected GPS, DLS, or injected via one of the APIs), and the time the message is received.
+                            <br />Also see <a href="#timesources">/timesources</a>.</td>
+                        <td>v6.0.0-</td>
                      </tr>
                   </tbody>
                </table>
@@ -724,10 +1068,138 @@
             <div class="examples">
                <div class="example">
                   <p><strong>Example JSON Data for POST</strong>: Providing the following JSON object as the body of a POST to /config will
-                  update the 'streaming_enable' and 'timer_period' options, while leaving all other options unchanged.</p>
+                  update the 'streaming_enable', 'timer_period', and 'pin_mode' options, while leaving all other options unchanged.</p>
                   <pre>{
    "streaming_enable" : false,
-   "timer_period" : 1.0
+   "timer_period" : 1.0,
+   "pin_modes" : {
+      "0" : 0
+   }
+}</pre>
+               </div>
+            </div>
+         </div>
+         
+         <div class="route">
+            <h2 id="pin-mux">Pin Configuration Options [/pin_mux]</h2>
+            <p><strong>Versions</strong>: v6.0.0-</p>
+            <p><strong>URL</strong>: /pin_mux</p>
+            <p><strong>Supported Verbs</strong>: GET</p>
+            <div class="summary">
+               <p>This read-only object returns information regarding configurable pins and their available functions.</p>
+               <p>See <code>pin_modes</code> in the <a href="#config">/config</a> route for details on how to use these values</p>
+            </div>
+            <div class="props">
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>functions</td>
+                        <td>object</td>
+                        <td>Each element of the functions object is named numerically, and is a FunctionEnumeration Object. See details below.</td>
+                     </tr>
+                     <tr>
+                        <td>pins</td>
+                        <td>array of PinEnumeration Objects</td>
+                        <td>Describes the pin for each index. See details on the PinEnumeration object below.</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="props">
+               <p><strong>FunctionEnumeration Object Details</strong></p>
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>id</td>
+                        <td>int</td>
+                        <td>The integer enumeration that this function is represented by.</td>
+                     </tr>
+                     <tr>
+                        <td>name</td>
+                        <td>string</td>
+                        <td>A human-readable string describing the function performed when this enumeration is selected.</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="props">
+               <p><strong>PinEnumeration Object Details</strong></p>
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>name</td>
+                        <td>string</td>
+                        <td>A human readable string indicating what physical pin is configured by this index.</td>
+                     </tr>
+                     <tr>
+                        <td>opts</td>
+                        <td>array of integers</td>
+                        <td>Lists which functions the pin is capable of performing. Uses the same enumeration as the FunctionEnumeration id field.</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="examples">
+               <div class="example">
+                  <p><strong>Example GET Response</strong>:</p>
+                  <pre>{
+   "functions" : {
+      "0" : {
+         "id" : 0,
+         "name" : "Disabled"
+      },
+      "1" : {
+         "id" : 1,
+         "name" : "PPS Input"
+      },
+      "128" : {
+         "id" : 128,
+         "name" : "PPS Output"
+      },
+      "129" : {
+         "id" : 129,
+         "name" : "Top of Frame Output"
+      },
+      "2" : {
+         "id" : 2,
+         "name" : "External Trigger Input"
+      }
+   },
+   "pins" : [
+      {
+         "name" : "Pwr/Trg Pin 1",
+         "opts" : [0,1,2,128,129]
+      },
+      {
+         "name" : "GPS Pin 4",
+         "opts" : [0,1,2,128,129]
+      },
+      {
+         "name" : "GPS Pin 5",
+         "opts" : [0,1,2,128,129]
+      }
+   ]
 }</pre>
                </div>
             </div>
@@ -735,6 +1207,7 @@
 
          <div class="route">
             <h2 id="status">Status [/status]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /status</p>
             <p><strong>Supported Verbs</strong>: GET</p>
             <div class="summary">
@@ -744,101 +1217,146 @@
                <table>
                   <thead>
                      <tr>
-                        <th style="text-align: left">Property</th>
-                        <th style="text-align: center">Type</th>
+                        <th>Property</th>
+                        <th>Type</th>
                         <th>Description</th>
+                        <th>Versions</th>
                      </tr>
                   </thead>
                   <tbody>
                      <tr>
-                        <td style="text-align: left">sd_gb_free</td>
-                        <td style="text-align: center">float</td>
+                        <td>sd_gb_free</td>
+                        <td>float</td>
                         <td>The amount of free space on the SD card (GB)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">sd_gb_total</td>
-                        <td style="text-align: center">float</td>
+                        <td>sd_gb_total</td>
+                        <td>float</td>
                         <td>The total amount of storage on the SD card (GB)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">sd_warn</td>
-                        <td style="text-align: center">bool</td>
+                        <td>sd_warn</td>
+                        <td>bool</td>
                         <td>When true, indicates the low SD space warning threshold is met</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">sd_status</td>
-                        <td style="text-align: center">string</td>
-                        <td>Status of the SD card, one of "Ok, NotPresent, ReadError, Full"</td>
+                        <td>sd_status</td>
+                        <td>string</td>
+                        <td>Status of the SD card, one of 'Ok', 'NotPresent', 'ReadError', or 'Full'</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">bus_volts</td>
-                        <td style="text-align: center">float</td>
+                        <td>bus_volts</td>
+                        <td>float</td>
                         <td>The measured supply voltage</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">gps_used_sats</td>
-                        <td style="text-align: center">int</td>
+                        <td>gps_used_sats</td>
+                        <td>int</td>
                         <td>The number of satellites used by GPS fix</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">gps_vis_sats</td>
-                        <td style="text-align: center">int</td>
+                        <td>gps_vis_sats</td>
+                        <td>int</td>
                         <td>The number of visible GPS satellites</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">gps_warn</td>
-                        <td style="text-align: center">bool</td>
+                        <td>gps_warn</td>
+                        <td>bool</td>
                         <td>True when the GPS receiver reports interference detected</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">gps_lat</td>
-                        <td style="text-align: center">float</td>
+                        <td>gps_lat</td>
+                        <td>float</td>
                         <td>The current latitude (radians)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">gps_lon</td>
-                        <td style="text-align: center">float</td>
+                        <td>gps_lon</td>
+                        <td>float</td>
                         <td>The current longitude (radians)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">course</td>
-                        <td style="text-align: center">float</td>
+                        <td>course</td>
+                        <td>float</td>
                         <td>The direction of travel in NED</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">alt_agl</td>
-                        <td style="text-align: center">float</td>
+                        <td>alt_agl</td>
+                        <td>float</td>
                         <td>Altitude above ground level</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">alt_msl</td>
-                        <td style="text-align: center">float</td>
+                        <td>alt_msl</td>
+                        <td>float</td>
                         <td>Altitude above mean sea level</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">p_acc</td>
-                        <td style="text-align: center">float</td>
+                        <td>p_acc</td>
+                        <td>float</td>
                         <td>Positional accuracy of GPS fix</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">utc_time</td>
-                        <td style="text-align: center">datetime</td>
+                        <td>utc_time</td>
+                        <td>datetime</td>
                         <td>Format YYYY-MM-DDTHH:MM:SS.SSS</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">vel_2d</td>
-                        <td style="text-align: center">float</td>
+                        <td>vel_2d</td>
+                        <td>float</td>
                         <td>Horizontal velocity (m/s)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">sv_info</td>
-                        <td style="text-align: center">array</td>
+                        <td>sv_info</td>
+                        <td>array</td>
                         <td>Array of svinfo objects (see below)</td>
+                        <td>v1.3.2-</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">auto_cap_active</td>
-                        <td style="text-align: center">bool</td>
+                        <td>auto_cap_active</td>
+                        <td>bool</td>
                         <td>True indicates that the camera's automatic capture mode is activated</td>
+                        <td>v1.3.2-</td>
+                     </tr>
+                     <tr>
+                        <td>dls_status</td>
+                        <td>string</td>
+                        <td>The DLS state. One of 'Ok', 'NotPresent', 'Programming', 'Initializing'*, or 'Error'*
+                            <br />* This state was added in v6.0.0
+                        </td>
+                        <td>v1.5.27-</td>
+                     </tr>
+                     <tr>
+                        <td>gps_time</td>
+                        <td>datetime</td>
+                        <td>Format YYYY-MM-DDTHH:MM:SS.SSS</td>
+                        <td>v1.5.27-</td>
+                     </tr>
+                     <tr>
+                        <td>utc_time_valid</td>
+                        <td>bool</td>
+                        <td>When 'true', the utc_time provided in this status is believed to be correct</td>
+                        <td>v1.5.27-</td>
+                     </tr>
+                     <tr>
+                        <td>time_source</td>
+                        <td>string</td>
+                        <td>What type of time source is being used by the camera. One of 'GPS', 'PPS', or 'None'</td>
+                        <td>v6.0.0-</td>
                      </tr>
                   </tbody>
                </table>
@@ -848,66 +1366,65 @@
                <table>
                   <thead>
                      <tr>
-                        <th style="text-align: left">Property</th>
-                        <th style="text-align: center">Type</th>
+                        <th>Property</th>
+                        <th>Type</th>
                         <th>Description</th>
                      </tr>
                   </thead>
                   <tbody>
                      <tr>
-                        <td style="text-align: left">azimuth</td>
-                        <td style="text-align: center">float</td>
+                        <td>azimuth</td>
+                        <td>float</td>
                         <td>Satellite azimuth (deg)</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">elevation</td>
-                        <td style="text-align: center">float</td>
+                        <td>elevation</td>
+                        <td>float</td>
                         <td>Satellite elevation (deg)</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">channel</td>
-                        <td style="text-align: center">int</td>
+                        <td>channel</td>
+                        <td>int</td>
                         <td>Receiver channel</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">cno</td>
-                        <td style="text-align: center">int</td>
+                        <td>cno</td>
+                        <td>int</td>
                         <td>Satellite carrier-to-noise ratio</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">used_flag</td>
-                        <td style="text-align: center">bool</td>
+                        <td>used_flag</td>
+                        <td>bool</td>
                         <td>Satellite is being used in the position fix</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">diff_flag</td>
-                        <td style="text-align: center">bool</td>
+                        <td>diff_flag</td>
+                        <td>bool</td>
                         <td>Satellite is using differential corrections</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">orbit_info</td>
-                        <td style="text-align: center">bool</td>
+                        <td>orbit_info</td>
+                        <td>bool</td>
                         <td>Receiver has some orbital infomation about this satellite</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">orbit 
-                        <em>is</em>eph</td>
-                        <td style="text-align: center">bool</td>
+                        <td>orbit_is_eph</td>
+                        <td>bool</td>
                         <td>Orbital information is ephemeris data</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">sv_healthy</td>
-                        <td style="text-align: center">bool</td>
+                        <td>sv_healthy</td>
+                        <td>bool</td>
                         <td>This satellite is healthy and can be used for positioning</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">svid</td>
-                        <td style="text-align: center">int</td>
+                        <td>svid</td>
+                        <td>int</td>
                         <td>Space Vehicle ID</td>
                      </tr>
                      <tr>
-                        <td style="text-align: left">quality</td>
-                        <td style="text-align: center">int</td>
+                        <td>quality</td>
+                        <td>int</td>
                         <td>Quality indicator for this satellite</td>
                      </tr>
                   </tbody>
@@ -920,7 +1437,7 @@
    "alt_agl": 14.798,
    "alt_msl": 283.55,
    "auto_cap_active": false,
-   "bus_volts": 3.695,
+   "bus_volts": 4.695,
    "course": 169.4142636445688,
    "gps_lat": 36.2709446,
    "gps_lon": -104.7104612,
@@ -928,13 +1445,11 @@
    "gps_used_sats": 5,
    "gps_vis_sats": 16,
    "gps_warn": false,
-   "p_acc": 0,
-   "sd_gb_free": 0,
-   "sd_gb_total": 0,
-   "sd_warn": true,
-   "sd_status": "NotPresent",
-   "utc_time": "2014-11-13T18:34:0.000Z",
-   "vel_2d": 0.08,
+   "p_acc": 5.820000171661377,
+   "sd_gb_free": 20.0958251953125,
+   "sd_gb_total": 29.70469665527344,
+   "sd_warn": false,
+   "sd_status": "Ok",
    "sv_info": [
       {
          "azimuth": 0.8203047513961792,
@@ -963,7 +1478,11 @@
          "used_flag": false
       },
       ...
-   ]
+   ],
+   "time_source": "GPS",
+   "utc_time": "2014-11-13T18:34:0.000Z",
+   "utc_time_valid": true,
+   "vel_2d": 0.08,
 }</pre>
                </div>
             </div>
@@ -971,6 +1490,7 @@
 
          <div class="route">
             <h2 id="networkstatus">Network Status [/networkstatus]</h2>
+            <p><strong>Versions</strong>: v1.5.3-</p>
             <p><strong>URL</strong>: /networkstatus</p>
             <p><strong>Supported Verbs</strong>: GET</p>
             <div class="summary">
@@ -996,7 +1516,7 @@
                      <tr>
                         <td>device_type</td>
                         <td>string</td>
-                        <td>The type of device. Will report as either "camera" or "dls".</td>
+                        <td>The type of device. Will report as either "camera", "dls", or "DLS 2".</td>
                      </tr>
                      <tr>
                         <td>gps_source</td>
@@ -1031,7 +1551,7 @@
          "device_type" : "camera",
          "gps_source" : "",
          "mode" : "master",
-         "serial" : "1449003LT",
+         "serial" : "RE01-1449003-MS",
          "sw_version" : "v1.5.3"
       },
       {  "bands" : [475,560,670,670,717],
@@ -1047,8 +1567,88 @@
             </div>
          </div>
 
+
+         <div class="route">
+            <h2 id="timesources">Time Sources Information [/timesources]</h2>
+            <p><strong>Versions</strong>: v6.0.0-</p>
+            <p><strong>URL</strong>: /timesources</p>
+            <p><strong>Supported Verbs</strong>: GET</p>
+            <div class="summary">
+               <p>This read-only object contains information about what time source the camera is using, and provides an
+                  estimated delay value between the various time sources and the time used by the camera.</p>
+            </div>
+            <div class="props">
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>time_sources</td>
+                        <td>array of TimeSource objects</td>
+                        <td>Contains an unordered array of TimeSource objects</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="props">
+               <strong>TimeSource Object Definition</strong>
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>active</td>
+                        <td>bool</td>
+                        <td>When 'true', the camera is actively using this time source to estimate time</td>
+                     </tr>
+                     <tr>
+                        <td>delay</td>
+                        <td>double</td>
+                        <td>The estimated delay between the camera's time and the sources' reported time, in seconds.
+                            <br />If no estimate is known, 1.797693134862316e+308 will be returned</td>
+                     </tr>
+                     <tr>
+                        <td>type</td>
+                        <td>string</td>
+                        <td>The type of the time source. Either 'GPS' or 'PPS'</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="examples">
+               <div class="example">
+               <p>Example GET response:</p>
+               <pre>{
+   "time_sources" : [
+      {
+         "active" : false,
+         "delay" : -0.108506053686142,
+         "type" : "GPS"
+      },
+      {
+         "active" : true,
+         "delay" : 5.09058661890549e-09,
+         "type" : "PPS"
+      }
+   ]
+}</pre>
+               </div>
+            </div>
+         </div>
+
          <div class="route">
             <h2 id="version">Version Information [/version]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /version</p>
             <p><strong>Supported Verbs</strong>: GET</p>
             <div class="summary">
@@ -1090,6 +1690,7 @@
 
          <div class="route">
             <h2 id="files">File Access [/files/*]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /files/path/on/sd/card</p>
             <p><strong>Supported verbs</strong>: GET</p>
             <div class="summary">
@@ -1143,6 +1744,7 @@
          
          <div class="route">
             <h2 id="deletefile">File Deletion [/deletefile/*]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /deletefile/path/on/sd/card</p>
             <p><strong>Supported verbs</strong>: GET</p>
             <div class="summary">
@@ -1189,6 +1791,7 @@
 
          <div class="route">
             <h2 id="wifi">Wifi Configuration [/wifi]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /wifi</p>
             <p><strong>Supported verbs</strong>: GET, POST</p>
             <div class="summary">
@@ -1226,6 +1829,7 @@
 
          <div class="route">
             <h2 id="reformatsdcard">Reformat SD Card [/reformatsdcard]</h2>
+            <p><strong>Versions</strong>: v1.5.9-</p>
             <p><strong>URL</strong>: /reformatsdcard</p>
             <p><strong>Supported verbs</strong>: POST</p>
             <div class="summary">
@@ -1265,6 +1869,7 @@
 
          <div class="route">
             <h2 id="camera-info">Camera Information [/camera_info]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /camera_info</p>
             <p><strong>Supported verbs</strong>: GET</p>
             <div class="summary">
@@ -1301,6 +1906,7 @@
 
          <div class="route">
             <h2 id="calibration-distortion">Distortion Calibration [/calibration/distortion]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /calibration/distortion</p>
             <p><strong>Supported verbs</strong>: GET</p>
             <div class="summary">
@@ -1389,6 +1995,7 @@
 
          <div class="route">
             <h2 id="calibration-vignette">Vignette Calibration [/calibration/vignette]</h2>
+            <p><strong>Versions</strong>: v1.3.2-</p>
             <p><strong>URL</strong>: /calibration/vignette</p>
             <p><strong>Supported verbs</strong>: GET</p>
             <div class="summary">
@@ -1457,7 +2064,80 @@
                </div>
             </div>
          </div>
+         
+                  <div class="route">
+            <h2 id="calibration-rig-relatives">Rig Relatives Calibration [/calibration/rig_relatives]</h2>
+            <p><strong>Versions</strong>: v4.1.0-</p>
+            <p><strong>URL</strong>: /calibration/rig_relatives</p>
+            <p><strong>Supported verbs</strong>: GET</p>
+            <div class="summary">
+               <p>Used to retrieve the relative rotations between lenses. Calibration is returned as an array for each band, where
+                  the first element of the array is the X-rotation, the second is the Y-rotation, and the third is the Z-rotation, all
+                  in radians. Rotations should be applied to the image first as Z, then Y, then X. In matrix form, it should look like
+                  v_cal = Rx*Ry*Rz*v . When you rotate all images from a capture by their respective rotation values, they should all align,
+                  assuming the target is effectively at infinity. See our <a href="https://github.com/micasense/imageprocessing/">Image
+                  Processing Tutorial</a> for more details on using these values.</p>
+            </div>
+            <div class="examples">
+               <p>
+                  <strong>Example URLs</strong>:<br />
+                  <code>GET /calibration/rig_relatives</code>
+               </p>
+               <div class="example">
+                  <p><strong>Example data</strong></p>
+                  <pre>{
+   "1" : [-0.0025194,-0.00756218,-0.000187806],
+   "2" : [0,0,0],
+   "3" : [-0.00126232,0.00104639,-0.00439204],
+   "4" : [-0.0068887,-0.00415932,0.000341805],
+   "5" : [-0.00455459,-0.00342963,-0.002376]
+}</pre>
+               </div>
+            </div>
+         </div>
+         
+         <h1 id="deprecated-or-removed-routes">Deprecated or Removed Routes</h1>
 
+         <div class="route">
+            <h2 id="captures-kml">KML Captures [/captures.kml] - REMOVED</h2>
+            <p><strong>Versions</strong>: v1.3.2-v1.5.9</p>
+            <p><strong>URL</strong>: /captures.kml</p>
+            <p><strong>Supported verbs</strong>: GET</p>
+            <div class="replacement">
+               <p>Use the <a href="#captures-kmz">/capture.kmz</a> route instead</p>
+            </div>
+            <div class="summary">
+               <p>/captures.kml will return a kmz file with the contents of all captures currently on the SD card. This is especially
+               useful when flying multiple flights across one or more areas to ensure continuous coverage across those areas.</p>
+            </div>
+            <div class="examples">
+               <div class="example">
+               <p>
+                  <strong>Example KML File</strong>
+               </p>
+               <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;kml xmlns="http://www.opengis.net/kml/2.2"&gt;
+   &lt;Document&gt;
+      &lt;Folder&gt;
+         &lt;name&gt;"0000SET"&lt;/name&gt;
+         &lt;Placemark&gt;
+            &lt;name&gt;710&lt;/name&gt;
+            &lt;Point&gt;
+               &lt;coordinates&gt;-110.7228486,32.902748314,37.2748314&lt;/coordinates&gt;
+            &lt;/Point&gt;
+         &lt;/Placemark&gt;
+         &lt;Placemark&gt;
+            &lt;name&gt;711&lt;/name&gt;
+            &lt;Point&gt;
+               &lt;coordinates&gt;-110.72628388,32.902745594,37.2745594&lt;/coordinates&gt;
+            &lt;/Point&gt;
+         &lt;/Placemark&gt;
+      &lt;/Folder&gt;
+   &lt;/Document&gt;
+&lt;/kml&gt;</pre>
+               </div>
+            </div>
+         </div>
       </article>
    </body>
 </html>
