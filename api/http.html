@@ -599,15 +599,21 @@
                gimbaled camera relative to the aircraft. If desired, the aircraft orientation can be set to zero, and in the case the
                camera orientation becomes relative to the earth. Alternatively, if the camera is fixed mounted, the camera orientation
                can be set to the appropriate static value and only the aircraft orientation is updated.</p>
-               <p>The aircraft orientation is specified in the standard aeronautical coordinate frame, where the X axis points to the
-               front of the vehicle, the Y axis points to the right, and the Z axis points down. Rotation order is Yaw, then Pitch, then
-               Roll, about the Z, Y, then X axes accordingly.</p>
-               <p>The camera orientation represents the orientation of the camera relative to the aircraft. The default orientation, when
-               the camera angles are all zero, is defined such that the camera is pointed straight down relative to the aircraft
-               (aircraft nadir) with the top of the camera towards the "front" of the aircraft. The rotation order is again yaw, then
-               pitch, then roll, about the camera Z, Y, and X axes accordingly. The camera axes are defined such that at zero rotation
-               angle, the X axis points down (along the camera focal axis) the Z axis points towards the rear of the vehicle, and the Y
-               axis follows right-hand rule and points out the right side of the vehicle.</p>
+               <p>The aircraft orientation is specified in the standard aeronautical coordinate frame, where the Z-axis points down, the
+               Y-axis points to the right, and X-axis points to the front of the vehicle. The default orientation, when the vehicle angles
+               are all zero, is defined such that the Z-axis points directly towards the center of the earth, and the X-axis points towards
+               true north. Rotations about the Z, Y, and X axes correspond to the angles psi, theta, and phi, respectively. For the vehicle,
+               this means that psi corresponds to yaw, theta corresponds to pitch, and phi corresponds to roll. Rotation order is about the
+               Z, Y, then X axis, or yaw, then pitch, then roll.</p>
+               <p>The camera orientation represents the orientation of the camera relative to the aircraft. The axes used are referenced to
+               the camera, not the vehicle. The camera’s Z-axis points towards the bottom of the camera, the Y-axis points to the right of the
+               camera, and the X-axis points in the direction the camera is facing, along the camera focal axis. The default orientation, when
+               the camera angles are all zero, is defined such that the camera’s Z-axis is aligned with the aircraft’s <em>negative</em> X-axis,
+               the camera’s Y-axis is aligned with the aircraft’s Y-axis, and the camera’s X-axis is aligned with the aircraft’s Z-axis. This
+               corresponds to the camera looking at nadir, with the top of the camera pointing towards the front of the vehicle. Rotations about
+               the Z, Y, and X axes of the camera correspond to the angles psi, theta, and phi, respectively. For the camera, this means that psi
+               corresponds to pan, theta corresponds to tilt, and phi corresponds to roll. The rotation order is about the Z, Y, then X axis, or
+               pan, then tilt, then roll.</p>
                <p>For a fixed camera pointed straight down relative to the aircraft, and with the top of the camera toward the front of
                   the aircraft, the value of 0 can be used for all angles.</p>
             </div>
