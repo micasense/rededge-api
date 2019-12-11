@@ -42,6 +42,8 @@
                   <li><a href="#calibration-distortion">Distortion Calibration [/calibration/distortion]</a></li>
                   <li><a href="#calibration-rig-relatives">Rig Relatives Calibration [/calibration/rig_relatives]</a></li>
                   <li><a href="#calibration-vignette">Vignette Calibration [/calibration/vignette]</a></li>
+                  <li><a href="#prepare-power-down">Prepare for Power Down [/powerdownready]</a></li>
+                  <li><a href="#thermal_nuc">Thermal NUC [/thermal_nuc]</a></li>
                </ul>
             </li>
             <li>
@@ -980,8 +982,8 @@
                         <td>network_mode</td>
                         <td>string</td>
                         <td>(<em>none</em>)</td>
-                        <td>Selects whether the camera will act as a master or slave in a MicaSense network. Allowable values: "master",
-                        "slave".</td>
+                        <td>Selects whether the camera will act as a main camera or auxiliary camera in a MicaSense network. Allowable values: "main",
+                        "auxiliary". <br/>Changed from "master/slave" to "main/auxiliary" in v7.0.0</td>
                         <td>v1.5.0-</td>
                      </tr>
                      <tr>
@@ -1243,15 +1245,21 @@
                         <td>v1.3.2-</td>
                      </tr>
                      <tr>
+                        <td>sd_gb_type</td>
+                        <td>string</td>
+                        <td>The filesystem type of the SD card. One of 'FAT32', 'exFat', or 'Unknown'</td>
+                        <td>v7.0.0-</td>
+                     </tr>
+                     <tr>
                         <td>sd_warn</td>
                         <td>bool</td>
-                        <td>When true, indicates the low SD space warning threshold is met</td>
+                        <td>When true, indicates the low SD space warning threshold is met or using unsupported SD filesystem type</td>
                         <td>v1.3.2-</td>
                      </tr>
                      <tr>
                         <td>sd_status</td>
                         <td>string</td>
-                        <td>Status of the SD card, one of 'Ok', 'NotPresent', 'ReadError', or 'Full'</td>
+                        <td>Status of the SD card, one of 'Ok', 'NotPresent', or 'Full'</td>
                         <td>v1.3.2-</td>
                      </tr>
                      <tr>
@@ -1511,6 +1519,7 @@
                         <th>Property</th>
                         <th>Type</th>
                         <th>Description</th>
+                        <th>Version</th>
                      </tr>
                   </thead>
                   <tbody>
@@ -1518,32 +1527,74 @@
                         <td>bands</td>
                         <td>array</td>
                         <td>A list of the center wavelengths of the sensors on the device, in nanometers (nm).</td>
+                        <td>v1.5.3-</td>
+                     </tr>
+                     <tr>
+                        <td>bandwidths</td>
+                        <td>array</td>
+                        <td>A list of the bandwidths of the sensors on the device, in nanometers (nm).</td>
+                        <td>v7.0.0-</td>
                      </tr>
                      <tr>
                         <td>device_type</td>
                         <td>string</td>
-                        <td>The type of device. Will report as either "camera", "dls", or "DLS 2".</td>
+                        <td>The type of device. Will report as either "Camera", "DLS", or "DLS 2".</td>
+                        <td>v1.5.3-</td>
                      </tr>
                      <tr>
                         <td>gps_source</td>
                         <td>string</td>
                         <td>Indicates where the device is receiving GPS information from. Will report as either an empty string,
                         "direct", or "host".</td>
+                        <td>v1.5.3-</td>
                      </tr>
                      <tr>
                         <td>mode</td>
                         <td>string</td>
                         <td>Indicates which network mode the device is operating in.</td>
+                        <td>v1.5.3-</td>
+                     </tr>
+                     <tr>
+                        <td>sd_gb_free</td>
+                        <td>float</td>
+                        <td>Space remaining (in GB) on storage device.</td>
+                        <td>v7.0.0-</td>
+                     </tr>
+                     <tr>
+                        <td>sd_gb_total</td>
+                        <td>float</td>
+                        <td>Total size (in GB) of storage device.</td>
+                        <td>v7.0.0-</td>
+                     </tr>
+                     <tr>
+                        <td>sd_status</td>
+                        <td>string</td>
+                        <td>Status of the storage device, one of 'Ok', 'NotPresent', or 'Full'</td>
+                        <td>v7.0.0-</td>
+                     </tr>
+                     <tr>
+                        <td>sd_type</td>
+                        <td>string</td>
+                        <td>The filesystem type of the storage device. One of 'FAT32', 'exFat', or 'Unknown'</td>
+                        <td>v7.0.0-</td>
+                     </tr>
+                     <tr>
+                        <td>sd_warn</td>
+                        <td>bool</td>
+                        <td>When true, indicates the low storage device space warning threshold is met or using unsuppored storage device filesystem type</td>
+                        <td>v7.0.0-</td>
                      </tr>
                      <tr>
                         <td>serial</td>
                         <td>string</td>
                         <td>Reports the serial number of the device.</td>
+                        <td>v1.5.3-</td>
                      </tr>
                      <tr>
                         <td>sw_version</td>
                         <td>string</td>
                         <td>Reports the software version currently running on the device.</td>
+                        <td>v1.5.3-</td>
                      </tr>
                   </tbody>
                </table>
@@ -1552,21 +1603,43 @@
                <div class="example">
                   <p><strong>Example Reponse to <code>GET /networkstatus</code></strong>:</p>
                   <pre>{
-   "network_map" : [
-      {  "bands" : [475,560,670,670,717],
-         "device_type" : "camera",
-         "gps_source" : "",
-         "mode" : "master",
-         "serial" : "RE01-1449003-MS",
-         "sw_version" : "v1.5.3"
-      },
-      {  "bands" : [475,560,670,670,717],
-         "device_type" : "dls",
-         "gps_source" : "direct",
-         "mode" : "slave",
-         "serial" : "DL01-1525030-SC",
-         "sw_version" : "v0.2.34"
-      }
+   "network_map" : 
+      [
+         {  "bands":[475,560,668,840,717],
+            "bandwidths":[20,20,10,40,10],
+            "device_type":"Camera",
+            "gps_source":"",
+            "mode":"main",
+            "sd_gb_free":25.33200073242188,
+            "sd_gb_total":29.70773315429688,
+            "sd_status":"Ok",
+            "sd_type":"FAT32",
+            "sd_warn":false,
+            "serial":"RM02-1839163-SC",
+            "sw_version":"v7.0.0"
+         },
+         {  "bands":[475,560,668,840,717],
+            "bandwidths":[20,20,10,40,10],
+            "device_type":"Camera",
+            "gps_source":"",
+            "mode":"auxiliary",
+            "sd_gb_free":25.63470458984375,
+            "sd_gb_total":29.70469665527344,
+            "sd_status":"Ok",
+            "sd_type":"FAT32",
+            "sd_warn":false,
+            "serial":"RM02-1839202-SC",
+            "sw_version":"v7.0.0"
+         },
+         {
+            "bands":[450,500,550,570,600,610,650,680,730,760,810,860],
+            "bandwidths":[],
+            "device_type":"DLS 2",
+            "gps_source":"direct",
+            "mode":"auxiliary",
+            "serial":"DA03-1921711-OB",
+            "sw_version":"v1.2.3"
+         }
    ]
 }</pre>
                </div>
@@ -2070,7 +2143,7 @@
                </div>
             </div>
          </div>
-         
+
                   <div class="route">
             <h2 id="calibration-rig-relatives">Rig Relatives Calibration [/calibration/rig_relatives]</h2>
             <p><strong>Versions</strong>: v4.1.0-</p>
@@ -2101,7 +2174,128 @@
                </div>
             </div>
          </div>
-         
+
+         <div class="route">
+            <h2 id="prepare-power-down">Prepare for Power Down [/powerdownready]</h2>
+            <p><strong>Versions</strong>: v7.0.0-</p>
+            <p><strong>URL</strong>: /powerdownready</p>
+            <p><strong>Supported verbs</strong>: GET, POST</p>
+            <div class="summary">
+               <p>This route reports the readiness of the camera  for power down. It can also be used to request the camera to prepare for power down.<br/><br/>
+               NOTE: This route will <em>not</em> actually power down the camera. It places the camera in a "safe" state for power down, meaning that the storage media
+               is unmounted after ensuring that any pending data has been written out. This prevents the possiblility of the storage media becoming corrupted. This is
+               an alternative to holding the button of the camera down for five seconds.</p>
+            </div>
+            <div class="props">
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>ready_for_power_down</td>
+                        <td>bool</td>
+                        <td>When reporting 'true', camera is ready to be powered down</td>
+                     </tr>
+                     <tr>
+                        <td>power_down</td>
+                        <td>bool</td>
+                        <td>When requested 'true', camera will prepare to power down</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="examples">
+               <p>
+                  <strong>Example URL</strong>:<br />
+                  <code>GET /powerdownready</code><br />
+               </p>
+               <p>
+                  <strong>Example Response</strong>:<br />
+                  <pre>{
+   "ready_for_power_down" : false
+}</pre>
+               </p>
+               <div class="example">
+                  <p><strong>Example POST data to request power down preparation</strong></p>
+                  <pre>{
+   "power_down" : true
+}</pre>
+               </div>
+            </div>
+         </div>
+
+         <div class="route">
+            <h2 id="thermal_nuc">Thermal NUC [/thermal_nuc]</h2>
+            <p><strong>Versions</strong>: v7.0.0-</p>
+            <p><strong>URL</strong>: /thermal_nuc</p>
+            <p><strong>Supported verbs</strong>: GET, POST</p>
+            <div class="summary">
+               <p>This route returns information regarding temperature change in Kelvin and number of seconds since the last non-uniform calibration (NUC)
+                  of the thermal imager. <br/><br/>
+                  NOTE: This route only works with cameras that have a thermal imager, such as the Altum.<br/><br/>
+                  If the property "nuc_now" is present in the POST request and set to true then this route commands the camera to NUC the thermal imager. If a NUC is 
+                  commanded then auto-NUCing will be disabled. Auto-NUCing <em>cannot</em> be re-enabled unless the camera is rebooted, so regular commands must be sent to this route
+                  in order to maintain high quality thermal data. We have found that NUCing once every five minutes or a change of 2 Kelvin maintains good thermal image quality.</p>
+            </div>
+            <div class="props">
+               <table>
+                  <thead>
+                     <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>nuc_now</td>
+                        <td>bool</td>
+                        <td>Post true to NUC</td>
+                     </tr>
+                     <tr>
+                        <td>elapsed_seconds_since_nuc</td>
+                        <td>int</td>
+                        <td>Number of seconds since last nuc</td>
+                     </tr>
+                     <tr>
+                        <td>delta_deg_K_since_nuc</td>
+                        <td>float</td>
+                        <td>Change in temperature (measured in K) since the last nuc</td>
+                     </tr>
+                     <tr>
+                        <td>message</td>
+                        <td>string</td>
+                        <td>Notification in case of NUC failure or NUC already in progress</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="examples">
+               <p>
+                  <strong>Example URL</strong>:<br />
+                  <code>GET /thermal_nuc</code><br />
+               </p>
+               <p>
+                  <strong>Example Response</strong>:<br />
+                  <pre>{
+   "delta_deg_K_since_nuc":301.5400085449219,
+   "elapsed_seconds_since_nuc":249.52
+}</pre>
+               </p>
+               <div class="example">
+                  <p><strong>Example POST data for NUC request</strong></p>
+                  <pre>{
+   "nuc_now" : true
+}</pre>
+               </div>
+            </div>
+         </div>
+
          <h1 id="deprecated-or-removed-routes">Deprecated or Removed Routes</h1>
 
          <div class="route">
