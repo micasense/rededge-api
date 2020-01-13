@@ -35,6 +35,14 @@
                </ul>
             </li>
             <li>
+               <a href="#parameter_microservice">Parameter Microservice</a>
+               <ul>
+                  <li>
+                     <a href="#supported_parameters">Supported Parameters</a>
+                  </li>
+               </ul>
+            </li>
+            <li>
                <a href="#messages">Messages</a>
                <ul>
                   <li>
@@ -74,6 +82,15 @@
                      <a href="#camera_feedback">CAMERA_FEEDBACK</a>
                   </li>
                   <li>
+                     <a href="#param_request_read">PARAM_REQUEST_READ</a>
+                  </li>
+                  <li>
+                     <a href="#param_request_list">PARAM_REQUEST_LIST</a>
+                  </li>
+                  <li>
+                     <a href="#param_value">PARAM_VALUE</a>
+                  </li>
+                  <li>
                      <a href="#param_set">PARAM_SET</a>
                   </li>
                </ul>
@@ -103,10 +120,527 @@
          GPS in both styles at the same time is not recommended.</p>
          
          <h2 id="commanding-captures">Commanding Captures</h2>
-         <p>The <a href="#digicam_configure">DIGICAM_CONFIGURE</a> message can be used to set up the camera imagers<p>
+         <p>The <a href="#digicam_configure">DIGICAM_CONFIGURE</a> message can be used to set up the camera imagers</p>
          <p>The <a href="#digicam_control">DIGICAM_CONTROL</a> message will command a capture, and the camera will send a
          <a href="#camera_status">CAMERA_STATUS</a> and a <a href="#camera_feedback">CAMERA_FEEDBACK</a> message in response</p>
          
+         <h1 id="parameter_microservice">Parameter Microservice</h1>
+         <p>The Parameter Protocol allows for the ability to perform additional read and write commands for parameters implemented in the target hardware not otherwise encapsulated by standard MAVLink messages</p>
+         <p>For a full explaination of the Parameter Microservice, please see the official MAVLink documentation at <a href="https://mavlink.io/en/services/parameter.html">MAVLink Parameter Protocol</a></p>
+         <p>There are 4 messages associated with the parameter microservice, which are detailed in the Messages section below:
+            <a href="#param_request_read">PARAM_REQUEST_READ</a>,
+            <a href="#param_request_list">PARAM_REQUEST_LIST</a>,
+            <a href="#param_value">PARAM_VALUE</a>,
+            <a href="#param_set">PARAM_SET</a></p>
+         
+         <p>The enumeration and description of each MAV_PARAM_TYPE is listed below</p>
+         <table>
+            <tr>
+               <th>Value</th>
+               <th>Field Name</th>
+               <th>Description</th>
+            </tr>
+            <tr>
+               <td>1</td>
+               <td>MAV_PARAM_TYPE_UINT8</td>
+               <td>8-bit unsigned integer</td>
+            </tr>
+            <tr>
+               <td>2</td>
+               <td>MAV_PARAM_TYPE_INT8</td>
+               <td>8-bit signed integer</td>
+            </tr>
+            <tr>
+               <td>3</td>
+               <td>MAV_PARAM_TYPE_UINT16</td>
+               <td>16-bit unsigned integer</td>
+            </tr>
+            <tr>
+               <td>4</td>
+               <td>MAV_PARAM_TYPE_INT16</td>
+               <td>16-bit signed integer</td>
+            </tr>
+            <tr>
+               <td>5</td>
+               <td>MAV_PARAM_TYPE_UINT32</td>
+               <td>32-bit unsigned integer</td>
+            </tr>
+            <tr>
+               <td>6</td>
+               <td>MAV_PARAM_TYPE_INT32</td>
+               <td>32-bit signed integer</td>
+            </tr>
+            <tr>
+               <td>7</td>
+               <td>MAV_PARAM_TYPE_UINT64</td>
+               <td>64-bit unsigned integer</td>
+            </tr>
+            <tr>
+               <td>8</td>
+               <td>MAV_PARAM_TYPE_INT64</td>
+               <td>64-bit signed integer</td>
+            </tr>
+            <tr>
+               <td>9</td>
+               <td>MAV_PARAM_TYPE_REAL32</td>
+               <td>32-bit floating point</td>
+            </tr>
+            <tr>
+               <td>10</td>
+               <td>MAV_PARAM_TYPE_REAL64</td>
+               <td>64-bit floating point</td>
+            </tr>
+         </table>
+         <h2 id="supported_parameters">Supported Parameters</h2>
+         <table>
+            <tr>
+               <th>Param ID</th>
+               <th>Param Type</th>
+               <th>Description</th>
+               <th>Versions</th>
+            </tr>
+            <tr>
+               <td>wifi</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Set to 1.0 to turn WiFi module on</li>
+                     <li>Set to 0.0 to turn WiFi module off</li>
+                  </ul>
+               </td>
+               <td>v1.5.30-</td>
+            </tr>
+            <tr>
+               <td>rawFormat</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Selects what raw output format the camera saves as</li>
+                     <ul>
+                        <li>Set to 0 for TIFF</li>
+                        <li>Set to 1 for DNG</li>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>enabledBandsRaw</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Bit mask of bands that are enabled for raw capture storage</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>enabledBandsJpeg</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Bit mask of bands that are enabled for jpeg capture and storage</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>autoCapMode</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Auto capture mode</li>
+                     <ul>
+                        <li>Set to 0 for Disabled</li>
+                        <li>Set to 1 for Timer</li>
+                        <li>Set to 2 for Overlap</li>
+                        <li>Set to 3 for External Trigger</li>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>timerPeriod</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Period between timer captures (seconds)</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>overlapAlongTrk</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Desired along track overlap percentage (0-100)</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>overlapCrossTrk</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Desired cross track overlap percentage (0-100)</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>pwmTriggerThresh</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>The long/short pulse width threshold for PWM input, in milliseconds</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>extTriggerMode</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>When set to 1, top of frame pulses will be generated on a camera-specific pin.</li>
+                     <ul>
+                        <li>Note that activating this feature may cause damage to the camera if the pin is also driven by an external device</li>
+                        </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>extTrgrOutPulseH</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>When set to 1.0, top of frame pulses will be generated by resting low, with the rising edge of the pulse indicating the top of frame of a capture</li>
+                     <li>When set to 0.0, the top of frame pulse will be generated by resting high, with the falling edge of the pulse indicating the top of frame of a capture</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>agcMinimumMean</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Sets the minimum normalized mean value for each image during Automatic Gain Control (AGC)</li>
+                     <li>Valid values are from 0.0 to 1.0, inclusive</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>gainExpCrossover</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Exposure time (in seconds) at which the gain should be increased in order to properly expose rather than increasing the exposure time further</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>operatingAlt</td>
+               <td>MAV_PARAM_TYPE_INT32 (6)</td>
+               <td>
+                  <ul>
+                     <li>Aircraft operating altitude above ground (meters)</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>opAltTolerance</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Distance, in meters, below the operating altitude (operatingAlt) to enable automatic capture modes</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>audioEnable</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>When set to 1.0, the camera is allowed to produce sounds. Note that not all camera models have a method of producing sound, in which case this field is not a functional parameter</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>audioSelBitfield</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Bitfield that masks individual audio features. Setting a bit to 0 will disable the individual associated audio feature
+                        <br />
+                        <table>
+                          <thead>
+                             <tr>
+                                <th>Bit</th>
+                                <th>Feature</th>
+                             </tr>
+                          </thead>
+                          <tbody>
+                             <tr>
+                                <td>0</td>
+                                <td>Tone when a normal capture is taken (anti_sat=false)</td>
+                             </tr>
+                             <tr>
+                                <td>1</td>
+                                <td>Tone when a panel capture is taken (anti_sat=true)</td>
+                             </tr>
+                             <tr>
+                                <td>2</td>
+                                <td>Tone when a panel detection is active</td>
+                             </tr>
+                          </tbody>
+                        </table>
+                     </li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>injectedGpsDelay</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Sets the fixed expected delay in seconds between the timestamp contained in the GPS source (whether that be from a directly connected GPS, DLS, or injected via one of the APIs), and the time the message is received</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>ipAddress</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Sets the Ethernet IP address of the camera</li>
+                     <li>The input is divided into four 8-bit sections (part1.part2.part3.part4) and interpreted as follows:</li>
+                     <ul>
+                        <li>part1 = (ipAddress >> 24) & 0xFF</li>
+                        <li>part2 = (ipAddress >> 16) & 0xFF</li>
+                        <li>part3 = (ipAddress >> 8) & 0xFF</li>
+                        <li>part4 = (ipAddress >> 0) & 0xFF</li>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>pinModes</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Sets the pin modes of the camera</li>
+                     <li>The input is divided into two 16-bit sections and interpreted as follows:</li>
+                     <ul>
+                        <li>pin number = (pinModes >> 16) & 0xFFFF</li>
+                        <li>pin mode = (pinModes >> 0) & 0xFFFF</li>
+                     </ul>
+                     <li>Each time this value is read, it will cycle through the pins, i.e., if there are 3 configurable pins, 3 separate calls will need to be made to see all pin information</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>networkMode</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Selects whether the camera will act as a main camera or auxiliary camera in a MicaSense network</li>
+                     <ul>
+                        <li>Set to 0 for Main</li>
+                        <li>Set to 1 for Auxiliary</li>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>thermalNucTime</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Set to 1.0 to command a NUC</li>
+                     <ul>
+                        <li>This will cause automatic NUCing to become disabled and all further NUCs will need to be commanded until the camera has been power cycled</li>
+                     </ul>
+                     <li>Returns the number of seconds since the last NUC</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>thermalNucTemp</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Set to 1.0 to command a NUC</li>
+                     <ul>
+                        <li>This will cause automatic NUCing to become disabled and all further NUCs will need to be commanded until the camera has been power cycled</li>
+                     </ul>
+                     <li>Returns the change in temperature (measured in K) since the last NUC</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+         </table>
+         <p><b>WARNING: </b>The parameters below, all prefixed with a "~", are considered depreciated and may be subject to removal in a future firmware update. They are read-only, and any PARAM_SET calls will have no effect on the returned value.</p>
+         <table>
+            <tr>
+               <th>Param ID</th>
+               <th>Param Type</th>
+               <th>Description</th>
+               <th>Versions</th>
+            </tr>
+            <tr>
+               <td>~sdGbFree</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>The amount of free space on the SD card (GB)</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~sdGbTotal</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>The total amount of storage on the SD card (GB)</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~sdWarn</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>When the value returned is 1.0, indicates the low SD space warning threshold is met (Under 10GB remaining) or using unsupported SD filesystem type</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~sdStatus</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Status of the SD card</li>
+                     <ul>
+                        <li>Returns 0 when SD card is not present</li>
+                        <li>Returns 1 when SD card is full</li>
+                        <li>Returns 2 when SD card is detected and has free space</li>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~busVolts</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Returns the measured supply voltage</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~autoCapActive</td>
+               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
+               <td>
+                  <ul>
+                     <li>Returns 1.0 when the camera's automatic capture mode is activated</li>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~dlsStatus</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>Returns the current status of the DLS:</li>
+                     <ul>
+                        <li>Returns 0 when DLS status is 'Not Present'</li>
+                        <li>Returns 1 when DLS status is 'OK'</li>
+                        <li>Returns 2 when DLS status is 'Programming'</li>
+                        <li>Returns 3 when DLS status is 'Error'</li>
+                        <li>Returns 4 when DLS status is 'Initializing'</li>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~timeSource</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>What type of time source is being used by the camera:</li>
+                     <ul>
+                        <li>Returns 0 for None</li>
+                        <li>Returns 1 for GPS</li>
+                        <li>Returns 2 for PPS</li>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~serialFirstFour</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>The first four values of the camera's serial number</li>
+                     <ul>
+                        <li>The serial number can be interpreted from the returned value by evaluating each 8-bit section as an individual ASCII character.</li>
+                        <li>EX: If the serial is 'AL03'</li>
+                        <ul>
+                           <li>(serialfirstFour >> 24) & 0xFF = A</li>
+                           <li>(serialfirstFour >> 16) & 0xFF = L</li>
+                           <li>(serialfirstFour >> 8) & 0xFF = 0</li>
+                           <li>(serialfirstFour >> 0) & 0xFF = 3</li>
+                        </ul>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+            <tr>
+               <td>~swVersion</td>
+               <td>MAV_PARAM_TYPE_UINT32 (5)</td>
+               <td>
+                  <ul>
+                     <li>The camera's software version</li>
+                     <ul>
+                        <li>The software version can be interpreted from the returned value by evaluating each 8-bit section as an individual uint8 value</li>
+                        <li>EX: If the software version is 'v1.2.3'</li>
+                        <ul>
+                           <li>(swVersion >> 0) & 0xFF = 1</li>
+                           <li>(swVersion >> 8) & 0xFF = 2</li>
+                           <li>(swVersion >> 16) & 0xFF = 3</li>
+                        </ul>
+                     </ul>
+                  </ul>
+               </td>
+               <td>v7.1.0-</td>
+            </tr>
+         </table>
+
          <h1 id="messages">Messages</h1>
          
          <h2 id="heartbeat">HEARTBEAT (0)</h2>
@@ -977,7 +1511,109 @@
                </td>
             </tr>
          </table>
-         
+         <h2 id="param_request_read">PARAM_REQUEST_READ (20)</h2>
+         <p><strong>Versions</strong>: v7.1.0-</p>
+         <p>Allows for reading of miscellaneous settings, not already captured by another MAVLink message</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="https://mavlink.io/en/messages/common.html#PARAM_REQUEST_READ">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Target System</td>
+               <td>uint8_t</td>
+               <td>System ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Target Component</td>
+               <td>uint8_t</td>
+               <td>Component ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Param ID</td>
+               <td>char[16]</td>
+               <td>Onboard parameter id, terminated by NULL if the length is less than 16 human-readable
+                     chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars -
+                     applications have to provide 16+1 bytes storage if the ID is stored as string</td>
+               <td>Same as official, <a href="#supported_parameters">Supported Parameters</a></td>
+            </tr>
+            <tr>
+               <td>Param Index</td>
+               <td>int_16</td>
+               <td>Parameter index. Send -1 to use the param ID field as identifier (else the param id will be ignored)</td>
+               <td>Same as official</td>
+            </tr>
+         </table>
+         <h2 id="param_request_list">PARAM_REQUEST_LIST (21)</h2>
+         <p><strong>Versions</strong>: v7.1.0-</p>
+         <p>Request all parameters of this component. After this request, all parameters are emitted</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="https://mavlink.io/en/messages/common.html#PARAM_REQUEST_LIST">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Target System</td>
+               <td>uint8_t</td>
+               <td>System ID</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Target Component</td>
+               <td>uint8_t</td>
+               <td>Component ID</td>
+               <td>Same as official</td>
+            </tr>
+         </table>
+         <h2 id="param_value">PARAM_VALUE (22)</h2>
+         <p><strong>Versions</strong>: v7.1.0-</p>
+         <p>The current value of a parameter, broadcast in response to a request to get one or more parameters (PARAM_REQUEST_READ, PARAM_REQUEST_LIST) or whenever a parameter is set (PARAM_SET) or changes.</p>
+         <table>
+            <tr>
+               <th>Field Name</th>
+               <th>Type</th>
+               <th><a href="https://mavlink.io/en/messages/common.html#PARAM_VALUE">Official Description</a></th>
+               <th>RedEdge Implementation</th>
+            </tr>
+            <tr>
+               <td>Param ID</td>
+               <td>char[16]</td>
+               <td>Onboard parameter id, terminated by NULL if the length is less than 16 human-readable
+                     chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars -
+                     applications have to provide 16+1 bytes storage if the ID is stored as string</td>
+               <td>Same as official, <a href="#supported_parameters">Supported Parameters</a></td>
+            </tr>
+            <tr>
+               <td>Param Value</td>
+               <td>4 bytes of data</td>
+               <td>Onboard parameter value</td>
+               <td>Implemeted as a union. Interpreted as the <a href="https://mavlink.io/en/messages/common.html#MAV_PARAM_TYPE">MAV_PARAM_TYPE</a> listed in the Param Type field under <a href="#supported_parameters">Supported Parameters</a></td>
+            </tr>
+            <tr>
+               <td>Param Type</td>
+               <td>uint8_t</td>
+               <td>Onboard parameter type: see the <a href="https://mavlink.io/en/messages/common.html#MAV_PARAM_TYPE">MAV_PARAM_TYPE</a> enum for supported data types</td>
+               <td>Same as official, except  64-bit values not supported</td>
+            </tr>
+            <tr>
+               <td>Param Count</td>
+               <td>uint16</td>
+               <td>Total number of onboard parameters</td>
+               <td>Same as official</td>
+            </tr>
+            <tr>
+               <td>Param Index</td>
+               <td>uint_16</td>
+               <td>Index of this onboard parameter</td>
+               <td>Same as official</td>
+            </tr>
+         </table>
          <h2 id="param_set">PARAM_SET (23)</h2>
          <p><strong>Versions</strong>: v1.5.30-</p>
          <p>Allows for configuraiton of miscellaneous settings, not already captured by another MAVLink message</p>
@@ -1006,37 +1642,19 @@
                <td>Onboard parameter id, terminated by NULL if the length is less than 16 human-readable
                      chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars -
                      applications have to provide 16+1 bytes storage if the ID is stored as string</td>
-               <td>Same as official</td>
+               <td>Same as official, <a href="#supported_parameters">Supported Parameters</a></td>
             </tr>
             <tr>
                <td>Param Value</td>
-               <td>float</td>
+               <td>4 bytes of data</td>
                <td>Onboard parameter value</td>
-               <td>Same as official</td>
+               <td>Implemeted as a union. Interpreted as the <a href="https://mavlink.io/en/messages/common.html#MAV_PARAM_TYPE">MAV_PARAM_TYPE</a> listed in the Param Type field under <a href="#supported_parameters">Supported Parameters</a></td>
             </tr>
             <tr>
                <td>Param Type</td>
                <td>uint8_t</td>
-               <td>Onboard parameter type: see the MAV_PARAM_TYPE enum for supported data types.</td>
-               <td>Same as official</td>
-            </tr>
-         </table>
-         <p>Supported Parameters</p>
-         <table>
-            <tr>
-               <th>Param ID</th>
-               <th>Param Type</th>
-               <th>Description</th>
-            </tr>
-            <tr>
-               <td>wifi</td>
-               <td>MAV_PARAM_TYPE_REAL32 (9)</td>
-               <td>
-                  <ul>
-                     <li>Set to 1.0 to turn WiFi module on</li>
-                     <li>Set to 0.0 to turn WiFi module off</li>
-                  </ul>
-               </td>
+               <td>Onboard parameter type: see the <a href="https://mavlink.io/en/messages/common.html#MAV_PARAM_TYPE">MAV_PARAM_TYPE</a> enum for supported data types</td>
+               <td>Same as official, except  64-bit values not supported</td>
             </tr>
          </table>
       </article>
