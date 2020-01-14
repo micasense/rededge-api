@@ -127,14 +127,15 @@
          <h1 id="parameter_microservice">Parameter Microservice</h1>
          <p>The parameter microservice implements the <a href="https://mavlink.io/en/services/parameter.html">MAVLink
             Parameter Protocol</a> to read or change camera configuration settings.</p>
-         <p>For a full explaination of the Parameter Microservice, please see the official MAVLink documentation at <a href="https://mavlink.io/en/services/parameter.html">MAVLink Parameter Protocol</a></p>
+         <p>For a full explaination of the Parameter Microservice, please see the official MAVLink documentation at
+         <a href="https://mavlink.io/en/services/parameter.html">MAVLink Parameter Protocol</a></p>
          <p>There are 4 messages associated with the parameter microservice, which are detailed in the Messages section below:
             <a href="#param_request_read">PARAM_REQUEST_READ</a>,
             <a href="#param_request_list">PARAM_REQUEST_LIST</a>,
             <a href="#param_value">PARAM_VALUE</a>,
             <a href="#param_set">PARAM_SET</a></p>
          
-         <p>The enumeration and description of each MAV_PARAM_TYPE is listed below</p>
+         <p id="mav_param_type">The enumeration and description of each MAV_PARAM_TYPE is listed below</p>
          <table>
             <tr>
                <th>Value</th>
@@ -419,7 +420,8 @@
                <td>MAV_PARAM_TYPE_REAL32</td>
                <td>
                   <ul>
-                     <li>Sets the fixed expected delay in seconds between the timestamp contained in the GPS source (whether that be from a directly connected GPS, DLS, or injected via one of the APIs), and the time the message is received</li>
+                     <li>Sets the fixed expected delay in seconds between the timestamp contained in the GPS source 
+                     (whether that be from a directly connected GPS, DLS, or injected via one of the APIs), and the time the message is received</li>
                   </ul>
                </td>
                <td>v7.1.0-</td>
@@ -452,7 +454,8 @@
                         <li>pin number = (pinModes >> 16) & 0xFFFF</li>
                         <li>pin mode = (pinModes >> 0) & 0xFFFF</li>
                      </ul>
-                     <li>Each time this value is read, it will cycle through the pins, i.e., if there are 3 configurable pins, 3 separate calls will need to be made to see all pin information</li>
+                     <li>Each time this value is read, it will cycle through the pins,
+                        i.e., if there are 3 configurable pins, 3 separate calls will need to be made to see all pin information</li>
                   </ul>
                </td>
                <td>v7.1.0-</td>
@@ -1546,18 +1549,21 @@
                <td>Onboard parameter id, terminated by NULL if the length is less than 16 human-readable
                      chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars -
                      applications have to provide 16+1 bytes storage if the ID is stored as string</td>
-               <td>Same as official, <a href="#supported_parameters">Supported Parameters</a></td>
+               <td>Same as official. See the list of <a href="#supported_parameters">Supported Parameters</a></td>
             </tr>
             <tr>
                <td>Param Index</td>
                <td>int_16</td>
                <td>Parameter index. Send -1 to use the param ID field as identifier (else the param id will be ignored)</td>
-               <td>Same as official</td>
+               <td>Same as official.<br />
+                  We do not guarantee indices for a specific parameter will be the same for all software versions,
+                  so we recommend using the Param ID and setting the Param Index to -1 for the first access
+                  of each parameter after power on. The returned index can be safely used on subsequent calls.</td>
             </tr>
          </table>
          <h2 id="param_request_list">PARAM_REQUEST_LIST (21)</h2>
          <p><strong>Versions</strong>: v7.1.0-</p>
-         <p>Request all parameters of this component. After this request, all parameters are emitted</p>
+         <p>Requests that the camera send the current value for every supported parameter</p>
          <table>
             <tr>
                <th>Field Name</th>
@@ -1580,7 +1586,9 @@
          </table>
          <h2 id="param_value">PARAM_VALUE (22)</h2>
          <p><strong>Versions</strong>: v7.1.0-</p>
-         <p>The current value of a parameter, broadcast in response to a request to get one or more parameters (PARAM_REQUEST_READ, PARAM_REQUEST_LIST) or whenever a parameter is set (PARAM_SET) or changes.</p>
+         <p>The current value of a parameter, broadcast in response to a request to get one or more parameters 
+         (<a href="#param_request_read">PARAM_REQUEST_READ</a>, <a href="#param_request_list">PARAM_REQUEST_LIST</a>) 
+         or whenever a parameter is set (<a href="#param_set">PARAM_SET</a>) or changes.</p>
          <table>
             <tr>
                <th>Field Name</th>
@@ -1594,19 +1602,20 @@
                <td>Onboard parameter id, terminated by NULL if the length is less than 16 human-readable
                      chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars -
                      applications have to provide 16+1 bytes storage if the ID is stored as string</td>
-               <td>Same as official, <a href="#supported_parameters">Supported Parameters</a></td>
+               <td>Same as official. See the list of <a href="#supported_parameters">Supported Parameters</a></td>
             </tr>
             <tr>
                <td>Param Value</td>
                <td>4 bytes of data</td>
                <td>Onboard parameter value</td>
-               <td>Implemeted as a union. Interpreted as the <a href="https://mavlink.io/en/messages/common.html#MAV_PARAM_TYPE">MAV_PARAM_TYPE</a> listed in the Param Type field under <a href="#supported_parameters">Supported Parameters</a></td>
+               <td>Implemeted as a union. Interpreted as the <a href="#mav_param_type">MAV_PARAM_TYPE</a> 
+               listed in the Param Type field under <a href="#supported_parameters">Supported Parameters</a></td>
             </tr>
             <tr>
                <td>Param Type</td>
                <td>uint8_t</td>
-               <td>Onboard parameter type: see the <a href="https://mavlink.io/en/messages/common.html#MAV_PARAM_TYPE">MAV_PARAM_TYPE</a> enum for supported data types</td>
-               <td>Same as official, except  64-bit values not supported</td>
+               <td>Onboard parameter type: see the <a href="#mav_param_type">MAV_PARAM_TYPE</a> enum for supported data types</td>
+               <td>Same as official</td>
             </tr>
             <tr>
                <td>Param Count</td>
@@ -1649,19 +1658,19 @@
                <td>Onboard parameter id, terminated by NULL if the length is less than 16 human-readable
                      chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars -
                      applications have to provide 16+1 bytes storage if the ID is stored as string</td>
-               <td>Same as official, <a href="#supported_parameters">Supported Parameters</a></td>
+               <td>Same as official. See the list of <a href="#supported_parameters">Supported Parameters</a></td>
             </tr>
             <tr>
                <td>Param Value</td>
                <td>4 bytes of data</td>
                <td>Onboard parameter value</td>
-               <td>Implemeted as a union. Interpreted as the <a href="https://mavlink.io/en/messages/common.html#MAV_PARAM_TYPE">MAV_PARAM_TYPE</a> listed in the Param Type field under <a href="#supported_parameters">Supported Parameters</a></td>
+               <td>Implemeted as a union. Interpreted as the <a href="#mav_param_type">MAV_PARAM_TYPE</a> listed in the Param Type field under <a href="#supported_parameters">Supported Parameters</a></td>
             </tr>
             <tr>
                <td>Param Type</td>
                <td>uint8_t</td>
-               <td>Onboard parameter type: see the <a href="https://mavlink.io/en/messages/common.html#MAV_PARAM_TYPE">MAV_PARAM_TYPE</a> enum for supported data types</td>
-               <td>Same as official, except  64-bit values not supported</td>
+               <td>Onboard parameter type: see the <a href="#mav_param_type">MAV_PARAM_TYPE</a> enum for supported data types</td>
+               <td>Same as official</td>
             </tr>
          </table>
       </article>
