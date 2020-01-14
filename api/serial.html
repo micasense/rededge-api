@@ -125,7 +125,8 @@
          <a href="#camera_status">CAMERA_STATUS</a> and a <a href="#camera_feedback">CAMERA_FEEDBACK</a> message in response</p>
          
          <h1 id="parameter_microservice">Parameter Microservice</h1>
-         <p>The Parameter Protocol allows for the ability to perform additional read and write commands for parameters implemented in the target hardware not otherwise encapsulated by standard MAVLink messages</p>
+         <p>The parameter microservice implements the <a href="https://mavlink.io/en/services/parameter.html">MAVLink
+            Parameter Protocol</a> to read or change camera configuration settings.</p>
          <p>For a full explaination of the Parameter Microservice, please see the official MAVLink documentation at <a href="https://mavlink.io/en/services/parameter.html">MAVLink Parameter Protocol</a></p>
          <p>There are 4 messages associated with the parameter microservice, which are detailed in the Messages section below:
             <a href="#param_request_read">PARAM_REQUEST_READ</a>,
@@ -370,7 +371,11 @@
                <td>MAV_PARAM_TYPE_REAL32</td>
                <td>
                   <ul>
-                     <li>When set to 1.0, the camera is allowed to produce sounds. Note that not all camera models have a method of producing sound, in which case this field is not a functional parameter</li>
+                     <li>When set to 1.0, the camera is allowed to produce sounds</li>
+                     <ul>
+                        <li>Note that not all camera models have a method of producing sound, in which case this field is not a functional parameter</li>
+                     </ul>
+                     <li>When set to 0.0, the camera will not make any sounds</li>
                   </ul>
                </td>
                <td>v7.1.0-</td>
