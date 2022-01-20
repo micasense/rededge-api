@@ -105,8 +105,9 @@
          <h2 id="communicating">Communicating</h2>
          <p>The <a href="#heartbeat">HEARTBEAT</a> message can ensure that the RedEdge is booted and ready to receive MAVLink packets.</p>
          <p>The <a href="#ping">PING</a> message can be used to ensure round-trip serial connectivity with the RedEdge.</p>
-         <p>MAVLink messages include a <em>Target System</em> parameter. The RedEdge will adopt the Target System Id
-         of any message it receives, and defaults to 255 otherwise.</p>
+         <p>MAVLink messages include a sender <em>System ID</em> (sysid) parameter. The RedEdge will adopt the System ID
+         of any message it receives, and defaults to 255 otherwise. Because of this behavior, it also ignores the
+         Target System field, and instead assumes that any target system filtering is handled by the sender.</p>
          <p>Many MAVLink messages include a <em>Target Component</em> parameter. The RedEdge will ignore any command that does not
          specify MAV_COMP_ID_CAMERA or MAV_COMP_ID_ALL as the Target Component.</p>
          
